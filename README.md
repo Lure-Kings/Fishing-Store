@@ -1,224 +1,320 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lure Kings - Premium Fishing Lures</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Global Styles */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
             background-color: #f5f5f5;
             color: #333;
             line-height: 1.6;
         }
-
-        .header {
-            background-color: #1a365d;
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .nav {
+        
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
-
+        
         .logo {
-            font-size: 2rem;
+            font-size: 24px;
             font-weight: bold;
-            color: white;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
+            list-style: none;
         }
-
-        .logo i {
-            font-size: 1.8rem;
-            color: #f8d56b;
+        
+        nav ul li {
+            margin-left: 20px;
         }
-
-        .nav-buttons {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background-color: #1a365d;
+        
+        nav ul li a {
             color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: white;
-            border: 1px solid white;
+        
+        nav ul li a:hover {
+            color: var(--secondary);
         }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
+        
         .cart-icon {
             position: relative;
         }
-
+        
         .cart-count {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e74c3c;
+            top: -10px;
+            right: -10px;
+            background-color: var(--danger);
             color: white;
             border-radius: 50%;
             width: 20px;
             height: 20px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
+            align-items: center;
+            font-size: 12px;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
+        
+        /* Hero Section */
         .hero {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1513828583688-c52646db42da');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 600px;
+        }
+        
+        /* Categories Section */
+        .categories {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            color: var(--dark);
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-card {
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding: 20px;
         }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #1a365d;
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-
-        .hero p {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            color: #666;
+        
+        .category-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 15px;
         }
-
-        .categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            justify-content: center;
+        
+        .category-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
         }
-
-        .category-btn {
-            padding: 0.5rem 1rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        
+        /* Products Section */
+        .products-container {
+            padding: 40px 0;
         }
-
-        .category-btn:hover, .category-btn.active {
-            background: #1a365d;
-            border-color: #1a365d;
-            color: white;
-        }
-
-        .products-grid {
+        
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
         }
-
+        
         .product-card {
-            background: white;
-            border: 1px solid #ddd;
+            background-color: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-
+        
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-
-        .product-image {
+        
+        .product-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-bottom: 1px solid #ddd;
         }
-
+        
         .product-info {
-            padding: 1rem;
+            padding: 15px;
         }
-
-        .product-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: #1a365d;
+        
+        .product-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
         }
-
-        .product-price {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #e74c3c;
-            margin-bottom: 1rem;
-        }
-
-        .product-description {
+        
+        .product-info p {
             color: #666;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
-
-        .add-to-cart {
-            width: 100%;
-            background-color: #1a365d;
+        
+        .product-price {
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary);
             color: white;
             border: none;
-            padding: 0.5rem;
             border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
-
-        .add-to-cart:hover {
-            background-color: #142a4a;
+        
+        .btn:hover {
+            background-color: #2980b9;
         }
-
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        /* Cart Styles */
+        .cart-container {
+            padding: 40px 0;
+        }
+        
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .cart-table th, .cart-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .cart-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .cart-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .cart-total {
+            text-align: right;
+            margin-bottom: 30px;
+        }
+        
+        .checkout-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+        }
+        
+        .bank-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -226,999 +322,442 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
-            max-width: 90%;
-            max-height: 90%;
-            overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            color: #333;
-        }
-
-        .close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #ddd;
-            gap: 1rem;
-        }
-
-        .cart-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-
-        .cart-item-info {
-            flex-grow: 1;
-        }
-
-        .cart-item-title {
-            font-weight: bold;
-            margin-bottom: 0.25rem;
-            color: #1a365d;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0.5rem 0;
-        }
-
-        .quantity-btn {
-            background: #1a365d;
-            color: white;
-            border: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
             justify-content: center;
+            align-items: center;
         }
-
-        .quantity-btn:hover {
-            background: #142a4a;
-        }
-
-        .remove-item {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .remove-item:hover {
-            background: #c0392b;
-        }
-
-        .cart-total {
-            text-align: center;
-            padding: 1rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #1a365d;
-            border-top: 1px solid #ddd;
-            margin-top: 1rem;
-        }
-
-        .admin-form {
-            background: white;
-            border: 1px solid #ddd;
-            padding: 1.5rem;
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
             border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #1a365d;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: #1a365d;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .checkout-form {
             max-width: 500px;
-            margin: 0 auto;
+            width: 90%;
         }
-
-        .file-upload-area {
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 1rem;
+        
+        .modal-header {
+            margin-bottom: 20px;
         }
-
-        .file-upload-area:hover {
-            border-color: #1a365d;
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
         }
-
-        .image-preview {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 1rem;
-            border: 1px solid #ddd;
-        }
-
-        .payment-info {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .payment-info h4 {
-            color: #1a365d;
-            margin-bottom: 0.5rem;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1a365d;
-            color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 3000;
-            display: none;
-        }
-
-        .admin-logo {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .admin-logo img {
-            max-width: 200px;
-            height: auto;
-        }
-
-        .logo-upload-container {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .logo-preview {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 1rem;
-            border: 1px solid #ddd;
-        }
-
-        .required-field::after {
-            content: " *";
-            color: red;
-        }
-
-        .payment-options {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .payment-option {
-            flex: 1;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .payment-option:hover {
-            border-color: #1a365d;
-        }
-
-        .payment-option.selected {
-            border-color: #1a365d;
-            background-color: #f0f7ff;
-        }
-
-        .payment-option img {
-            max-width: 100px;
-            height: auto;
-            margin-bottom: 0.5rem;
-        }
-
-        .back-to-shop {
-            display: block;
-            text-align: center;
-            margin-top: 2rem;
-            color: #1a365d;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .back-to-shop:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-
-        input.error {
-            border-color: #e74c3c;
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .category-grid, .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="nav">
-            <div class="logo" onclick="window.location.href='index.html'">
-                <i class="fas fa-fish"></i>
-                <span>Lure Kings</span>
-            </div>
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" id="adminBtn">Admin</button>
-                <div class="cart-icon" id="cartIcon">
-                    <i class="fas fa-shopping-cart" style="font-size: 1.5rem; color: white;"></i>
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
-            </div>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">LURE <span>KINGS</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showPage('home')">Home</a></li>
+                    <li><a href="#" onclick="showPage('products')">Products</a></li>
+                    <li>
+                        <a href="#" onclick="showPage('cart')" class="cart-icon">
+                            Cart <span class="cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <div class="container">
+    <!-- Home Page -->
+    <section id="home-page" class="page">
         <div class="hero">
             <h1>Premium Fishing Lures</h1>
-            <p>Discover our handcrafted fishing lures designed to attract the biggest catches in any water condition.</p>
+            <p>Quality lures for the serious angler. Catch more fish with Lure Kings!</p>
         </div>
-
-        <div class="categories">
-            <button class="category-btn active" data-category="all">All Products</button>
-            <button class="category-btn" data-category="freshwater">Freshwater</button>
-            <button class="category-btn" data-category="saltwater">Saltwater</button>
-            <button class="category-btn" data-category="fly">Fly Fishing</button>
-            <button class="category-btn" data-category="bass">Bass</button>
+        
+        <div class="container categories">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="category-grid">
+                <div class="category-card" onclick="showCategory('jigs')">
+                    <img src="https://via.placeholder.com/250x150?text=Jigs" alt="Jigs">
+                    <h3>Jigs</h3>
+                    <p>Versatile lures for all conditions</p>
+                </div>
+                <div class="category-card" onclick="showCategory('soft-plastics')">
+                    <img src="https://via.placeholder.com/250x150?text=Soft+Plastics" alt="Soft Plastics">
+                    <h3>Soft Plastics</h3>
+                    <p>Realistic action and feel</p>
+                </div>
+                <div class="category-card" onclick="showCategory('topwaters')">
+                    <img src="https://via.placeholder.com/250x150?text=Topwaters" alt="Topwaters">
+                    <h3>Topwaters</h3>
+                    <p>Explosive surface strikes</p>
+                </div>
+                <div class="category-card" onclick="showCategory('spinnerbaits')">
+                    <img src="https://via.placeholder.com/250x150?text=Spinnerbaits" alt="Spinnerbaits">
+                    <h3>Spinnerbaits</h3>
+                    <p>Vibration and flash combo</p>
+                </div>
+                <div class="category-card" onclick="showCategory('bladed-jigs')">
+                    <img src="https://via.placeholder.com/250x150?text=Bladed+Jigs" alt="Bladed Jigs">
+                    <h3>Bladed Jigs</h3>
+                    <p>Powerful vibration action</p>
+                </div>
+                <div class="category-card" onclick="showCategory('crankbaits')">
+                    <img src="https://via.placeholder.com/250x150?text=Crankbaits" alt="Crankbaits">
+                    <h3>Crankbaits</h3>
+                    <p>Diving action at various depths</p>
+                </div>
+                <div class="category-card" onclick="showCategory('jerkbaits')">
+                    <img src="https://via.placeholder.com/250x150?text=Jerkbaits" alt="Jerkbaits">
+                    <h3>Jerkbaits</h3>
+                    <p>Erratic action triggers strikes</p>
+                </div>
+                <div class="category-card" onclick="showCategory('swimbaits')">
+                    <img src="https://via.placeholder.com/250x150?text=Swimbaits" alt="Swimbaits">
+                    <h3>Swimbaits</h3>
+                    <p>Realistic swimming action</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="products-grid" id="productsGrid">
-            <!-- Products will be loaded here -->
+    <!-- Products Page -->
+    <section id="products-page" class="page" style="display: none;">
+        <div class="container products-container">
+            <h1 id="category-title">PRODUCTS</h1>
+            <div class="product-grid" id="product-grid">
+                <!-- Products will be loaded here -->
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Cart Modal -->
-    <div class="modal" id="cartModal">
-        <div class="modal-content">
-            <span class="close" id="closeCart">&times;</span>
-            <h2>Your Shopping Cart</h2>
-            <div id="cartItems">
-                <!-- Cart items will be loaded here -->
+    <!-- Cart Page -->
+    <section id="cart-page" class="page" style="display: none;">
+        <div class="container cart-container">
+            <h1>Your Cart</h1>
+            <div id="cart-content">
                 <p>Your cart is empty</p>
             </div>
-            <div class="cart-total" id="cartTotal">
-                Total: $0.00
-            </div>
-            <button class="btn btn-primary" id="checkoutBtn" style="width: 100%;">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <!-- Checkout Modal -->
-    <div class="modal" id="checkoutModal">
-        <div class="modal-content">
-            <span class="close" id="closeCheckout">&times;</span>
-            <h2>Checkout</h2>
-            <div class="checkout-form">
-                <h3>Shipping Information</h3>
-                <div class="form-group">
-                    <label class="required-field">Full Name</label>
-                    <input type="text" id="fullName" required>
-                    <div class="error-message" id="nameError">Please enter your full name</div>
-                </div>
-                <div class="form-group">
-                    <label class="required-field">Email</label>
-                    <input type="email" id="email" required>
-                    <div class="error-message" id="emailError">Please enter a valid email address</div>
-                </div>
-                <div class="form-group">
-                    <label class="required-field">Phone Number</label>
-                    <input type="tel" id="phone" required pattern="[0-9]*">
-                    <div class="error-message" id="phoneError">Please enter a valid phone number (digits only)</div>
-                </div>
-                <div class="form-group">
-                    <label class="required-field">Address</label>
-                    <input type="text" id="address" required>
-                    <div class="error-message" id="addressError">Please enter your address</div>
-                </div>
-                <div class="form-group">
-                    <label class="required-field">City</label>
-                    <input type="text" id="city" required>
-                    <div class="error-message" id="cityError">Please enter your city</div>
-                </div>
-                <div class="form-group">
-                    <label class="required-field">Postal Code</label>
-                    <input type="text" id="postalCode" required>
-                    <div class="error-message" id="postalError">Please enter your postal code</div>
-                </div>
-
-                <h3>Payment Method</h3>
-                <div class="payment-options">
-                    <div class="payment-option" data-method="stripe">
-                        <img src="https://stripe.com/img/v3/home/social.png" alt="Stripe">
-                        <div>Credit/Debit Card</div>
-                    </div>
-                    <div class="payment-option" data-method="paypal">
-                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal">
-                        <div>PayPal</div>
-                    </div>
-                </div>
-
-                <div class="payment-info" id="stripePayment">
-                    <h4>Card Details</h4>
+            <div id="checkout-form" style="display: none;">
+                <h2>Customer Information</h2>
+                <form id="order-form">
                     <div class="form-group">
-                        <label class="required-field">Card Number</label>
-                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
-                        <div class="error-message" id="cardError">Please enter a valid card number</div>
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label class="required-field">Expiration Date</label>
-                        <input type="text" id="expDate" placeholder="MM/YY">
-                        <div class="error-message" id="expError">Please enter a valid expiration date</div>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label class="required-field">CVV</label>
-                        <input type="text" id="cvv" placeholder="123">
-                        <div class="error-message" id="cvvError">Please enter a valid CVV</div>
+                        <label for="address">Shipping Address</label>
+                        <textarea id="address" class="form-control" required></textarea>
                     </div>
-                </div>
-
-                <div class="payment-info hidden" id="paypalPayment">
-                    <h4>PayPal</h4>
-                    <p>You will be redirected to PayPal to complete your payment after submitting this form.</p>
-                </div>
-
-                <input type="hidden" id="paymentMethod" value="stripe">
-
-                <button class="btn btn-primary" id="placeOrderBtn" style="width: 100%; margin-top: 1rem;">Place Order</button>
-                <a href="#" class="back-to-shop" id="backToShop">Continue Shopping</a>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control">
+                    </div>
+                    
+                    <h3>Payment Method</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" name="payment" value="bank-transfer" checked> Bank Transfer
+                        </label>
+                        <label>
+                            <input type="radio" name="payment" value="credit-card"> Credit Card
+                        </label>
+                    </div>
+                    
+                    <div id="bank-details" class="bank-details">
+                        <h4>Bank Transfer Details</h4>
+                        <p>Bank Name: Lure Kings Bank</p>
+                        <p>Account Number: 1234567890</p>
+                        <p>Routing Number: 987654321</p>
+                        <p>Please include your order number in the transfer reference.</p>
+                    </div>
+                    
+                    <button type="button" class="btn btn-block" onclick="placeOrder()">Complete Order</button>
+                </form>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Order Confirmation Modal -->
-    <div class="modal" id="confirmationModal">
+    <div id="order-modal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeConfirmation">&times;</span>
-            <div style="text-align: center;">
-                <i class="fas fa-check-circle" style="font-size: 4rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+            <div class="modal-header">
                 <h2>Order Confirmed!</h2>
-                <p>Thank you for your purchase. Your order has been placed successfully.</p>
-                <p>An email confirmation has been sent to <span id="confirmationEmail"></span></p>
-                <button class="btn btn-primary" id="returnToShop" style="margin-top: 1rem;">Return to Shop</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <p>Thank you for your order!</p>
+                <p>A confirmation has been sent to your email.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">Continue Shopping</button>
             </div>
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
-    <div class="modal" id="adminLoginModal">
-        <div class="modal-content">
-            <span class="close" id="closeAdminLogin">&times;</span>
-            <h2>Admin Login</h2>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="adminPassword">
-                <div class="error-message" id="adminError">Incorrect password</div>
-            </div>
-            <button class="btn btn-primary" id="adminLoginBtn">Login</button>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Lure Kings. All rights reserved.</p>
         </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div class="modal" id="adminPanel">
-        <div class="modal-content">
-            <span class="close" id="closeAdminPanel">&times;</span>
-            <div class="admin-logo">
-                <h2>Admin Panel</h2>
-            </div>
-
-            <div class="admin-form">
-                <h3>Add New Product</h3>
-                <div class="form-group">
-                    <label>Product Name</label>
-                    <input type="text" id="productName">
-                </div>
-                <div class="form-group">
-                    <label>Product Description</label>
-                    <textarea id="productDescription" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Price ($)</label>
-                    <input type="number" id="productPrice" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="productCategory">
-                        <option value="freshwater">Freshwater</option>
-                        <option value="saltwater">Saltwater</option>
-                        <option value="fly">Fly Fishing</option>
-                        <option value="bass">Bass</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Product Image</label>
-                    <div class="file-upload-area" id="imageUploadArea">
-                        <p>Click to upload product image</p>
-                        <input type="file" id="productImage" accept="image/*" style="display: none;">
-                        <img id="productImagePreview" class="image-preview" style="display: none;">
-                    </div>
-                </div>
-                <button class="btn btn-primary" id="addProductBtn">Add Product</button>
-            </div>
-
-            <div class="admin-form">
-                <h3>Current Products</h3>
-                <div id="adminProductsList">
-                    <!-- Admin products will be listed here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
+    </footer>
 
     <script>
-        // Products data - will be loaded from localStorage
-        let products = JSON.parse(localStorage.getItem('products')) || [
-            {
-                id: 1,
-                name: "Bass Pro Lure",
-                description: "Premium bass fishing lure with realistic movement",
-                price: 12.99,
-                category: "bass",
-                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-            },
-            {
-                id: 2,
-                name: "Saltwater King",
-                description: "Heavy-duty saltwater lure for big game fishing",
-                price: 24.99,
-                category: "saltwater",
-                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-            },
-            {
-                id: 3,
-                name: "Fly Fisher's Dream",
-                description: "Hand-tied fly lure for trout and salmon",
-                price: 8.99,
-                category: "fly",
-                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-            },
-            {
-                id: 4,
-                name: "Freshwater Classic",
-                description: "Versatile freshwater lure for all species",
-                price: 9.99,
-                category: "freshwater",
-                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-            }
-        ];
+        // Sample product data
+        const products = {
+            'jigs': [
+                { id: 1, name: 'Football Jig', price: 5.99, description: 'Perfect for rocky bottoms', image: 'https://via.placeholder.com/300x200?text=Football+Jig' },
+                { id: 2, name: 'Arky Head Jig', price: 4.99, description: 'Great for dragging', image: 'https://via.placeholder.com/300x200?text=Arky+Head+Jig' },
+                { id: 3, name: 'Flipping Jig', price: 6.49, description: 'Heavy cover specialist', image: 'https://via.placeholder.com/300x200?text=Flipping+Jig' },
+                { id: 4, name: 'Swim Jig', price: 5.49, description: 'Versatile swimming action', image: 'https://via.placeholder.com/300x200?text=Swim+Jig' }
+            ],
+            'soft-plastics': [
+                { id: 5, name: 'Worm 7"', price: 3.99, description: 'Classic worm design', image: 'https://via.placeholder.com/300x200?text=Worm+7' },
+                { id: 6, name: 'Craw', price: 4.49, description: 'Realistic craw imitation', image: 'https://via.placeholder.com/300x200?text=Craw' },
+                { id: 7, name: 'Stick Bait', price: 3.49, description: 'Wacky rig favorite', image: 'https://via.placeholder.com/300x200?text=Stick+Bait' },
+                { id: 8, name: 'Swimbait 4"', price: 4.99, description: 'Swimming tail action', image: 'https://via.placeholder.com/300x200?text=Swimbait+4' }
+            ],
+            'topwaters': [
+                { id: 9, name: 'Popper', price: 8.99, description: 'Chugging surface action', image: 'https://via.placeholder.com/300x200?text=Popper' },
+                { id: 10, name: 'Walking Bait', price: 12.99, description: 'Side-to-side action', image: 'https://via.placeholder.com/300x200?text=Walking+Bait' },
+                { id: 11, name: 'Buzzbait', price: 7.49, description: 'Blade creates surface commotion', image: 'https://via.placeholder.com/300x200?text=Buzzbait' }
+            ],
+            'spinnerbaits': [
+                { id: 12, name: 'Willow Leaf Spinnerbait', price: 6.99, description: 'Flashy blade for clear water', image: 'https://via.placeholder.com/300x200?text=Willow+Leaf' },
+                { id: 13, name: 'Colorado Spinnerbait', price: 6.49, description: 'Thumping vibration', image: 'https://via.placeholder.com/300x200?text=Colorado' }
+            ],
+            'bladed-jigs': [
+                { id: 14, name: 'Chatterbait', price: 9.99, description: 'Powerful vibration', image: 'https://via.placeholder.com/300x200?text=Chatterbait' }
+            ],
+            'crankbaits': [
+                { id: 15, name: 'Squarebill', price: 7.99, description: 'Shallow running', image: 'https://via.placeholder.com/300x200?text=Squarebill' },
+                { id: 16, name: 'Deep Diver', price: 8.99, description: 'Dives to 15ft', image: 'https://via.placeholder.com/300x200?text=Deep+Diver' }
+            ],
+            'jerkbaits': [
+                { id: 17, name: 'Suspending Jerkbait', price: 10.99, description: 'Hangs in strike zone', image: 'https://via.placeholder.com/300x200?text=Suspending+Jerkbait' }
+            ],
+            'swimbaits': [
+                { id: 18, name: 'Glide Bait', price: 15.99, description: 'Realistic swimming action', image: 'https://via.placeholder.com/300x200?text=Glide+Bait' },
+                { id: 19, name: 'Paddle Tail Swimbait', price: 6.99, description: 'Tail creates vibration', image: 'https://via.placeholder.com/300x200?text=Paddle+Tail' }
+            ]
+        };
 
-        // Cart data - will be loaded from localStorage
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // Shopping cart
+        let cart = [];
 
-        // DOM Elements
-        const productsGrid = document.getElementById('productsGrid');
-        const cartIcon = document.getElementById('cartIcon');
-        const cartCount = document.getElementById('cartCount');
-        const cartModal = document.getElementById('cartModal');
-        const closeCart = document.getElementById('closeCart');
-        const cartItems = document.getElementById('cartItems');
-        const cartTotal = document.getElementById('cartTotal');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        const checkoutModal = document.getElementById('checkoutModal');
-        const closeCheckout = document.getElementById('closeCheckout');
-        const placeOrderBtn = document.getElementById('placeOrderBtn');
-        const confirmationModal = document.getElementById('confirmationModal');
-        const closeConfirmation = document.getElementById('closeConfirmation');
-        const returnToShop = document.getElementById('returnToShop');
-        const adminBtn = document.getElementById('adminBtn');
-        const adminLoginModal = document.getElementById('adminLoginModal');
-        const closeAdminLogin = document.getElementById('closeAdminLogin');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
-        const adminPanel = document.getElementById('adminPanel');
-        const closeAdminPanel = document.getElementById('closeAdminPanel');
-        const adminPassword = document.getElementById('adminPassword');
-        const adminError = document.getElementById('adminError');
-        const toast = document.getElementById('toast');
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        const backToShop = document.getElementById('backToShop');
-        const confirmationEmail = document.getElementById('confirmationEmail');
-
-        // Payment elements
-        const paymentOptions = document.querySelectorAll('.payment-option');
-        const stripePayment = document.getElementById('stripePayment');
-        const paypalPayment = document.getElementById('paypalPayment');
-        const paymentMethod = document.getElementById('paymentMethod');
-
-        // Admin product management elements
-        const productName = document.getElementById('productName');
-        const productDescription = document.getElementById('productDescription');
-        const productPrice = document.getElementById('productPrice');
-        const productCategory = document.getElementById('productCategory');
-        const productImage = document.getElementById('productImage');
-        const productImagePreview = document.getElementById('productImagePreview');
-        const imageUploadArea = document.getElementById('imageUploadArea');
-        const addProductBtn = document.getElementById('addProductBtn');
-        const adminProductsList = document.getElementById('adminProductsList');
-
-        // Form validation elements
-        const requiredFields = document.querySelectorAll('[required]');
-        const errorMessages = document.querySelectorAll('.error-message');
-
-        // Initialize the app
-        function init() {
-            renderProducts();
-            updateCartCount();
-            setupEventListeners();
-        }
-
-        // Set up event listeners
-        function setupEventListeners() {
-            // Cart and checkout
-            cartIcon.addEventListener('click', openCart);
-            closeCart.addEventListener('click', closeModal.bind(null, cartModal));
-            checkoutBtn.addEventListener('click', openCheckout);
-            closeCheckout.addEventListener('click', closeModal.bind(null, checkoutModal));
-            placeOrderBtn.addEventListener('click', placeOrder);
-            returnToShop.addEventListener('click', returnToShopHandler);
-            backToShop.addEventListener('click', backToShopHandler);
-
-                        // Admin login
-            adminLoginBtn.addEventListener('click', adminLogin);
-            closeAdminPanel.addEventListener('click', closeModal.bind(null, adminPanel));
-
-            // Product categories
-            categoryBtns.forEach(btn => {
-                btn.addEventListener('click', () => filterProducts(btn.dataset.category));
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.display = 'none';
             });
-
-            // Payment options
-            paymentOptions.forEach(option => {
-                option.addEventListener('click', () => selectPaymentMethod(option.dataset.method));
-            });
-
-            // Admin product management
-            imageUploadArea.addEventListener('click', () => productImage.click());
-            productImage.addEventListener('change', handleImageUpload);
-            addProductBtn.addEventListener('click', addProduct);
-
-            // Form validation
-            requiredFields.forEach(field => {
-                field.addEventListener('input', validateField);
-            });
-
-            // Close modals when clicking outside
-            window.addEventListener('click', (e) => {
-                if (e.target === cartModal) closeModal(cartModal);
-                if (e.target === checkoutModal) closeModal(checkoutModal);
-                if (e.target === confirmationModal) closeModal(confirmationModal);
-                if (e.target === adminLoginModal) closeModal(adminLoginModal);
-                if (e.target === adminPanel) closeModal(adminPanel);
-            });
-        }
-
-        // Render products to the page
-        function renderProducts(filteredProducts = products) {
-            productsGrid.innerHTML = '';
+            document.getElementById(`${pageId}-page`).style.display = 'block';
             
-            if (filteredProducts.length === 0) {
-                productsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products found in this category.</p>';
-                return;
+            if (pageId === 'cart') {
+                updateCartDisplay();
             }
-
-            filteredProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" class="product-image">
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-price">$${product.price.toFixed(2)}</p>
-                        <p class="product-description">${product.description}</p>
-                        <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
-                    </div>
-                `;
-                productsGrid.appendChild(productCard);
-            });
-
-            // Add event listeners to add-to-cart buttons
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', addToCart);
-            });
         }
 
-        // Filter products by category
-        function filterProducts(category) {
-            // Update active category button
-            categoryBtns.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.category === category);
-            });
-
-            if (category === 'all') {
-                renderProducts();
-                return;
+        function showCategory(category) {
+            showPage('products');
+            document.getElementById('category-title').textContent = category.replace('-', ' ').toUpperCase();
+            
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = '';
+            
+            const categoryProducts = products[category.replace('-', ' ')];
+            
+            if (categoryProducts && categoryProducts.length > 0) {
+                categoryProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <p class="product-price">$${product.price.toFixed(2)}</p>
+                            <button class="btn btn-block" onclick="addToCart(${product.id})">Add to Cart</button>
+                        </div>
+                    `;
+                    productGrid.appendChild(productCard);
+                });
+            } else {
+                productGrid.innerHTML = '<p>No products found in this category.</p>';
             }
-
-            const filteredProducts = products.filter(product => product.category === category);
-            renderProducts(filteredProducts);
         }
 
         // Cart functions
-        function addToCart(e) {
-            const productId = parseInt(e.target.dataset.id);
-            const product = products.find(p => p.id === productId);
-            
-            // Check if product is already in cart
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    ...product,
-                    quantity: 1
-                });
+        function addToCart(productId) {
+            // Find the product in all categories
+            let productToAdd = null;
+            for (const category in products) {
+                const foundProduct = products[category].find(p => p.id === productId);
+                if (foundProduct) {
+                    productToAdd = foundProduct;
+                    break;
+                }
             }
             
-            updateCart();
-            showToast(`${product.name} added to cart`);
-        }
-
-        function updateCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            renderCartItems();
+            if (productToAdd) {
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({
+                        id: productToAdd.id,
+                        name: productToAdd.name,
+                        price: productToAdd.price,
+                        quantity: 1
+                    });
+                }
+                
+                updateCartCount();
+                alert(`${productToAdd.name} added to cart!`);
+            }
         }
 
         function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
-            cartCount.textContent = count;
-            cartCount.style.display = count > 0 ? 'flex' : 'none';
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = totalItems;
         }
 
-        function renderCartItems() {
+        function updateCartDisplay() {
+            const cartContent = document.getElementById('cart-content');
+            const checkoutForm = document.getElementById('checkout-form');
+            
             if (cart.length === 0) {
-                cartItems.innerHTML = '<p>Your cart is empty</p>';
-                cartTotal.textContent = 'Total: $0.00';
-                checkoutBtn.disabled = true;
-                return;
-            }
-            
-            checkoutBtn.disabled = false;
-            cartItems.innerHTML = '';
-            
-            let total = 0;
-            
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
+                cartContent.innerHTML = '<p>Your cart is empty</p>';
+                checkoutForm.style.display = 'none';
+            } else {
+                let cartHTML = `
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
                 
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-info">
-                        <h4 class="cart-item-title">${item.name}</h4>
-                        <p>$${item.price.toFixed(2)}</p>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
-                        </div>
-                    </div>
-                    <div>
-                        <p>$${itemTotal.toFixed(2)}</p>
-                        <button class="remove-item" data-id="${item.id}">Remove</button>
+                let cartTotal = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    cartTotal += itemTotal;
+                    
+                    cartHTML += `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>$${item.price.toFixed(2)}</td>
+                            <td>${item.quantity}</td>
+                            <td>$${itemTotal.toFixed(2)}</td>
+                            <td><button class="btn" onclick="removeFromCart(${item.id})">Remove</button></td>
+                        </tr>
+                    `;
+                });
+                
+                cartHTML += `
+                        </tbody>
+                    </table>
+                    <div class="cart-total">
+                        <h3>Total: $${cartTotal.toFixed(2)}</h3>
                     </div>
                 `;
-                cartItems.appendChild(cartItem);
-            });
-            
-            cartTotal.textContent = `Total: $${total.toFixed(2)}`;
-            
-            // Add event listeners to quantity buttons
-            document.querySelectorAll('.quantity-btn').forEach(btn => {
-                btn.addEventListener('click', updateQuantity);
-            });
-            
-            // Add event listeners to remove buttons
-            document.querySelectorAll('.remove-item').forEach(btn => {
-                btn.addEventListener('click', removeItem);
-            });
-        }
-
-        function updateQuantity(e) {
-            const productId = parseInt(e.target.dataset.id);
-            const action = e.target.dataset.action;
-            const item = cart.find(item => item.id === productId);
-            
-            if (action === 'increase') {
-                item.quantity += 1;
-            } else if (action === 'decrease' && item.quantity > 1) {
-                item.quantity -= 1;
+                
+                cartContent.innerHTML = cartHTML;
+                checkoutForm.style.display = 'block';
             }
-            
-            updateCart();
         }
 
-        function removeItem(e) {
-            const productId = parseInt(e.target.dataset.id);
+        function removeFromCart(productId) {
             cart = cart.filter(item => item.id !== productId);
-            updateCart();
-            showToast('Item removed from cart');
+            updateCartDisplay();
+            updateCartCount();
         }
 
-        // Modal functions
-        function openCart() {
-            renderCartItems();
-            cartModal.style.display = 'block';
-        }
-
-        function openCheckout() {
-            closeModal(cartModal);
-            checkoutModal.style.display = 'block';
-        }
-
-        function closeModal(modal) {
-            modal.style.display = 'none';
-        }
-
-        function openAdminLogin() {
-            adminLoginModal.style.display = 'block';
-        }
-
-        // Admin functions
-        function adminLogin() {
-            // In a real app, this would be a secure server-side check
-            if (adminPassword.value === 'admin123') {
-                closeModal(adminLoginModal);
-                adminPanel.style.display = 'block';
-                renderAdminProducts();
-            } else {
-                adminError.style.display = 'block';
-            }
-        }
-
-        function renderAdminProducts() {
-            adminProductsList.innerHTML = '';
-            
-            if (products.length === 0) {
-                adminProductsList.innerHTML = '<p>No products found</p>';
-                return;
-            }
-            
-            products.forEach(product => {
-                const productItem = document.createElement('div');
-                productItem.className = 'product-item';
-                productItem.style.marginBottom = '1rem';
-                productItem.style.paddingBottom = '1rem';
-                productItem.style.borderBottom = '1px solid #ddd';
-                productItem.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h4>${product.name}</h4>
-                            <p>$${product.price.toFixed(2)} - ${product.category}</p>
-                        </div>
-                        <button class="btn btn-secondary" data-id="${product.id}" style="background-color: #e74c3c; color: white;">Delete</button>
-                    </div>
-                `;
-                adminProductsList.appendChild(productItem);
-            });
-            
-            // Add event listeners to delete buttons
-            document.querySelectorAll('.product-item button').forEach(btn => {
-                btn.addEventListener('click', deleteProduct);
-            });
-        }
-
-        function deleteProduct(e) {
-            const productId = parseInt(e.target.dataset.id);
-            products = products.filter(product => product.id !== productId);
-            localStorage.setItem('products', JSON.stringify(products));
-            renderAdminProducts();
-            renderProducts();
-            showToast('Product deleted');
-        }
-
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    productImagePreview.src = event.target.result;
-                    productImagePreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function addProduct() {
-            if (!productName.value || !productPrice.value) {
-                showToast('Please fill in all required fields');
-                return;
-            }
-            
-            const newProduct = {
-                id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-                name: productName.value,
-                description: productDescription.value,
-                price: parseFloat(productPrice.value),
-                category: productCategory.value,
-                image: productImagePreview.src || 'https://via.placeholder.com/300'
-            };
-            
-            products.push(newProduct);
-            localStorage.setItem('products', JSON.stringify(products));
-            
-            // Reset form
-            productName.value = '';
-            productDescription.value = '';
-            productPrice.value = '';
-            productImagePreview.src = '';
-            productImagePreview.style.display = 'none';
-            productImage.value = '';
-            
-            renderProducts();
-            renderAdminProducts();
-            showToast('Product added successfully');
-        }
-
-        // Checkout functions
-        function selectPaymentMethod(method) {
-            paymentMethod.value = method;
-            
-            paymentOptions.forEach(option => {
-                option.classList.toggle('selected', option.dataset.method === method);
-            });
-            
-            if (method === 'stripe') {
-                stripePayment.classList.remove('hidden');
-                paypalPayment.classList.add('hidden');
-            } else {
-                stripePayment.classList.add('hidden');
-                paypalPayment.classList.remove('hidden');
-            }
-        }
-
-        function validateField(e) {
-            const field = e.target;
-            const errorId = `${field.id}Error`;
-            const errorElement = document.getElementById(errorId);
-            
-            if (!field.checkValidity()) {
-                field.classList.add('error');
-                errorElement.style.display = 'block';
-                return false;
-            } else {
-                field.classList.remove('error');
-                errorElement.style.display = 'none';
-                return true;
-            }
-        }
-
-        function validateForm() {
-            let isValid = true;
-            
-            requiredFields.forEach(field => {
-                const errorId = `${field.id}Error`;
-                const errorElement = document.getElementById(errorId);
-                
-                if (!field.checkValidity()) {
-                    field.classList.add('error');
-                    errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
-            
-            return isValid;
-        }
-
+        // Order functions
         function placeOrder() {
-            if (!validateForm()) {
-                showToast('Please fill in all required fields correctly');
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            
+            if (!name || !email || !address) {
+                alert('Please fill in all required fields');
                 return;
             }
             
-            // In a real app, you would process the payment here
-            const email = document.getElementById('email').value;
-            confirmationEmail.textContent = email;
+            // In a real app, you would send this data to your server
+            const orderTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
+            // Show order confirmation
+            document.getElementById('modal-body').innerHTML = `
+                <p>Thank you for your order, ${name}!</p>
+                ${paymentMethod === 'bank-transfer' ? '<p>Please complete your bank transfer to the account details provided.</p>' : ''}
+                <p>Order Total: $${orderTotal.toFixed(2)}</p>
+                <p>A confirmation has been sent to ${email}.</p>
+            `;
+            
+            // Show modal
+            document.getElementById('order-modal').style.display = 'flex';
             
             // Clear cart
             cart = [];
-            updateCart();
+            updateCartCount();
+            updateCartDisplay();
             
-            // Close checkout and show confirmation
-            closeModal(checkoutModal);
-            confirmationModal.style.display = 'block';
+            // Reset form
+            document.getElementById('order-form').reset();
         }
 
-        function returnToShopHandler(e) {
-            e.preventDefault();
-            closeModal(confirmationModal);
+        function closeModal() {
+            document.getElementById('order-modal').style.display = 'none';
+            showPage('home');
         }
 
-        function backToShopHandler(e) {
-            e.preventDefault();
-            closeModal(checkoutModal);
-            openCart();
-        }
-
-        // Utility functions
-        function showToast(message) {
-            toast.textContent = message;
-            toast.style.display = 'block';
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+            updateCartCount();
             
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        // Initialize the app
-        init();
+            // Set up payment method toggle
+            document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('bank-details').style.display = 
+                        this.value === 'bank-transfer' ? 'block' : 'none';
+                });
+            });
+        });
     </script>
 </body>
 </html>
