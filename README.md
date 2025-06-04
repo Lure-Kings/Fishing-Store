@@ -437,449 +437,778 @@
 
         .logo-preview {
             max-width: 200px;
-            max-height: 100px;
+            max-height: 200px;
+            border-radius: 8px;
             margin-top: 1rem;
+            border: 1px solid #ddd;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-option {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #1a365d;
+        }
+
+        .payment-option.selected {
+            border-color: #1a365d;
+            background-color: #f0f7ff;
+        }
+
+        .payment-option img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-to-shop {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: #1a365d;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .back-to-shop:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
             display: none;
         }
 
-        @media (max-width: 768px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
+        input.error {
+            border-color: #e74c3c;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo" id="logo">
-                <i class="fas fa-crown"></i>
-                Lure Kings
+    <div class="header">
+        <div class="nav">
+            <div class="logo" onclick="window.location.href='index.html'">
+                <i class="fas fa-fish"></i>
+                <span>Lure Kings</span>
             </div>
             <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="showView('store')">Store</button>
-                <button class="btn btn-primary cart-icon" onclick="showCart()">
-                    <i class="fas fa-shopping-cart"></i>
+                <button class="btn btn-secondary" id="adminBtn">Admin</button>
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.5rem; color: white;"></i>
                     <span class="cart-count" id="cartCount">0</span>
-                </button>
+                </div>
             </div>
-        </nav>
-    </header>
-
-    <div class="toast" id="toast">Item added to cart!</div>
+        </div>
+    </div>
 
     <div class="container">
-        <!-- Store View -->
-        <div id="storeView">
-            <div class="hero">
-                <h1>Premium Fishing Lures</h1>
-                <p>High-quality fishing lures for the serious angler</p>
-            </div>
-
-            <div class="categories">
-                <button class="category-btn active" onclick="filterByCategory('all')">All Lures</button>
-                <button class="category-btn" onclick="filterByCategory('jigs')">Jigs</button>
-                <button class="category-btn" onclick="filterByCategory('soft-plastics')">Soft Plastics</button>
-                <button class="category-btn" onclick="filterByCategory('topwaters')">Topwaters</button>
-                <button class="category-btn" onclick="filterByCategory('spinnerbaits')">Spinnerbaits</button>
-            </div>
-
-            <div class="products-grid" id="productsGrid"></div>
+        <div class="hero">
+            <h1>Premium Fishing Lures</h1>
+            <p>Discover our handcrafted fishing lures designed to attract the biggest catches in any water condition.</p>
         </div>
 
-        <!-- Admin View -->
-        <div id="adminView" class="hidden">
-            <div class="hero">
-                <div class="admin-logo">
-                    <img id="companyLogo" src="" alt="Lure Kings Logo">
-                </div>
-                <h1>Admin Dashboard</h1>
-                <p>Manage your Lure Kings inventory</p>
-            </div>
+        <div class="categories">
+            <button class="category-btn active" data-category="all">All Products</button>
+            <button class="category-btn" data-category="freshwater">Freshwater</button>
+            <button class="category-btn" data-category="saltwater">Saltwater</button>
+            <button class="category-btn" data-category="fly">Fly Fishing</button>
+            <button class="category-btn" data-category="bass">Bass</button>
+        </div>
 
-            <div class="logo-upload-container">
-                <h3>Upload Company Logo</h3>
-                <div class="file-upload-area" onclick="document.getElementById('logoUpload').click()">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i>
-                    <p>Click to upload logo or drag & drop</p>
-                    <p style="font-size: 0.9rem; opacity: 0.7;">Supports JPG, PNG</p>
-                </div>
-                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
-                <img id="logoPreview" class="logo-preview">
-            </div>
-
-            <div class="admin-form">
-                <h2 style="margin-bottom: 1rem; color: #1a365d;">Add New Product</h2>
-                <form id="productForm">
-                    <div class="form-group">
-                        <label for="productName">Product Name</label>
-                        <input type="text" id="productName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productCategory">Category</label>
-                        <select id="productCategory" required>
-                            <option value="">Select Category</option>
-                            <option value="jigs">Jigs</option>
-                            <option value="soft-plastics">Soft Plastics</option>
-                            <option value="topwaters">Topwaters</option>
-                            <option value="spinnerbaits">Spinnerbaits</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="productPrice">Price ($)</label>
-                        <input type="number" id="productPrice" step="0.01" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productDescription">Description</label>
-                        <textarea id="productDescription" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="productImage">Product Image</label>
-                        <div class="file-upload-area" onclick="document.getElementById('imageUpload').click()">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i>
-                            <p>Click to upload image or drag & drop</p>
-                            <p style="font-size: 0.9rem; opacity: 0.7;">Supports JPG, PNG, GIF</p>
-                        </div>
-                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                        <input type="url" id="productImage" placeholder="Or enter image URL">
-                        <img id="imagePreview" class="image-preview" style="display: none;">
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        Add Product
-                    </button>
-                </form>
-            </div>
-
-            <div class="admin-form">
-                <h2 style="margin-bottom: 1rem; color: #1a365d;">Manage Existing Products</h2>
-                <div id="adminProductsList"></div>
-            </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here -->
         </div>
     </div>
 
     <!-- Cart Modal -->
-    <div id="cartModal" class="modal">
+    <div class="modal" id="cartModal">
         <div class="modal-content">
-            <span class="close" onclick="closeCart()">&times;</span>
-            <h2 style="margin-bottom: 1rem; color: #1a365d;">
-                Shopping Cart
-            </h2>
-            <div id="cartItems"></div>
-            <div class="cart-total" id="cartTotal">Total: $0.00</div>
-            <button class="btn btn-primary" onclick="showCheckout()" style="width: 100%; margin-top: 1rem;">
-                Proceed to Checkout
-            </button>
+            <span class="close" id="closeCart">&times;</span>
+            <h2>Your Shopping Cart</h2>
+            <div id="cartItems">
+                <!-- Cart items will be loaded here -->
+                <p>Your cart is empty</p>
+            </div>
+            <div class="cart-total" id="cartTotal">
+                Total: $0.00
+            </div>
+            <button class="btn btn-primary" id="checkoutBtn" style="width: 100%;">Proceed to Checkout</button>
         </div>
     </div>
 
     <!-- Checkout Modal -->
-    <div id="checkoutModal" class="modal">
+    <div class="modal" id="checkoutModal">
         <div class="modal-content">
-            <span class="close" onclick="closeCheckout()">&times;</span>
-            <h2 style="margin-bottom: 1rem; color: #1a365d;">
-                Secure Checkout
-            </h2>
-            
-            <div class="payment-info">
-                <h4>Payment Information</h4>
-                <p><strong>Bank Details:</strong> ANZ Bank</p>
-                <p><strong>Account Name:</strong> Lure Kings Pty Ltd</p>
-                <p><strong>BSB:</strong> 012-345</p>
-                <p><strong>Account Number:</strong> 123456789</p>
-                <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
-                    Use your order number as the payment reference
-                </p>
-            </div>
+            <span class="close" id="closeCheckout">&times;</span>
+            <h2>Checkout</h2>
+            <div class="checkout-form">
+                <h3>Shipping Information</h3>
+                <div class="form-group">
+                    <label class="required-field">Full Name</label>
+                    <input type="text" id="fullName" required>
+                    <div class="error-message" id="nameError">Please enter your full name</div>
+                </div>
+                <div class="form-group">
+                    <label class="required-field">Email</label>
+                    <input type="email" id="email" required>
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+                <div class="form-group">
+                    <label class="required-field">Phone Number</label>
+                    <input type="tel" id="phone" required pattern="[0-9]*">
+                    <div class="error-message" id="phoneError">Please enter a valid phone number (digits only)</div>
+                </div>
+                <div class="form-group">
+                    <label class="required-field">Address</label>
+                    <input type="text" id="address" required>
+                    <div class="error-message" id="addressError">Please enter your address</div>
+                </div>
+                <div class="form-group">
+                    <label class="required-field">City</label>
+                    <input type="text" id="city" required>
+                    <div class="error-message" id="cityError">Please enter your city</div>
+                </div>
+                <div class="form-group">
+                    <label class="required-field">Postal Code</label>
+                    <input type="text" id="postalCode" required>
+                    <div class="error-message" id="postalError">Please enter your postal code</div>
+                </div>
 
-            <!-- Using FormSubmit to send emails -->
-            <form id="checkoutForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
-                <input type="hidden" name="_subject" value="New Order from Lure Kings">
-                <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_next" value="https://yourwebsite.com/thank-you.html">
-                <input type="hidden" name="_cc" value="lure.kings.fishing.aus@gmail.com">
-                <input type="hidden" name="_autoresponse" value="Thank you for your order! We'll process it shortly.">
-                
-                <div class="form-group">
-                    <label for="customerName">Full Name</label>
-                    <input type="text" id="customerName" name="name" required>
+                <h3>Payment Method</h3>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="stripe">
+                        <img src="https://stripe.com/img/v3/home/social.png" alt="Stripe">
+                        <div>Credit/Debit Card</div>
+                    </div>
+                    <div class="payment-option" data-method="paypal">
+                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" alt="PayPal">
+                        <div>PayPal</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="customerEmail">Email Address</label>
-                    <input type="email" id="customerEmail" name="email" required>
+
+                <div class="payment-info" id="stripePayment">
+                    <h4>Card Details</h4>
+                    <div class="form-group">
+                        <label class="required-field">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+                        <div class="error-message" id="cardError">Please enter a valid card number</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="required-field">Expiration Date</label>
+                        <input type="text" id="expDate" placeholder="MM/YY">
+                        <div class="error-message" id="expError">Please enter a valid expiration date</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="required-field">CVV</label>
+                        <input type="text" id="cvv" placeholder="123">
+                        <div class="error-message" id="cvvError">Please enter a valid CVV</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="customerPhone">Phone Number</label>
-                    <input type="tel" id="customerPhone" name="phone" required>
+
+                <div class="payment-info hidden" id="paypalPayment">
+                    <h4>PayPal</h4>
+                    <p>You will be redirected to PayPal to complete your payment after submitting this form.</p>
                 </div>
-                <div class="form-group">
-                    <label for="customerAddress">Delivery Address</label>
-                    <textarea id="customerAddress" name="address" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="orderNotes">Order Notes (Optional)</label>
-                    <textarea id="orderNotes" name="notes" rows="2" placeholder="Any special instructions..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Order Items</label>
-                    <div id="orderItemsDisplay"></div>
-                </div>
-                <div class="cart-total" id="checkoutTotal">Total: $0.00</div>
-                <input type="hidden" id="orderItems" name="order_items">
-                <input type="hidden" id="orderTotal" name="order_total">
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
-                    Place Order
-                </button>
-            </form>
+
+                <input type="hidden" id="paymentMethod" value="stripe">
+
+                <button class="btn btn-primary" id="placeOrderBtn" style="width: 100%; margin-top: 1rem;">Place Order</button>
+                <a href="#" class="back-to-shop" id="backToShop">Continue Shopping</a>
+            </div>
         </div>
     </div>
 
+    <!-- Order Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <span class="close" id="closeConfirmation">&times;</span>
+            <div style="text-align: center;">
+                <i class="fas fa-check-circle" style="font-size: 4rem; color: #4CAF50; margin-bottom: 1rem;"></i>
+                <h2>Order Confirmed!</h2>
+                <p>Thank you for your purchase. Your order has been placed successfully.</p>
+                <p>An email confirmation has been sent to <span id="confirmationEmail"></span></p>
+                <button class="btn btn-primary" id="returnToShop" style="margin-top: 1rem;">Return to Shop</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="modal" id="adminLoginModal">
+        <div class="modal-content">
+            <span class="close" id="closeAdminLogin">&times;</span>
+            <h2>Admin Login</h2>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="adminPassword">
+                <div class="error-message" id="adminError">Incorrect password</div>
+            </div>
+            <button class="btn btn-primary" id="adminLoginBtn">Login</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="modal" id="adminPanel">
+        <div class="modal-content">
+            <span class="close" id="closeAdminPanel">&times;</span>
+            <div class="admin-logo">
+                <h2>Admin Panel</h2>
+            </div>
+
+            <div class="admin-form">
+                <h3>Add New Product</h3>
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="productName">
+                </div>
+                <div class="form-group">
+                    <label>Product Description</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Price ($)</label>
+                    <input type="number" id="productPrice" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="productCategory">
+                        <option value="freshwater">Freshwater</option>
+                        <option value="saltwater">Saltwater</option>
+                        <option value="fly">Fly Fishing</option>
+                        <option value="bass">Bass</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <div class="file-upload-area" id="imageUploadArea">
+                        <p>Click to upload product image</p>
+                        <input type="file" id="productImage" accept="image/*" style="display: none;">
+                        <img id="productImagePreview" class="image-preview" style="display: none;">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="addProductBtn">Add Product</button>
+            </div>
+
+            <div class="admin-form">
+                <h3>Current Products</h3>
+                <div id="adminProductsList">
+                    <!-- Admin products will be listed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
     <script>
-        // Global variables
-        let isAdminLoggedIn = false;
-        const ADMIN_PASSWORD = "lureking2024";
-        let clickCount = 0;
-        let clickTimeout;
-        
-        let products = [
+        // Products data - will be loaded from localStorage
+        let products = JSON.parse(localStorage.getItem('products')) || [
             {
                 id: 1,
-                name: "Bass Pro Jig Head",
-                category: "jigs",
+                name: "Bass Pro Lure",
+                description: "Premium bass fishing lure with realistic movement",
                 price: 12.99,
-                description: "Premium jig head perfect for bass fishing with realistic action.",
-                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop"
+                category: "bass",
+                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
             },
             {
                 id: 2,
-                name: "Soft Plastic Worm",
-                category: "soft-plastics",
-                price: 8.49,
-                description: "Lifelike soft plastic worm that attracts fish with its natural movement.",
-                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop"
+                name: "Saltwater King",
+                description: "Heavy-duty saltwater lure for big game fishing",
+                price: 24.99,
+                category: "saltwater",
+                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
             },
             {
                 id: 3,
-                name: "Popper Topwater Lure",
-                category: "topwaters",
-                price: 15.99,
-                description: "Creates explosive surface action that drives fish wild.",
-                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop"
+                name: "Fly Fisher's Dream",
+                description: "Hand-tied fly lure for trout and salmon",
+                price: 8.99,
+                category: "fly",
+                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
             },
             {
                 id: 4,
-                name: "Colorado Spinnerbait",
-                category: "spinnerbaits",
-                price: 11.79,
-                description: "Classic spinnerbait with Colorado blade for maximum flash and vibration.",
-                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop"
+                name: "Freshwater Classic",
+                description: "Versatile freshwater lure for all species",
+                price: 9.99,
+                category: "freshwater",
+                image: "https://images.unsplash.com/photo-1576872381147-7fb4b5bd4777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
             }
         ];
 
-        let cart = [];
-        let currentFilter = 'all';
+        // Cart data - will be loaded from localStorage
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        // Initialize the app when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            init();
-        });
+        // DOM Elements
+        const productsGrid = document.getElementById('productsGrid');
+        const cartIcon = document.getElementById('cartIcon');
+        const cartCount = document.getElementById('cartCount');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const closeCheckout = document.getElementById('closeCheckout');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeConfirmation = document.getElementById('closeConfirmation');
+        const returnToShop = document.getElementById('returnToShop');
+        const adminBtn = document.getElementById('adminBtn');
+        const adminLoginModal = document.getElementById('adminLoginModal');
+        const closeAdminLogin = document.getElementById('closeAdminLogin');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminPanel = document.getElementById('adminPanel');
+        const closeAdminPanel = document.getElementById('closeAdminPanel');
+        const adminPassword = document.getElementById('adminPassword');
+        const adminError = document.getElementById('adminError');
+        const toast = document.getElementById('toast');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const backToShop = document.getElementById('backToShop');
+        const confirmationEmail = document.getElementById('confirmationEmail');
 
+        // Payment elements
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const stripePayment = document.getElementById('stripePayment');
+        const paypalPayment = document.getElementById('paypalPayment');
+        const paymentMethod = document.getElementById('paymentMethod');
+
+        // Admin product management elements
+        const productName = document.getElementById('productName');
+        const productDescription = document.getElementById('productDescription');
+        const productPrice = document.getElementById('productPrice');
+        const productCategory = document.getElementById('productCategory');
+        const productImage = document.getElementById('productImage');
+        const productImagePreview = document.getElementById('productImagePreview');
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const addProductBtn = document.getElementById('addProductBtn');
+        const adminProductsList = document.getElementById('adminProductsList');
+
+        // Form validation elements
+        const requiredFields = document.querySelectorAll('[required]');
+        const errorMessages = document.querySelectorAll('.error-message');
+
+        // Initialize the app
         function init() {
             renderProducts();
             updateCartCount();
-            renderAdminProducts();
             setupEventListeners();
-            setupImageUpload();
-            setupLogoUpload();
-            
-            // Add crown click listener
-            document.getElementById('logo').addEventListener('click', handleCrownClick);
-            
-            // Load saved logo from localStorage if exists
-            const savedLogo = localStorage.getItem('companyLogo');
-            if (savedLogo) {
-                document.getElementById('companyLogo').src = savedLogo;
-                document.getElementById('logoPreview').src = savedLogo;
-                document.getElementById('logoPreview').style.display = 'block';
-            }
         }
 
-        function handleCrownClick() {
-            clickCount++;
-            
-            // Reset counter after 1 second
-            clearTimeout(clickTimeout);
-            clickTimeout = setTimeout(() => {
-                clickCount = 0;
-            }, 1000);
-            
-            // If clicked 3 times, show admin login
-            if (clickCount >= 3) {
-                clickCount = 0;
-                showAdminLogin();
-            }
-        }
-
+        // Set up event listeners
         function setupEventListeners() {
-            // Admin form submission
-            document.getElementById('productForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                addProduct();
+            // Cart and checkout
+            cartIcon.addEventListener('click', openCart);
+            closeCart.addEventListener('click', closeModal.bind(null, cartModal));
+            checkoutBtn.addEventListener('click', openCheckout);
+            closeCheckout.addEventListener('click', closeModal.bind(null, checkoutModal));
+            placeOrderBtn.addEventListener('click', placeOrder);
+            returnToShop.addEventListener('click', returnToShopHandler);
+            backToShop.addEventListener('click', backToShopHandler);
+
+                        // Admin login
+            adminLoginBtn.addEventListener('click', adminLogin);
+            closeAdminPanel.addEventListener('click', closeModal.bind(null, adminPanel));
+
+            // Product categories
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => filterProducts(btn.dataset.category));
             });
 
-            // Checkout form submission
-            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-                // Prepare order details for email
-                const orderItems = cart.map(item => 
-                    `${item.name} (${item.quantity} x $${item.price.toFixed(2)}) = $${(item.quantity * item.price).toFixed(2)}`
-                ).join('\n');
-                
-                document.getElementById('orderItems').value = orderItems;
-                document.getElementById('orderTotal').value = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
-                
-                // Reset cart after submission
-                cart = [];
-                updateCartCount();
-                localStorage.setItem('cart', JSON.stringify(cart));
+            // Payment options
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => selectPaymentMethod(option.dataset.method));
             });
 
-            // Image upload handling
-            document.getElementById('imageUpload').addEventListener('change', function(e) {
-                handleImageUpload(e);
+            // Admin product management
+            imageUploadArea.addEventListener('click', () => productImage.click());
+            productImage.addEventListener('change', handleImageUpload);
+            addProductBtn.addEventListener('click', addProduct);
+
+            // Form validation
+            requiredFields.forEach(field => {
+                field.addEventListener('input', validateField);
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === cartModal) closeModal(cartModal);
+                if (e.target === checkoutModal) closeModal(checkoutModal);
+                if (e.target === confirmationModal) closeModal(confirmationModal);
+                if (e.target === adminLoginModal) closeModal(adminLoginModal);
+                if (e.target === adminPanel) closeModal(adminPanel);
             });
         }
 
-        function setupLogoUpload() {
-            const uploadArea = document.querySelector('.logo-upload-container .file-upload-area');
-            const fileInput = document.getElementById('logoUpload');
-            const preview = document.getElementById('logoPreview');
-            const logoDisplay = document.getElementById('companyLogo');
+        // Render products to the page
+        function renderProducts(filteredProducts = products) {
+            productsGrid.innerHTML = '';
             
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#1a365d';
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = '#ddd';
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#ddd';
-                
-                if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    handleLogoUpload({ target: fileInput });
-                }
-            });
-            
-            fileInput.addEventListener('change', handleLogoUpload);
-        }
-
-        function handleLogoUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (!file.type.match('image.*')) {
-                alert('Please select an image file');
+            if (filteredProducts.length === 0) {
+                productsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products found in this category.</p>';
                 return;
             }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('logoPreview');
-                const logoDisplay = document.getElementById('companyLogo');
-                
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                
-                logoDisplay.src = e.target.result;
-                
-                // Save to localStorage
-                localStorage.setItem('companyLogo', e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
 
-        // View management
-        function showView(view) {
-            if (view === 'admin' && !isAdminLoggedIn) {
-                showAdminLogin();
-                return;
-            }
-            
-            document.getElementById('storeView').classList.toggle('hidden', view !== 'store');
-            document.getElementById('adminView').classList.toggle('hidden', view !== 'admin');
-        }
-
-        // Product rendering
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-            
-            const filteredProducts = currentFilter === 'all' 
-                ? products 
-                : products.filter(p => p.category === currentFilter);
-            
             filteredProducts.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
                     <img src="${product.image}" alt="${product.name}" class="product-image">
                     <div class="product-info">
                         <h3 class="product-title">${product.name}</h3>
-                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <p class="product-price">$${product.price.toFixed(2)}</p>
                         <p class="product-description">${product.description}</p>
-                        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
                     </div>
                 `;
-                grid.appendChild(card);
+                productsGrid.appendChild(productCard);
+            });
+
+            // Add event listeners to add-to-cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(btn => {
+                btn.addEventListener('click', addToCart);
             });
         }
 
-        function filterByCategory(category) {
-            currentFilter = category;
-            renderProducts();
-            
-            // Update active state of category buttons
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(category));
+        // Filter products by category
+        function filterProducts(category) {
+            // Update active category button
+            categoryBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === category);
             });
+
+            if (category === 'all') {
+                renderProducts();
+                return;
+            }
+
+            const filteredProducts = products.filter(product => product.category === category);
+            renderProducts(filteredProducts);
         }
 
-        // Cart functionality
-        function addToCart(productId) {
+        // Cart functions
+        function addToCart(e) {
+            const productId = parseInt(e.target.dataset.id);
             const product = products.find(p => p.id === productId);
-            if (!product) return;
             
+            // Check if product is already in cart
             const existingItem = cart.find(item => item.id === productId);
+            
             if (existingItem) {
-                existingItem.quantity++;
+                existingItem.quantity += 1;
             } else {
-                cart.push({...product, quantity: 1});
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
             }
             
-            updateCartCount();
+            updateCart();
             showToast(`${product.name} added to cart`);
+        }
+
+        function updateCart() {
             localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderCartItems();
         }
 
         function updateCartCount() {
             const count = cart.reduce((total, item) => total + item.quantity, 0);
-            document.getElementById('cartCount').textContent = count;
+            cartCount.textContent = count;
+            cartCount.style.display = count > 0 ? 'flex' : 'none';
         }
 
+        function renderCartItems() {
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+                cartTotal.textContent = 'Total: $0.00';
+                checkoutBtn.disabled = true;
+                return;
+            }
+            
+            checkoutBtn.disabled = false;
+            cartItems.innerHTML = '';
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h4 class="cart-item-title">${item.name}</h4>
+                        <p>$${item.price.toFixed(2)}</p>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <p>$${itemTotal.toFixed(2)}</p>
+                        <button class="remove-item" data-id="${item.id}">Remove</button>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.quantity-btn').forEach(btn => {
+                btn.addEventListener('click', updateQuantity);
+            });
+            
+            // Add event listeners to remove buttons
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', removeItem);
+            });
+        }
+
+        function updateQuantity(e) {
+            const productId = parseInt(e.target.dataset.id);
+            const action = e.target.dataset.action;
+            const item = cart.find(item => item.id === productId);
+            
+            if (action === 'increase') {
+                item.quantity += 1;
+            } else if (action === 'decrease' && item.quantity > 1) {
+                item.quantity -= 1;
+            }
+            
+            updateCart();
+        }
+
+        function removeItem(e) {
+            const productId = parseInt(e.target.dataset.id);
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+            showToast('Item removed from cart');
+        }
+
+        // Modal functions
+        function openCart() {
+            renderCartItems();
+            cartModal.style.display = 'block';
+        }
+
+        function openCheckout() {
+            closeModal(cartModal);
+            checkoutModal.style.display = 'block';
+        }
+
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        function openAdminLogin() {
+            adminLoginModal.style.display = 'block';
+        }
+
+        // Admin functions
+        function adminLogin() {
+            // In a real app, this would be a secure server-side check
+            if (adminPassword.value === 'admin123') {
+                closeModal(adminLoginModal);
+                adminPanel.style.display = 'block';
+                renderAdminProducts();
+            } else {
+                adminError.style.display = 'block';
+            }
+        }
+
+        function renderAdminProducts() {
+            adminProductsList.innerHTML = '';
+            
+            if (products.length === 0) {
+                adminProductsList.innerHTML = '<p>No products found</p>';
+                return;
+            }
+            
+            products.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.style.marginBottom = '1rem';
+                productItem.style.paddingBottom = '1rem';
+                productItem.style.borderBottom = '1px solid #ddd';
+                productItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4>${product.name}</h4>
+                            <p>$${product.price.toFixed(2)} - ${product.category}</p>
+                        </div>
+                        <button class="btn btn-secondary" data-id="${product.id}" style="background-color: #e74c3c; color: white;">Delete</button>
+                    </div>
+                `;
+                adminProductsList.appendChild(productItem);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.product-item button').forEach(btn => {
+                btn.addEventListener('click', deleteProduct);
+            });
+        }
+
+        function deleteProduct(e) {
+            const productId = parseInt(e.target.dataset.id);
+            products = products.filter(product => product.id !== productId);
+            localStorage.setItem('products', JSON.stringify(products));
+            renderAdminProducts();
+            renderProducts();
+            showToast('Product deleted');
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    productImagePreview.src = event.target.result;
+                    productImagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function addProduct() {
+            if (!productName.value || !productPrice.value) {
+                showToast('Please fill in all required fields');
+                return;
+            }
+            
+            const newProduct = {
+                id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+                name: productName.value,
+                description: productDescription.value,
+                price: parseFloat(productPrice.value),
+                category: productCategory.value,
+                image: productImagePreview.src || 'https://via.placeholder.com/300'
+            };
+            
+            products.push(newProduct);
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            // Reset form
+            productName.value = '';
+            productDescription.value = '';
+            productPrice.value = '';
+            productImagePreview.src = '';
+            productImagePreview.style.display = 'none';
+            productImage.value = '';
+            
+            renderProducts();
+            renderAdminProducts();
+            showToast('Product added successfully');
+        }
+
+        // Checkout functions
+        function selectPaymentMethod(method) {
+            paymentMethod.value = method;
+            
+            paymentOptions.forEach(option => {
+                option.classList.toggle('selected', option.dataset.method === method);
+            });
+            
+            if (method === 'stripe') {
+                stripePayment.classList.remove('hidden');
+                paypalPayment.classList.add('hidden');
+            } else {
+                stripePayment.classList.add('hidden');
+                paypalPayment.classList.remove('hidden');
+            }
+        }
+
+        function validateField(e) {
+            const field = e.target;
+            const errorId = `${field.id}Error`;
+            const errorElement = document.getElementById(errorId);
+            
+            if (!field.checkValidity()) {
+                field.classList.add('error');
+                errorElement.style.display = 'block';
+                return false;
+            } else {
+                field.classList.remove('error');
+                errorElement.style.display = 'none';
+                return true;
+            }
+        }
+
+        function validateForm() {
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const errorId = `${field.id}Error`;
+                const errorElement = document.getElementById(errorId);
+                
+                if (!field.checkValidity()) {
+                    field.classList.add('error');
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+
+        function placeOrder() {
+            if (!validateForm()) {
+                showToast('Please fill in all required fields correctly');
+                return;
+            }
+            
+            // In a real app, you would process the payment here
+            const email = document.getElementById('email').value;
+            confirmationEmail.textContent = email;
+            
+            // Clear cart
+            cart = [];
+            updateCart();
+            
+            // Close checkout and show confirmation
+            closeModal(checkoutModal);
+            confirmationModal.style.display = 'block';
+        }
+
+        function returnToShopHandler(e) {
+            e.preventDefault();
+            closeModal(confirmationModal);
+        }
+
+        function backToShopHandler(e) {
+            e.preventDefault();
+            closeModal(checkoutModal);
+            openCart();
+        }
+
+        // Utility functions
         function showToast(message) {
-            const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.style.display = 'block';
             
@@ -888,251 +1217,8 @@
             }, 3000);
         }
 
-        function showCart() {
-            const modal = document.getElementById('cartModal');
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-            const orderItemsDisplay = document.getElementById('orderItemsDisplay');
-            
-            cartItems.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p>Your cart is empty</p>';
-                cartTotal.textContent = 'Total: $0.00';
-                orderItemsDisplay.innerHTML = '<p>No items</p>';
-            } else {
-                let total = 0;
-                let orderItemsHTML = '<ul style="list-style-type: none; padding: 0;">';
-                
-                cart.forEach(item => {
-                    const itemTotal = item.price * item.quantity;
-                    total += itemTotal;
-                    
-                    const cartItem = document.createElement('div');
-                    cartItem.className = 'cart-item';
-                    cartItem.innerHTML = `
-                        <img src="${item.image}" alt="${item.name}">
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${item.name}</div>
-                            <div>$${item.price.toFixed(2)} each</div>
-                            <div class="quantity-controls">
-                                <button class="quantity-btn" onclick="updateCartItem(${item.id}, -1)">-</button>
-                                <span>${item.quantity}</span>
-                                <button class="quantity-btn" onclick="updateCartItem(${item.id}, 1)">+</button>
-                            </div>
-                            <div>$${itemTotal.toFixed(2)}</div>
-                        </div>
-                        <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
-                    `;
-                    cartItems.appendChild(cartItem);
-                    
-                    orderItemsHTML += `
-                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: #f5f5f5; border-radius: 4px;">
-                            ${item.name} - ${item.quantity} x $${item.price.toFixed(2)} = $${itemTotal.toFixed(2)}
-                        </li>
-                    `;
-                });
-                
-                orderItemsHTML += '</ul>';
-                orderItemsDisplay.innerHTML = orderItemsHTML;
-                
-                cartTotal.textContent = `Total: $${total.toFixed(2)}`;
-                document.getElementById('checkoutTotal').textContent = `Total: $${total.toFixed(2)}`;
-            }
-            
-            modal.style.display = 'block';
-        }
-
-        function closeCart() {
-            document.getElementById('cartModal').style.display = 'none';
-        }
-
-        function updateCartItem(productId, change) {
-            const item = cart.find(item => item.id === productId);
-            if (!item) return;
-            
-            item.quantity += change;
-            
-            if (item.quantity <= 0) {
-                removeFromCart(productId);
-            } else {
-                updateCartCount();
-                showCart(); // Refresh cart display
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCartCount();
-            showCart(); // Refresh cart display
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        // Checkout functionality
-        function showCheckout() {
-            closeCart();
-            document.getElementById('checkoutModal').style.display = 'block';
-        }
-
-        function closeCheckout() {
-            document.getElementById('checkoutModal').style.display = 'none';
-        }
-
-        // Admin functionality
-        function showAdminLogin() {
-            // Create a simple password prompt
-            const password = prompt("Enter admin password:");
-            if (password === ADMIN_PASSWORD) {
-                isAdminLoggedIn = true;
-                showView('admin');
-            } else if (password !== null) {
-                alert('Incorrect password!');
-            }
-        }
-
-        function renderAdminProducts() {
-            const container = document.getElementById('adminProductsList');
-            container.innerHTML = '';
-            
-            if (products.length === 0) {
-                container.innerHTML = '<p>No products found</p>';
-                return;
-            }
-            
-            products.forEach(product => {
-                const productElement = document.createElement('div');
-                productElement.className = 'product-card';
-                productElement.innerHTML = `
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p>Category: ${product.category}</p>
-                        <p>Price: $${product.price.toFixed(2)}</p>
-                        <p>${product.description}</p>
-                        <button onclick="editProduct(${product.id})" class="btn btn-secondary">Edit</button>
-                        <button onclick="deleteProduct(${product.id})" class="btn btn-secondary" style="background: #e74c3c;">Delete</button>
-                    </div>
-                `;
-                container.appendChild(productElement);
-            });
-        }
-
-        function addProduct() {
-            const name = document.getElementById('productName').value;
-            const category = document.getElementById('productCategory').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const description = document.getElementById('productDescription').value;
-            let image = document.getElementById('productImage').value;
-            
-            // Use uploaded image if available
-            const uploadedImage = document.getElementById('imagePreview').src;
-            if (uploadedImage && !uploadedImage.includes('data:')) {
-                image = uploadedImage;
-            }
-            
-            if (!name || !category || isNaN(price) || !description || !image) {
-                alert('Please fill all fields');
-                return;
-            }
-            
-            const newProduct = {
-                id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-                name,
-                category,
-                price,
-                description,
-                image
-            };
-            
-            products.push(newProduct);
-            renderProducts();
-            renderAdminProducts();
-            
-            // Reset form
-            document.getElementById('productForm').reset();
-            document.getElementById('imagePreview').style.display = 'none';
-            alert('Product added successfully!');
-        }
-
-        function editProduct(id) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-            
-            // Fill the form with product data
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productCategory').value = product.category;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productDescription').value = product.description;
-            document.getElementById('productImage').value = product.image;
-            
-            // Show image preview if exists
-            if (product.image) {
-                const preview = document.getElementById('imagePreview');
-                preview.src = product.image;
-                preview.style.display = 'block';
-            }
-            
-            // Remove the product (will be re-added when form is submitted)
-            products = products.filter(p => p.id !== id);
-            
-            // Scroll to form
-            document.getElementById('productForm').scrollIntoView();
-        }
-
-        function deleteProduct(id) {
-            if (!confirm('Are you sure you want to delete this product?')) return;
-            
-            products = products.filter(p => p.id !== id);
-            renderProducts();
-            renderAdminProducts();
-        }
-
-        // Image upload handling
-        function setupImageUpload() {
-            const uploadArea = document.querySelector('.admin-form .file-upload-area');
-            const fileInput = document.getElementById('imageUpload');
-            const preview = document.getElementById('imagePreview');
-            
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#1a365d';
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = '#ddd';
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#ddd';
-                
-                if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    handleImageUpload({ target: fileInput });
-                }
-            });
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (!file.type.match('image.*')) {
-                alert('Please select an image file');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('imagePreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                
-                // Also set the image URL field
-                document.getElementById('productImage').value = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
+        // Initialize the app
+        init();
     </script>
 </body>
 </html>
