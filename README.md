@@ -1,412 +1,384 @@
-# Fishing-Store
-// Global variables
-let isAdminLoggedIn = false;
-const ADMIN_PASSWORD = "lureking2024";
-let products = [
-    {
-        id: 1,
-        name: "Bass Pro Jig Head",
-        category: "jigs",
-        price: 12.99,
-        description: "Premium jig head perfect for bass fishing with realistic action.",
-        image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop"
-    },
-    // ... (your other products)
-];
-let cart = [];
-let currentFilter = 'all';
-
-// Initialize the app when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    init();
-});
-
-function init() {
-    renderProducts();
-    updateCartCount();
-    renderAdminProducts();
-    updateNavigation();
-    checkAdminAccess();
-    setupImageUpload();
-    setupEventListeners();
-}
-
-// Setup all event listeners
-function setupEventListeners() {
-    // Admin form submission
-    document.getElementById('productForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        addProduct();
-    });
-
-    // Checkout form submission
-    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        processCheckout();
-    });
-
-    // Admin login form submission
-    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const password = document.getElementById('adminPassword').value;
-        if (password === ADMIN_PASSWORD) {
-            isAdminLoggedIn = true;
-            closeAdminLogin();
-            showView('admin');
-            document.getElementById('adminPassword').value = '';
-        } else {
-            alert('Incorrect password!');
-        }
-    });
-
-    // Image upload handling
-    document.getElementById('imageUpload').addEventListener('change', function(e) {
-        handleImageUpload(e);
-    });
-}
-
-// View management
-function showView(view) {
-    if (view === 'admin' && !isAdminLoggedIn) {
-        showAdminLogin();
-        return;
-    }
-    
-    document.getElementById('storeView').classList.toggle('hidden', view !== 'store');
-    document.getElementById('adminView').classList.toggle('hidden', view !== 'admin');
-    updateNavigation();
-}
-
-function updateNavigation() {
-    // Update active state of navigation buttons
-}
-
-// Product rendering
-function renderProducts() {
-    const grid = document.getElementById('productsGrid');
-    grid.innerHTML = '';
-    
-    const filteredProducts = currentFilter === 'all' 
-        ? products 
-        : products.filter(p => p.category === currentFilter);
-    
-    filteredProducts.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" class="product-image">
-            <div class="product-info">
-                <h3 class="product-title">${product.name}</h3>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
-                <p class="product-description">${product.description}</p>
-                <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-function filterByCategory(category) {
-    currentFilter = category;
-    renderProducts();
-    
-    // Update active state of category buttons
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(category));
-    });
-}
-
-// Cart functionality
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    
-    const existingItem = cart.find(item => item.id === productId);
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({...product, quantity: 1});
-    }
-    
-    updateCartCount();
-    showCartNotification(product.name);
-}
-
-function updateCartCount() {
-    const count = cart.reduce((total, item) => total + item.quantity, 0);
-    document.getElementById('cartCount').textContent = count;
-}
-
-function showCartNotification(productName) {
-    // Could implement a toast notification here
-    console.log(`${productName} added to cart`);
-}
-
-function showCart() {
-    const modal = document.getElementById('cartModal');
-    const cartItems = document.getElementById('cartItems');
-    const cartTotal = document.getElementById('cartTotal');
-    
-    cartItems.innerHTML = '';
-    
-    if (cart.length === 0) {
-        cartItems.innerHTML = '<p>Your cart is empty</p>';
-        cartTotal.textContent = 'Total: $0.00';
-    } else {
-        let total = 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Existing meta tags and styles -->
+    <style>
+        /* Existing CSS */
         
-        cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
-            
-            const cartItem = document.createElement('div');
-            cartItem.className = 'cart-item';
-            cartItem.innerHTML = `
-                <img src="${item.image}" alt="${item.name}">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">${item.name}</div>
-                    <div>$${item.price.toFixed(2)} each</div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="updateCartItem(${item.id}, -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="quantity-btn" onclick="updateCartItem(${item.id}, 1)">+</button>
+        /* New styles for payment section */
+        .payment-methods {
+            margin-bottom: 2rem;
+        }
+
+        .payment-option {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #1a365d;
+            background-color: #f9f9f9;
+        }
+
+        .payment-details {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .bank-details {
+            margin-bottom: 1rem;
+        }
+
+        .payment-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+    <!-- Existing header and navigation -->
+    
+    <!-- Checkout Modal with enhanced payment options -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCheckout()">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #1a365d;">
+                Secure Checkout
+            </h2>
+
+            <!-- Payment Methods Selection -->
+            <div class="payment-methods">
+                <button class="payment-option" onclick="selectPaymentMethod('bank')">Bank Transfer</button>
+                <button class="payment-option" onclick="selectPaymentMethod('stripe')">Stripe Payment</button>
+                <button class="payment-option" onclick="selectPaymentMethod('paypal')">PayPal</button>
+            </div>
+
+            <!-- Bank Transfer Details -->
+            <form id="bankForm">
+                <div class="payment-details bank-details">
+                    <h4>Bank Transfer Details</h4>
+                    <div class="form-group">
+                        <label for="bsb">BSB Number:</label>
+                        <input type="text" id="bsb" name="bsb" required pattern="[0-9]{3}-[0-9]{3}" maxlength="7">
+                        <span class="error-message">Format: XXX-XXX</span>
                     </div>
-                    <div>$${itemTotal.toFixed(2)}</div>
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number:</label>
+                        <input type="text" id="accountNumber" name="accountNumber" required pattern="[0-9]{6,10}">
+                        <span class="error-message">Must be 6-10 digits</span>
+                    </div>
                 </div>
-                <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
-            `;
-            cartItems.appendChild(cartItem);
-        });
-        
-        cartTotal.textContent = `Total: $${total.toFixed(2)}`;
-        document.getElementById('checkoutTotal').textContent = `Total: $${total.toFixed(2)}`;
-    }
-    
-    modal.style.display = 'block';
-}
+            </form>
 
-function closeCart() {
-    document.getElementById('cartModal').style.display = 'none';
-}
+            <!-- Customer Information -->
+            <form id="customerForm">
+                <input type="hidden" name="_subject" value="New Order from Lure Kings">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="thank-you.html">
+                <input type="hidden" name="_cc" value="lure.kings.fishing.aus@gmail.com">
+                <input type="hidden" name="_autoresponse" value="Thank you for your order! We'll process it shortly.">
 
-function updateCartItem(productId, change) {
-    const item = cart.find(item => item.id === productId);
-    if (!item) return;
-    
-    item.quantity += change;
-    
-    if (item.quantity <= 0) {
-        removeFromCart(productId);
-    } else {
-        updateCartCount();
-        showCart(); // Refresh cart display
-    }
-}
+                <div class="form-group">
+                    <label for="customerName">Full Name:</label>
+                    <input type="text" id="customerName" name="name" required>
+                    <span class="error-message">Required field</span>
+                </div>
 
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    updateCartCount();
-    showCart(); // Refresh cart display
-}
+                <div class="form-group">
+                    <label for="customerEmail">Email Address:</label>
+                    <input type="email" id="customerEmail" name="email" required>
+                    <span class="error-message">Valid email required</span>
+                </div>
 
-// Checkout functionality
-function showCheckout() {
-    closeCart();
-    document.getElementById('checkoutModal').style.display = 'block';
-}
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number:</label>
+                    <input type="tel" id="customerPhone" name="phone" required pattern="[0-9]{10}" maxlength="10">
+                    <span class="error-message">Must be 10 digits</span>
+                </div>
 
-function closeCheckout() {
-    document.getElementById('checkoutModal').style.display = 'none';
-}
+                <div class="form-group">
+                    <label for="customerAddress">Delivery Address:</label>
+                    <textarea id="customerAddress" name="address" rows="3" required></textarea>
+                    <span class="error-message">Required field</span>
+                </div>
 
-function processCheckout() {
-    const name = document.getElementById('customerName').value;
-    const email = document.getElementById('customerEmail').value;
-    
-    if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-    }
-    
-    // Generate order number
-    const orderNumber = 'LK-' + Date.now().toString().slice(-6);
-    
-    // In a real app, you would send this data to your server
-    const order = {
-        orderNumber,
-        customer: { name, email },
-        items: cart,
-        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        date: new Date().toISOString()
-    };
-    
-    console.log('Order placed:', order);
-    alert(`Order #${orderNumber} placed successfully!\nA confirmation has been sent to ${email}`);
-    
-    // Reset cart and close modals
-    cart = [];
-    updateCartCount();
-    closeCheckout();
-    document.getElementById('checkoutForm').reset();
-}
+                <!-- Order Summary -->
+                <div class="cart-total" id="checkoutTotal">Total: $0.00</div>
+            </form>
 
-// Admin functionality
-function showAdminLogin() {
-    document.getElementById('adminLoginModal').style.display = 'block';
-}
-
-function closeAdminLogin() {
-    document.getElementById('adminLoginModal').style.display = 'none';
-}
-
-function checkAdminAccess() {
-    if (window.location.hash === '#admin') {
-        showAdminLogin();
-    }
-}
-
-function renderAdminProducts() {
-    const container = document.getElementById('adminProductsList');
-    container.innerHTML = '';
-    
-    if (products.length === 0) {
-        container.innerHTML = '<p>No products found</p>';
-        return;
-    }
-    
-    products.forEach(product => {
-        const productElement = document.createElement('div');
-        productElement.className = 'product-card';
-        productElement.innerHTML = `
-            <div class="product-info">
-                <h3 class="product-title">${product.name}</h3>
-                <p>Category: ${product.category}</p>
-                <p>Price: $${product.price.toFixed(2)}</p>
-                <p>${product.description}</p>
-                <button onclick="editProduct(${product.id})" class="btn btn-secondary">Edit</button>
-                <button onclick="deleteProduct(${product.id})" class="btn btn-secondary" style="background: #ef4444;">Delete</button>
+            <!-- Payment Buttons -->
+            <div class="payment-buttons">
+                <button type="button" onclick="showCart()" class="btn btn-secondary">Back to Cart</button>
+                <button type="submit" form="bankForm" class="btn btn-primary">Complete Payment</button>
             </div>
-        `;
-        container.appendChild(productElement);
-    });
-}
+        </div>
+    </div>
 
-function addProduct() {
-    const name = document.getElementById('productName').value;
-    const category = document.getElementById('productCategory').value;
-    const price = parseFloat(document.getElementById('productPrice').value);
-    const description = document.getElementById('productDescription').value;
-    let image = document.getElementById('productImage').value;
-    
-    // Use uploaded image if available
-    const uploadedImage = document.getElementById('imagePreview').src;
-    if (uploadedImage && !uploadedImage.includes('data:')) {
-        image = uploadedImage;
-    }
-    
-    if (!name || !category || isNaN(price) || !description || !image) {
-        alert('Please fill all fields');
-        return;
-    }
-    
-    const newProduct = {
-        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-        name,
-        category,
-        price,
-        description,
-        image
-    };
-    
-    products.push(newProduct);
-    renderProducts();
-    renderAdminProducts();
-    
-    // Reset form
-    document.getElementById('productForm').reset();
-    document.getElementById('imagePreview').style.display = 'none';
-    alert('Product added successfully!');
-}
+    <!-- Thank You Page -->
+    <div id="thankYouPage" class="modal hidden">
+        <div class="modal-content">
+            <h2 style="color: #1a365d;">Thank You!</h2>
+            <p>Your order has been successfully placed.</p>
+            <p>An order confirmation has been sent to your email.</p>
+            <button onclick="returnToStore()" class="btn btn-primary">Return to Store</button>
+        </div>
+    </div>
 
-function editProduct(id) {
-    const product = products.find(p => p.id === id);
-    if (!product) return;
-    
-    // Fill the form with product data
-    document.getElementById('productName').value = product.name;
-    document.getElementById('productCategory').value = product.category;
-    document.getElementById('productPrice').value = product.price;
-    document.getElementById('productDescription').value = product.description;
-    document.getElementById('productImage').value = product.image;
-    
-    // Show image preview if exists
-    if (product.image) {
-        const preview = document.getElementById('imagePreview');
-        preview.src = product.image;
-        preview.style.display = 'block';
-    }
-    
-    // Remove the product (will be re-added when form is submitted)
-    products = products.filter(p => p.id !== id);
-    
-    // Scroll to form
-    document.getElementById('productForm').scrollIntoView();
-}
-
-function deleteProduct(id) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-    
-    products = products.filter(p => p.id !== id);
-    renderProducts();
-    renderAdminProducts();
-}
-
-// Image upload handling
-function setupImageUpload() {
-    const uploadArea = document.querySelector('.file-upload-area');
-    const fileInput = document.getElementById('imageUpload');
-    const preview = document.getElementById('imagePreview');
-    
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
-    
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-    });
-    
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
+    <script>
+        // Updated constants
+        const ADMIN_PASSWORD = "Maxchingershambo08";
         
-        if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            handleImageUpload({ target: fileInput });
+        // Initialize products from localStorage
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            {
+                id: 1,
+                name: "Bass Pro Jig Head",
+                category: "jigs",
+                price: 12.99,
+                description: "Premium jig head perfect for bass fishing with realistic action.",
+                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop"
+            },
+            // ... existing products ...
+        ];
+
+        // Enhanced cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            
+            // Load saved state
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            updateCartCount();
+            
+            // Set up payment method selection
+            const paymentButtons = document.querySelectorAll('.payment-option');
+            paymentButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    selectPaymentMethod(button.textContent.toLowerCase().replace(/\s/g, ''));
+                });
+            });
+
+            // Form validation setup
+            setupFormValidation();
+        });
+
+        // Enhanced initialization
+        function init() {
+            renderProducts();
+            updateCartCount();
+            renderAdminProducts();
+            setupEventListeners();
+            setupImageUpload();
+            setupLogoUpload();
+            
+            document.getElementById('logo').addEventListener('click', handleCrownClick);
+            
+            const savedLogo = localStorage.getItem('companyLogo');
+            if (savedLogo) {
+                document.getElementById('companyLogo').src = savedLogo;
+                document.getElementById('logoPreview').src = savedLogo;
+                document.getElementById('logoPreview').style.display = 'block';
+            }
         }
-    });
-}
 
-function handleImageUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    if (!file.type.match('image.*')) {
-        alert('Please select an image file');
-        return;
-    }
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const preview = document.getElementById('imagePreview');
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-        
-        // Also set the image URL field
-        document.getElementById('productImage').value = e.target.result;
-    };
-    reader.readAsDataURL(file);
-}
+        // Payment method selection
+        function selectPaymentMethod(method) {
+            const details = document.querySelector(`.${method}-details`);
+            document.querySelectorAll('.payment-details').forEach(detail => {
+                detail.style.display = 'none';
+            });
+            if (details) {
+                details.style.display = 'block';
+            }
+        }
 
-// Initialize the app
-init();
+        // Form validation setup
+        function setupFormValidation() {
+            const phoneInput = document.getElementById('customerPhone');
+            phoneInput.addEventListener('keypress', function(e) {
+                return /[0-9]/.test(e.key);
+            });
+
+            const forms = document.querySelectorAll('#bankForm, #customerForm');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!validateForm(this)) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    
+                    processPayment(e);
+                    return true;
+                });
+            });
+        }
+
+        // Form validation
+        function validateForm(form) {
+            let isValid = true;
+            
+            // Validate required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    showError(field);
+                } else {
+                    hideError(field);
+                }
+            });
+
+            // Validate email
+            const emailField = form.querySelector('[type="email"]');
+            if (emailField && !validateEmail(emailField.value)) {
+                isValid = false;
+                showError(emailField);
+            }
+
+            // Validate phone number
+            const phoneField = form.querySelector('[name="phone"]');
+            if (phoneField && !validatePhoneNumber(phoneField.value)) {
+                isValid = false;
+                showError(phoneField);
+            }
+
+            return isValid;
+        }
+
+        // Helper functions
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validatePhoneNumber(phone) {
+            return /^\d{10}$/.test(phone);
+        }
+
+        function showError(field) {
+            field.classList.add('error');
+            const errorMessage = field.nextElementSibling;
+            if (errorMessage) {
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function hideError(field) {
+            field.classList.remove('error');
+            const errorMessage = field.nextElementSibling;
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        }
+
+        // Enhanced cart management
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+
+            updateCartCount();
+            showToast(`${product.name} added to cart`);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Save products permanently
+        function saveProducts() {
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        // Enhanced admin functionality
+        function addProduct() {
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const description = document.getElementById('productDescription').value;
+            let image = document.getElementById('productImage').value;
+
+            // Use uploaded image if available
+            const uploadedImage = document.getElementById('imagePreview').src;
+            if (uploadedImage && !uploadedImage.includes('data:')) {
+                image = uploadedImage;
+            }
+
+            if (!name || !category || isNaN(price) || !description || !image) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            const newProduct = {
+                id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+                name,
+                category,
+                price,
+                description,
+                image
+            };
+
+            products.push(newProduct);
+            saveProducts(); // Save permanently
+            renderProducts();
+            renderAdminProducts();
+
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            alert('Product added successfully!');
+        }
+
+        // Payment processing
+        async function processPayment(event) {
+            event.preventDefault();
+            
+            const paymentMethod = document.querySelector('.payment-details:visible').className.split('-')[0];
+            const customerInfo = {
+                name: document.getElementById('customerName').value,
+                email: document.getElementById('customerEmail').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value
+            };
+
+            // Simulate payment processing
+            await simulatePaymentProcessing(paymentMethod);
+
+            // Clear cart and show thank you page
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            document.getElementById('checkoutModal').style.display = 'none';
+            document.getElementById('thankYouPage').classList.remove('hidden');
+        }
+
+        // Simulated payment processing
+        async function simulatePaymentProcessing(method) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(true);
+                    alert(`Payment processed successfully via ${method}`);
+                }, 1500);
+            });
+        }
+
+        // Return to store
+        function returnToStore() {
+            document.getElementById('thankYouPage').classList.add('hidden');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
