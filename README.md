@@ -962,24 +962,26 @@
             if (rating === 0) {
                 alert("Please select a rating");
                 return;
-            }
-            
-            generalReviews.push({ name, content
-                            saveGeneralReviewsToStorage();
+                        generalReviews.push({ name, content, rating: parseInt(document.getElementById('generalRating').value) });
+                saveGeneralReviewsToStorage();
                 renderGeneralReviews();
                 document.getElementById('generalReviewForm').reset();
-                showToast('Thank you for your review!');
                 
-                // Reset stars
+                // Reset star rating
                 document.querySelectorAll('#generalRatingStars .star').forEach(star => {
                     star.classList.remove('selected');
                 });
                 document.getElementById('generalRating').value = 0;
+                
+                showToast('Thank you for your review!');
             }
 
             function showProductReviews(productId) {
                 const product = products.find(p => p.id === productId);
                 document.getElementById('reviewModalTitle').textContent = `Reviews for ${product.name}`;
+                document.getElementById('reviewProductId').value = product.id;
+                document.getElementById('reviewProductName').value = product.name;
+                
                 const container = document.getElementById('productReviewsList');
                 container.innerHTML = '';
                 
@@ -997,8 +999,15 @@
                         container.appendChild(reviewEl);
                     });
                 }
-                document.getElementById('reviewProductId').value = product.id;
-                document.getElementById('reviewProductName').value = product.name;
+                
+                // Reset product review form
+                document.getElementById('productReviewerName').value = '';
+                document.getElementById('productReviewContent').value = '';
+                document.querySelectorAll('#productRatingStars .star').forEach(star => {
+                    star.classList.remove('selected');
+                });
+                document.getElementById('productRating').value = 0;
+                
                 document.getElementById('reviewModal').style.display = 'flex';
             }
 
@@ -1009,26 +1018,20 @@
                 const rating = parseInt(document.getElementById('productRating').value);
                 
                 if (rating === 0) {
-                    alert("Please select a rating");
+                    alert('Please select a rating by clicking the stars');
                     return;
                 }
                 
                 const product = products.find(p => p.id == productId);
-                if(product) {
+                if (product) {
                     product.reviews.push({ name, content, rating });
                     saveProductsToStorage();
-                    renderProducts(); // To update review count on card
+                    renderProducts(); // Update review count on product cards
                 }
+                
                 document.getElementById('productReviewForm').reset();
-                
-                // Reset stars
-                document.querySelectorAll('#productRatingStars .star').forEach(star => {
-                    star.classList.remove('selected');
-                });
-                document.getElementById('productRating').value = 0;
-                
                 closeModal('reviewModal');
-                showToast('Thank you for your review!');
+                showToast('Thank you for your product review!');
             }
 
             // --- ADMIN FUNCTIONALITY ---
@@ -1036,6 +1039,7 @@
                 clickCount++;
                 clearTimeout(clickTimeout);
                 clickTimeout = setTimeout(() => { clickCount = 0; }, 1000);
+                
                 if (clickCount >= 7) {
                     clickCount = 0;
                     showAdminLogin();
@@ -1047,10 +1051,12 @@
                     showView('admin');
                     return;
                 }
+                
                 const password = prompt("Enter admin password:");
                 if (password === ADMIN_PASSWORD) {
                     isAdminLoggedIn = true;
                     showView('admin');
+                    showToast('Admin access granted');
                 } else if (password) {
                     alert('Incorrect password!');
                 }
@@ -1059,276 +1065,105 @@
             function renderAdminProducts() {
                 const container = document.getElementById('adminProductsList');
                 container.innerHTML = '';
+                
                 if (products.length === 0) {
                     container.innerHTML = '<p>No products found. Add one above.</p>';
                     return;
                 }
+                
+                // Show newest products first
                 products.slice().reverse().forEach(product => {
-                    const productElement = document.createElement('div');
-                    productElement.className = 'product-card';
-                    productElement.innerHTML = `
+                    const productEl = document.createElement('div');
+                    productEl.className = 'product-card';
+                    productEl.innerHTML = `
                         <div class="product-info">
                             <h3 class="product-title">${product.name}</h3>
                             <p style="font-weight:bold; color: #e74c3c;">$${product.price.toFixed(2)}</p>
+                            <p>${product.reviews.length} reviews</p>
                             <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
                                 <button onclick="editProduct(${product.id})" class="btn btn-primary" style="flex:1;">Edit</button>
                                 <button onclick="deleteProduct(${product.id})" class="btn btn-primary" style="background: #e74c3c; flex:1;">Delete</button>
                             </div>
                         </div>
                     `;
-                    container.appendChild(productElement);
+                    container.appendChild(productEl);
                 });
             }
-            
+
             function saveProduct() {
                 const id = document.getElementById('productId').value;
-                const newProductData = {
+                const productData = {
                     name: document.getElementById('productName').value,
                     category: document.getElementById('productCategory').value,
                     price: parseFloat(document.getElementById('productPrice').value),
                     description: document.getElementById('productDescription').value,
-                    images: document.getElementById('productImageURLs').value.split('\n').map(url => url.trim()).filter(url => url),
+                    images: document.getElementById('productImageURLs').value.split('\n')
+                        .map(url => url.trim())
+                        .filter(url => url),
                     reviews: id ? products.find(p => p.id == id).reviews : []
                 };
 
-                if (id) { // Editing
+                if (id) {
+                    // Update existing product
                     const index = products.findIndex(p => p.id == id);
-                    products[index] = { ...products[index], ...newProductData };
-                } else { // Adding
-                    products.push({ id: Date.now(), ...newProductData, reviews: [] });
-                }
-                
-                saveProductsToStorage();
-                renderProducts();
-                renderAdminProducts();
-                document.getElementById('productForm').reset();
-                document.getElementById('productId').value = '';
-                showToast(id ? 'Product updated!' : 'Product added!');
-            }
-
-            function editProduct(id) {
-                const product = products.find(p => p.id === id);
-                document.getElementById('productId').value = product.id;
-                document.getElementById('productName').value = product.name;
-                document.getElementById('productCategory').value = product.category;
-                document.getElementById('productPrice').value = product.price;
-                document.getElementById('productDescription').value = product.description;
-                document.getElementById('productImageURLs').value = product.images.join('\n');
-                document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            function deleteProduct(id) {
-                if (!confirm('Are you sure you want to delete this product?')) return;
-                products = products.filter(p => p.id !== id);
-                saveProductsToStorage();
-                renderProducts();
-                renderAdminProducts();
-                showToast('Product deleted.');
-            }
-
-            // --- UTILITY FUNCTIONS ---
-            const showToast = (message) => {
-                const toast = document.getElementById('toast');
-                toast.textContent = message;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 3000);
-            };
-            
-            function handleLogoUpload(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const logoUrl = e.target.result;
-                    updateLogo(logoUrl);
-                    localStorage.setItem('companyLogo', logoUrl);
-                };
-                reader.readAsDataURL(file);
-            }
-
-            function updateLogo(logoUrl) {
-                document.getElementById('logoPreview').src = logoUrl;
-                document.getElementById('logoPreview').style.display = 'block';
-                document.getElementById('storeLogo').src = logoUrl;
-                document.getElementById('storeLogo').style.display = 'block';
-                document.getElementById('logoText').style.display = 'none';
-            }
-        </script>
-    </body>
-</html>                saveGeneralReviewsToStorage();
-                renderGeneralReviews();
-                document.getElementById('generalReviewForm').reset();
-                showToast('Thank you for your review!');
-                
-                // Reset stars
-                document.querySelectorAll('#generalRatingStars .star').forEach(star => {
-                    star.classList.remove('selected');
-                });
-                document.getElementById('generalRating').value = 0;
-            }
-
-            function showProductReviews(productId) {
-                const product = products.find(p => p.id === productId);
-                document.getElementById('reviewModalTitle').textContent = `Reviews for ${product.name}`;
-                const container = document.getElementById('productReviewsList');
-                container.innerHTML = '';
-                
-                if (product.reviews.length === 0) {
-                    container.innerHTML = '<p>No reviews for this product yet.</p>';
+                    products[index] = { ...products[index], ...productData };
+                    showToast('Product updated!');
                 } else {
-                    product.reviews.forEach(review => {
-                        const reviewEl = document.createElement('div');
-                        reviewEl.className = 'review';
-                        reviewEl.innerHTML = `
-                            <div class="review-author">${review.name}</div>
-                            <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
-                            <div class="review-content">${review.content}</div>
-                        `;
-                        container.appendChild(reviewEl);
+                    // Add new product
+                    products.push({
+                        id: Date.now(),
+                        ...productData,
+                        reviews: []
                     });
+                    showToast('Product added!');
                 }
-                document.getElementById('reviewProductId').value = product.id;
-                document.getElementById('reviewProductName').value = product.name;
-                document.getElementById('reviewModal').style.display = 'flex';
-            }
 
-            function saveProductReview() {
-                const productId = document.getElementById('reviewProductId').value;
-                const name = document.getElementById('productReviewerName').value;
-                const content = document.getElementById('productReviewContent').value;
-                const rating = parseInt(document.getElementById('productRating').value);
-                
-                if (rating === 0) {
-                    alert("Please select a rating");
-                    return;
-                }
-                
-                const product = products.find(p => p.id == productId);
-                if(product) {
-                    product.reviews.push({ name, content, rating });
-                    saveProductsToStorage();
-                    renderProducts(); // To update review count on card
-                }
-                document.getElementById('productReviewForm').reset();
-                
-                // Reset stars
-                document.querySelectorAll('#productRatingStars .star').forEach(star => {
-                    star.classList.remove('selected');
-                });
-                document.getElementById('productRating').value = 0;
-                
-                closeModal('reviewModal');
-                showToast('Thank you for your review!');
-            }
-
-            // --- ADMIN FUNCTIONALITY ---
-            function handleCrownClick() {
-                clickCount++;
-                clearTimeout(clickTimeout);
-                clickTimeout = setTimeout(() => { clickCount = 0; }, 1000);
-                if (clickCount >= 7) {
-                    clickCount = 0;
-                    showAdminLogin();
-                }
-            }
-
-            function showAdminLogin() {
-                if (isAdminLoggedIn) {
-                    showView('admin');
-                    return;
-                }
-                const password = prompt("Enter admin password:");
-                if (password === ADMIN_PASSWORD) {
-                    isAdminLoggedIn = true;
-                    showView('admin');
-                } else if (password) {
-                    alert('Incorrect password!');
-                }
-            }
-
-            function renderAdminProducts() {
-                const container = document.getElementById('adminProductsList');
-                container.innerHTML = '';
-                if (products.length === 0) {
-                    container.innerHTML = '<p>No products found. Add one above.</p>';
-                    return;
-                }
-                products.slice().reverse().forEach(product => {
-                    const productElement = document.createElement('div');
-                    productElement.className = 'product-card';
-                    productElement.innerHTML = `
-                        <div class="product-info">
-                            <h3 class="product-title">${product.name}</h3>
-                            <p style="font-weight:bold; color: #e74c3c;">$${product.price.toFixed(2)}</p>
-                            <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                                <button onclick="editProduct(${product.id})" class="btn btn-primary" style="flex:1;">Edit</button>
-                                <button onclick="deleteProduct(${product.id})" class="btn btn-primary" style="background: #e74c3c; flex:1;">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(productElement);
-                });
-            }
-            
-            function saveProduct() {
-                const id = document.getElementById('productId').value;
-                const newProductData = {
-                    name: document.getElementById('productName').value,
-                    category: document.getElementById('productCategory').value,
-                    price: parseFloat(document.getElementById('productPrice').value),
-                    description: document.getElementById('productDescription').value,
-                    images: document.getElementById('productImageURLs').value.split('\n').map(url => url.trim()).filter(url => url),
-                    reviews: id ? products.find(p => p.id == id).reviews : []
-                };
-
-                if (id) { // Editing
-                    const index = products.findIndex(p => p.id == id);
-                    products[index] = { ...products[index], ...newProductData };
-                } else { // Adding
-                    products.push({ id: Date.now(), ...newProductData, reviews: [] });
-                }
-                
                 saveProductsToStorage();
                 renderProducts();
                 renderAdminProducts();
                 document.getElementById('productForm').reset();
                 document.getElementById('productId').value = '';
-                showToast(id ? 'Product updated!' : 'Product added!');
             }
 
             function editProduct(id) {
                 const product = products.find(p => p.id === id);
+                if (!product) return;
+                
                 document.getElementById('productId').value = product.id;
                 document.getElementById('productName').value = product.name;
                 document.getElementById('productCategory').value = product.category;
                 document.getElementById('productPrice').value = product.price;
                 document.getElementById('productDescription').value = product.description;
                 document.getElementById('productImageURLs').value = product.images.join('\n');
+                
+                // Scroll to form
                 document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
             }
 
             function deleteProduct(id) {
                 if (!confirm('Are you sure you want to delete this product?')) return;
+                
                 products = products.filter(p => p.id !== id);
                 saveProductsToStorage();
                 renderProducts();
                 renderAdminProducts();
-                showToast('Product deleted.');
+                showToast('Product deleted');
             }
 
             // --- UTILITY FUNCTIONS ---
-            const showToast = (message) => {
+            function showToast(message) {
                 const toast = document.getElementById('toast');
                 toast.textContent = message;
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 3000);
-            };
-            
+            }
+
             function handleLogoUpload(event) {
                 const file = event.target.files[0];
                 if (!file) return;
+                
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = function(e) {
                     const logoUrl = e.target.result;
                     updateLogo(logoUrl);
                     localStorage.setItem('companyLogo', logoUrl);
@@ -1337,11 +1172,16 @@
             }
 
             function updateLogo(logoUrl) {
-                document.getElementById('logoPreview').src = logoUrl;
-                document.getElementById('logoPreview').style.display = 'block';
-                document.getElementById('storeLogo').src = logoUrl;
-                document.getElementById('storeLogo').style.display = 'block';
-                document.getElementById('logoText').style.display = 'none';
+                const logoImg = document.getElementById('storeLogo');
+                const logoPreview = document.getElementById('logoPreview');
+                const logoText = document.getElementById('logoText');
+                
+                logoImg.src = logoUrl;
+                logoPreview.src = logoUrl;
+                
+                logoImg.style.display = 'block';
+                logoPreview.style.display = 'block';
+                logoText.style.display = 'none';
             }
         </script>
     </body>
