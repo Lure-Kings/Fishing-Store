@@ -4,317 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lure Kings - Premium Fishing Lures</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Global Styles */
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #27ae60;
-            --danger: #e74c3c;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f5f5;
             color: #333;
             line-height: 1.6;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 20px 0;
+
+        .header {
+            background-color: #1a365d;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
-        .header-container {
+
+        .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
+
         .logo {
-            font-size: 24px;
+            font-size: 2rem;
             font-weight: bold;
-        }
-        
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
             color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
         }
         
-        nav ul li a:hover {
-            color: var(--secondary);
+        .logo #storeLogo {
+            max-height: 50px;
+            width: auto;
+            display: none; /* Hidden by default, shown via JS if logo is uploaded */
         }
-        
+
+        .logo .logo-text-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            color: #f8d56b;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #1a365d;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
         .cart-icon {
             position: relative;
         }
-        
+
         .cart-count {
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: var(--danger);
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
             color: white;
             border-radius: 50%;
             width: 20px;
             height: 20px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 12px;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1513828583688-c52646db42da');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .hero p {
-            font-size: 20px;
-            max-width: 600px;
-        }
-        
-        /* Categories Section */
-        .categories {
-            padding: 40px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 32px;
-            color: var(--dark);
-        }
-        
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .category-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .category-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-        
-        .category-card h3 {
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-        
-        /* Products Section */
-        .products-container {
-            padding: 40px 0;
-        }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .product-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .product-info {
-            padding: 15px;
-        }
-        
-        .product-info h3 {
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-        
-        .product-info p {
-            color: #666;
-            margin-bottom: 15px;
-        }
-        
-        .product-price {
+            font-size: 0.75rem;
             font-weight: bold;
-            color: var(--secondary);
-            font-size: 18px;
-            margin-bottom: 15px;
         }
-        
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s;
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
-        
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-        
-        /* Cart Styles */
-        .cart-container {
-            padding: 40px 0;
-        }
-        
-        .cart-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        
-        .cart-table th, .cart-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .cart-table th {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .cart-table tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .cart-total {
-            text-align: right;
-            margin-bottom: 30px;
-        }
-        
-        .checkout-form {
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
             background-color: white;
-            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
-        .form-group {
-            margin-bottom: 20px;
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a365d;
         }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
         }
-        
-        .form-control {
-            width: 100%;
-            padding: 10px;
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            background: white;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        
-        textarea.form-control {
-            min-height: 100px;
-        }
-        
-        .bank-details {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 20px 0;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark);
+
+        .category-btn:hover, .category-btn.active {
+            background: #1a365d;
+            border-color: #1a365d;
             color: white;
-            padding: 30px 0;
-            text-align: center;
-            margin-top: 40px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        /* Modal */
+        /* --- MODIFICATION: Horizontal Scroll Image Gallery --- */
+        .product-image-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            height: 220px;
+            border-bottom: 1px solid #ddd;
+        }
+        .product-image-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .product-image-container::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+        }
+        /* --- END MODIFICATION --- */
+
+        .product-info {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #1a365d;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            flex-grow: 1; /* Pushes buttons down */
+        }
+        
+        .product-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto; /* Pushes this container to the bottom */
+        }
+
+        .add-to-cart, .reviews-btn {
+            width: 100%;
+            background-color: #1a365d;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .add-to-cart:hover, .reviews-btn:hover {
+            background-color: #142a4a;
+        }
+        
+        .reviews-btn {
+            background-color: #555;
+        }
+        .reviews-btn:hover {
+            background-color: #333;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -322,442 +275,779 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
-        
+
         .modal-content {
-            background-color: white;
-            padding: 30px;
+            position: relative;
+            background: white;
             border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
+            padding: 2rem;
+            max-width: 90%;
+            width: 600px;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: #333;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close:hover {
+            color: #333;
         }
         
-        .modal-header {
-            margin-bottom: 20px;
+        /* --- Review System Styles --- */
+        .review-section {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .review {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+        }
+        .review:last-child {
+            border-bottom: none;
+        }
+        .review-author {
+            font-weight: bold;
+            color: #1a365d;
+        }
+        .review-content {
+            margin-top: 0.5rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .admin-form, .checkout-form {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1a365d;
+        }
+        .form-group label .required-star {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
         }
         
-        .modal-footer {
-            margin-top: 20px;
-            text-align: right;
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a365d;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .logo-upload-container {
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
         
-        /* Responsive */
+        .file-upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .logo-preview {
+            max-width: 200px;
+            max-height: 100px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .explainer-box {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #614d13;
+        }
+        .explainer-box h5 {
+            color: #d46b08;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* --- MODIFICATION: Stripe Placeholder Styles --- */
+        .payment-method {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+        .stripe-card-element {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
         @media (max-width: 768px) {
-            .header-container {
+            .nav {
                 flex-direction: column;
-                text-align: center;
+                gap: 1rem;
             }
-            
-            nav ul {
-                margin-top: 20px;
-            }
-            
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero p {
-                font-size: 18px;
-            }
-            
-            .category-grid, .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            .products-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">LURE <span>KINGS</span></div>
-            <nav>
-                <ul>
-                    <li><a href="#" onclick="showPage('home')">Home</a></li>
-                    <li><a href="#" onclick="showPage('products')">Products</a></li>
-                    <li>
-                        <a href="#" onclick="showPage('cart')" class="cart-icon">
-                            Cart <span class="cart-count">0</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo" id="logo">
+                <img id="storeLogo" src="" alt="Lure Kings Logo">
+                <div class="logo-text-container" id="logoText">
+                    <i class="fas fa-crown"></i>
+                    Lure Kings
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="showView('store')">Store</button>
+                <button class="btn btn-primary cart-icon" onclick="showCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </nav>
     </header>
 
-    <!-- Home Page -->
-    <section id="home-page" class="page">
-        <div class="hero">
-            <h1>Premium Fishing Lures</h1>
-            <p>Quality lures for the serious angler. Catch more fish with Lure Kings!</p>
-        </div>
-        
-        <div class="container categories">
-            <h2 class="section-title">Shop by Category</h2>
-            <div class="category-grid">
-                <div class="category-card" onclick="showCategory('jigs')">
-                    <img src="https://via.placeholder.com/250x150?text=Jigs" alt="Jigs">
-                    <h3>Jigs</h3>
-                    <p>Versatile lures for all conditions</p>
-                </div>
-                <div class="category-card" onclick="showCategory('soft-plastics')">
-                    <img src="https://via.placeholder.com/250x150?text=Soft+Plastics" alt="Soft Plastics">
-                    <h3>Soft Plastics</h3>
-                    <p>Realistic action and feel</p>
-                </div>
-                <div class="category-card" onclick="showCategory('topwaters')">
-                    <img src="https://via.placeholder.com/250x150?text=Topwaters" alt="Topwaters">
-                    <h3>Topwaters</h3>
-                    <p>Explosive surface strikes</p>
-                </div>
-                <div class="category-card" onclick="showCategory('spinnerbaits')">
-                    <img src="https://via.placeholder.com/250x150?text=Spinnerbaits" alt="Spinnerbaits">
-                    <h3>Spinnerbaits</h3>
-                    <p>Vibration and flash combo</p>
-                </div>
-                <div class="category-card" onclick="showCategory('bladed-jigs')">
-                    <img src="https://via.placeholder.com/250x150?text=Bladed+Jigs" alt="Bladed Jigs">
-                    <h3>Bladed Jigs</h3>
-                    <p>Powerful vibration action</p>
-                </div>
-                <div class="category-card" onclick="showCategory('crankbaits')">
-                    <img src="https://via.placeholder.com/250x150?text=Crankbaits" alt="Crankbaits">
-                    <h3>Crankbaits</h3>
-                    <p>Diving action at various depths</p>
-                </div>
-                <div class="category-card" onclick="showCategory('jerkbaits')">
-                    <img src="https://via.placeholder.com/250x150?text=Jerkbaits" alt="Jerkbaits">
-                    <h3>Jerkbaits</h3>
-                    <p>Erratic action triggers strikes</p>
-                </div>
-                <div class="category-card" onclick="showCategory('swimbaits')">
-                    <img src="https://via.placeholder.com/250x150?text=Swimbaits" alt="Swimbaits">
-                    <h3>Swimbaits</h3>
-                    <p>Realistic swimming action</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="toast" id="toast">Item added to cart!</div>
 
-    <!-- Products Page -->
-    <section id="products-page" class="page" style="display: none;">
-        <div class="container products-container">
-            <h1 id="category-title">PRODUCTS</h1>
-            <div class="product-grid" id="product-grid">
-                <!-- Products will be loaded here -->
+    <div class="container">
+        <div id="storeView">
+            <div class="hero">
+                <h1>Premium Fishing Lures</h1>
+                <p>High-quality fishing lures for the serious angler</p>
+            </div>
+
+            <div class="categories">
+                <button class="category-btn active" onclick="filterByCategory('all')">All Lures</button>
+                <button class="category-btn" onclick="filterByCategory('jigs')">Jigs</button>
+                <button class="category-btn" onclick="filterByCategory('soft-plastics')">Soft Plastics</button>
+                <button class="category-btn" onclick="filterByCategory('topwaters')">Topwaters</button>
+                <button class="category-btn" onclick="filterByCategory('spinnerbaits')">Spinnerbaits</button>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                 </div>
+            
+            <div class="review-section">
+                <h2 style="text-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
+                <div id="generalReviewsList">
+                    <p style="text-align: center;">No reviews yet. Be the first!</p>
+                </div>
+                <div class="admin-form" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; color: #1a365d;">Leave a Website Review</h3>
+                    <form id="generalReviewForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="New Lure Kings Website Review!">
+                        <input type="hidden" name="_template" value="table">
+                        <div class="form-group">
+                            <label for="reviewerName">Your Name</label>
+                            <input type="text" id="reviewerName" name="Reviewer_Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewContent">Your Review</label>
+                            <textarea id="reviewContent" name="Review_Content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Cart Page -->
-    <section id="cart-page" class="page" style="display: none;">
-        <div class="container cart-container">
-            <h1>Your Cart</h1>
-            <div id="cart-content">
-                <p>Your cart is empty</p>
+        <div id="adminView" class="hidden">
+            <div class="hero">
+                <h1>Admin Dashboard</h1>
+                <p>Manage your Lure Kings inventory</p>
             </div>
-            <div id="checkout-form" style="display: none;">
-                <h2>Customer Information</h2>
-                <form id="order-form">
+
+            <div class="logo-upload-container">
+                <h3>Upload Company Logo</h3>
+                <div class="file-upload-area">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i>
+                    <p>Click to upload logo or drag & drop</p>
+                </div>
+                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                <img id="logoPreview" class="logo-preview">
+            </div>
+
+            <div class="admin-form">
+                <h2 style="margin-bottom: 1rem; color: #1a365d;">Add/Edit Product</h2>
+                <form id="productForm">
+                    <input type="hidden" id="productId">
                     <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" class="form-control" required>
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" required>
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="jigs">Jigs</option>
+                            <option value="soft-plastics">Soft Plastics</option>
+                            <option value="topwaters">Topwaters</option>
+                            <option value="spinnerbaits">Spinnerbaits</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="address">Shipping Address</label>
-                        <textarea id="address" class="form-control" required></textarea>
+                        <label for="productPrice">Price ($)</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" class="form-control">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" rows="3" required></textarea>
                     </div>
-                    
-                    <h3>Payment Method</h3>
                     <div class="form-group">
-                        <label>
-                            <input type="radio" name="payment" value="bank-transfer" checked> Bank Transfer
-                        </label>
-                        <label>
-                            <input type="radio" name="payment" value="credit-card"> Credit Card
-                        </label>
+                        <label for="productImageURLs">Product Images (one URL per line)</label>
+                        <textarea id="productImageURLs" rows="4" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" required></textarea>
                     </div>
-                    
-                    <div id="bank-details" class="bank-details">
-                        <h4>Bank Transfer Details</h4>
-                        <p>Bank Name: Lure Kings Bank</p>
-                        <p>Account Number: 1234567890</p>
-                        <p>Routing Number: 987654321</p>
-                        <p>Please include your order number in the transfer reference.</p>
-                    </div>
-                    
-                    <button type="button" class="btn btn-block" onclick="placeOrder()">Complete Order</button>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Product</button>
                 </form>
             </div>
-        </div>
-    </section>
 
-    <!-- Order Confirmation Modal -->
-    <div id="order-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Order Confirmed!</h2>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <p>Thank you for your order!</p>
-                <p>A confirmation has been sent to your email.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" onclick="closeModal()">Continue Shopping</button>
+            <div class="admin-form">
+                <h2 style="margin-bottom: 1rem; color: #1a365d;">Manage Existing Products</h2>
+                <div id="adminProductsList"></div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Lure Kings. All rights reserved.</p>
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cartModal')">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #1a365d;">Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal" style="text-align:right; font-size:1.3rem; margin-top:1rem;">Total: $0.00</div>
+            <button class="btn btn-primary" onclick="showCheckout()" style="width: 100%; margin-top: 1rem;">Proceed to Checkout</button>
         </div>
-    </footer>
+    </div>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('checkoutModal')">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #1a365d;">Secure Checkout</h2>
+            <form id="checkoutForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="New Order from Lure Kings!">
+                <input type="hidden" name="_template" value="table">
+                
+                <div class="form-group">
+                    <label for="customerName">Full Name<span class="required-star">*</span></label>
+                    <input type="text" id="customerName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerEmail">Email Address<span class="required-star">*</span></label>
+                    <input type="email" id="customerEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Delivery Address<span class="required-star">*</span></label>
+                    <textarea id="customerAddress" name="address" rows="3" required></textarea>
+                </div>
+
+                <h4>Payment Method<span class="required-star">*</span></h4>
+                <div class="payment-method">
+                    <input type="radio" id="bankTransfer" name="payment_method" value="Bank Transfer" required>
+                    <label for="bankTransfer">Direct Bank Transfer</label>
+                    <div id="bankDetails" class="hidden" style="padding: 10px; font-size: 0.9em;">
+                        <p><strong>Bank:</strong> Your Bank | <strong>Account:</strong> Your Name<br>
+                           <strong>BSB:</strong> 000-000 | <strong>Acc No:</strong> 123456789<br>
+                           Please use your Order ID as the payment reference.</p>
+                    </div>
+                </div>
+                
+                <div class="payment-method">
+                    <input type="radio" id="stripe" name="payment_method" value="Stripe" required>
+                    <label for="stripe">Credit/Debit Card (Stripe)</label>
+                    <div id="stripe-card-container" class="hidden" style="margin-top: 10px;">
+                        <label for="card-element">Card Details</label>
+                        <div id="card-element" class="stripe-card-element">
+                          </div>
+                        <div id="card-errors" role="alert" style="color: #e74c3c; margin-top: 5px;"></div>
+                    </div>
+                </div>
+
+                <div class="explainer-box">
+                    <h5>Live Payment Integration (Stripe)</h5>
+                    <p>The credit card form above is a visual placeholder. To accept live payments, you must connect this site to a secure backend server. Client-side-only sites cannot securely process payments.</p>
+                </div>
+                
+                <input type="hidden" id="orderItems" name="order_items">
+                <input type="hidden" id="orderTotal" name="order_total">
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reviewModal')">&times;</span>
+            <h2 id="reviewModalTitle" style="margin-bottom: 1rem; color: #1a365d;">Product Reviews</h2>
+            <div id="productReviewsList"></div>
+            <div class="admin-form" style="margin-top: 2rem; border: none; padding: 0;">
+                <h3 style="margin-bottom: 1rem; color: #1a365d;">Leave a Review</h3>
+                <form id="productReviewForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                    <input type="hidden" id="reviewProductId" name="product_id">
+                    <input type="hidden" id="reviewProductName" name="Product_Name">
+                    <input type="hidden" name="_subject" value="New Product Review!">
+                    <input type="hidden" name="_template" value="table">
+                    <div class="form-group">
+                        <label for="productReviewerName">Your Name</label>
+                        <input type="text" id="productReviewerName" name="Reviewer_Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productReviewContent">Your Review</label>
+                        <textarea id="productReviewContent" name="Review_Content" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Sample product data
-        const products = {
-            'jigs': [
-                { id: 1, name: 'Football Jig', price: 5.99, description: 'Perfect for rocky bottoms', image: 'https://via.placeholder.com/300x200?text=Football+Jig' },
-                { id: 2, name: 'Arky Head Jig', price: 4.99, description: 'Great for dragging', image: 'https://via.placeholder.com/300x200?text=Arky+Head+Jig' },
-                { id: 3, name: 'Flipping Jig', price: 6.49, description: 'Heavy cover specialist', image: 'https://via.placeholder.com/300x200?text=Flipping+Jig' },
-                { id: 4, name: 'Swim Jig', price: 5.49, description: 'Versatile swimming action', image: 'https://via.placeholder.com/300x200?text=Swim+Jig' }
-            ],
-            'soft-plastics': [
-                { id: 5, name: 'Worm 7"', price: 3.99, description: 'Classic worm design', image: 'https://via.placeholder.com/300x200?text=Worm+7' },
-                { id: 6, name: 'Craw', price: 4.49, description: 'Realistic craw imitation', image: 'https://via.placeholder.com/300x200?text=Craw' },
-                { id: 7, name: 'Stick Bait', price: 3.49, description: 'Wacky rig favorite', image: 'https://via.placeholder.com/300x200?text=Stick+Bait' },
-                { id: 8, name: 'Swimbait 4"', price: 4.99, description: 'Swimming tail action', image: 'https://via.placeholder.com/300x200?text=Swimbait+4' }
-            ],
-            'topwaters': [
-                { id: 9, name: 'Popper', price: 8.99, description: 'Chugging surface action', image: 'https://via.placeholder.com/300x200?text=Popper' },
-                { id: 10, name: 'Walking Bait', price: 12.99, description: 'Side-to-side action', image: 'https://via.placeholder.com/300x200?text=Walking+Bait' },
-                { id: 11, name: 'Buzzbait', price: 7.49, description: 'Blade creates surface commotion', image: 'https://via.placeholder.com/300x200?text=Buzzbait' }
-            ],
-            'spinnerbaits': [
-                { id: 12, name: 'Willow Leaf Spinnerbait', price: 6.99, description: 'Flashy blade for clear water', image: 'https://via.placeholder.com/300x200?text=Willow+Leaf' },
-                { id: 13, name: 'Colorado Spinnerbait', price: 6.49, description: 'Thumping vibration', image: 'https://via.placeholder.com/300x200?text=Colorado' }
-            ],
-            'bladed-jigs': [
-                { id: 14, name: 'Chatterbait', price: 9.99, description: 'Powerful vibration', image: 'https://via.placeholder.com/300x200?text=Chatterbait' }
-            ],
-            'crankbaits': [
-                { id: 15, name: 'Squarebill', price: 7.99, description: 'Shallow running', image: 'https://via.placeholder.com/300x200?text=Squarebill' },
-                { id: 16, name: 'Deep Diver', price: 8.99, description: 'Dives to 15ft', image: 'https://via.placeholder.com/300x200?text=Deep+Diver' }
-            ],
-            'jerkbaits': [
-                { id: 17, name: 'Suspending Jerkbait', price: 10.99, description: 'Hangs in strike zone', image: 'https://via.placeholder.com/300x200?text=Suspending+Jerkbait' }
-            ],
-            'swimbaits': [
-                { id: 18, name: 'Glide Bait', price: 15.99, description: 'Realistic swimming action', image: 'https://via.placeholder.com/300x200?text=Glide+Bait' },
-                { id: 19, name: 'Paddle Tail Swimbait', price: 6.99, description: 'Tail creates vibration', image: 'https://via.placeholder.com/300x200?text=Paddle+Tail' }
-            ]
-        };
-
-        // Shopping cart
+        // --- GLOBAL STATE ---
+        let isAdminLoggedIn = false;
+        const ADMIN_PASSWORD = "Maxchingershambo08"; // Change this password
+        let clickCount = 0;
+        let clickTimeout;
+        let products = [];
         let cart = [];
+        let generalReviews = [];
+        let currentFilter = 'all';
+        
+        // --- MODIFICATION: Default product list is now empty ---
+        // Add your products via the admin dashboard after logging in.
+        const defaultProducts = [];
 
-        // Page navigation
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.style.display = 'none';
+        // --- APP INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => init());
+
+        function init() {
+            // Load data from localStorage or use defaults
+            products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            generalReviews = JSON.parse(localStorage.getItem('generalReviews')) || [];
+
+            const savedLogo = localStorage.getItem('companyLogo');
+            if (savedLogo) {
+                updateLogo(savedLogo);
+            }
+            
+            // Render initial views
+            renderProducts();
+            updateCartCount();
+            renderAdminProducts();
+            renderGeneralReviews();
+            
+            // Setup listeners
+            setupEventListeners();
+        }
+
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            document.getElementById('logo').addEventListener('click', handleCrownClick);
+            
+            document.getElementById('productForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveProduct();
             });
-            document.getElementById(`${pageId}-page`).style.display = 'block';
+
+            document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+                prepareOrderForSubmission();
+            });
             
-            if (pageId === 'cart') {
-                updateCartDisplay();
-            }
+            document.getElementById('generalReviewForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // This submits to FormSubmit and saves locally
+                document.getElementById('generalReviewForm').submit();
+                saveGeneralReview(); 
+            });
+
+            document.getElementById('productReviewForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // This submits to FormSubmit and saves locally
+                document.getElementById('productReviewForm').submit();
+                saveProductReview();
+            });
+
+            // Payment method selection logic
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    document.getElementById('bankDetails').classList.toggle('hidden', e.target.id !== 'bankTransfer');
+                    document.getElementById('stripe-card-container').classList.toggle('hidden', e.target.id !== 'stripe');
+                });
+            });
+            
+             // Logo Upload Listeners
+            const fileInput = document.getElementById('logoUpload');
+            const uploadArea = document.querySelector('.file-upload-area');
+            uploadArea.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleLogoUpload);
         }
 
-        function showCategory(category) {
-            showPage('products');
-            document.getElementById('category-title').textContent = category.replace('-', ' ').toUpperCase();
+        // --- DATA PERSISTENCE ---
+        const saveProductsToStorage = () => localStorage.setItem('products', JSON.stringify(products));
+        const saveCartToStorage = () => localStorage.setItem('cart', JSON.stringify(cart));
+        const saveGeneralReviewsToStorage = () => localStorage.setItem('generalReviews', JSON.stringify(generalReviews));
+
+        // --- VIEW MANAGEMENT ---
+        const showView = (view) => {
+            document.getElementById('storeView').classList.toggle('hidden', view !== 'store');
+            document.getElementById('adminView').classList.toggle('hidden', view !== 'admin');
+        };
+        const closeModal = (modalId) => document.getElementById(modalId).style.display = 'none';
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            const filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
             
-            const productGrid = document.getElementById('product-grid');
-            productGrid.innerHTML = '';
-            
-            const categoryProducts = products[category.replace('-', ' ')];
-            
-            if (categoryProducts && categoryProducts.length > 0) {
-                categoryProducts.forEach(product => {
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <div class="product-info">
-                            <h3>${product.name}</h3>
-                            <p>${product.description}</p>
-                            <p class="product-price">$${product.price.toFixed(2)}</p>
-                            <button class="btn btn-block" onclick="addToCart(${product.id})">Add to Cart</button>
+            if(filteredProducts.length === 0 && currentFilter === 'all') {
+                grid.innerHTML = `<p>No products yet. Log in to the admin panel to add some!</p>`;
+                return;
+            }
+
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image-container">
+                        ${product.images.map(imgSrc => `<img src="${imgSrc}" alt="${product.name}" class="product-image">`).join('')}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-buttons">
+                            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                            <button class="reviews-btn" onclick="showProductReviews(${product.id})">Reviews (${product.reviews.length})</button>
                         </div>
-                    `;
-                    productGrid.appendChild(productCard);
-                });
-            } else {
-                productGrid.innerHTML = '<p>No products found in this category.</p>';
-            }
-        }
-
-        // Cart functions
-        function addToCart(productId) {
-            // Find the product in all categories
-            let productToAdd = null;
-            for (const category in products) {
-                const foundProduct = products[category].find(p => p.id === productId);
-                if (foundProduct) {
-                    productToAdd = foundProduct;
-                    break;
-                }
-            }
-            
-            if (productToAdd) {
-                const existingItem = cart.find(item => item.id === productId);
-                if (existingItem) {
-                    existingItem.quantity++;
-                } else {
-                    cart.push({
-                        id: productToAdd.id,
-                        name: productToAdd.name,
-                        price: productToAdd.price,
-                        quantity: 1
-                    });
-                }
-                
-                updateCartCount();
-                alert(`${productToAdd.name} added to cart!`);
-            }
-        }
-
-        function updateCartCount() {
-            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-            document.querySelector('.cart-count').textContent = totalItems;
-        }
-
-        function updateCartDisplay() {
-            const cartContent = document.getElementById('cart-content');
-            const checkoutForm = document.getElementById('checkout-form');
-            
-            if (cart.length === 0) {
-                cartContent.innerHTML = '<p>Your cart is empty</p>';
-                checkoutForm.style.display = 'none';
-            } else {
-                let cartHTML = `
-                    <table class="cart-table">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                let cartTotal = 0;
-                
-                cart.forEach(item => {
-                    const itemTotal = item.price * item.quantity;
-                    cartTotal += itemTotal;
-                    
-                    cartHTML += `
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>$${item.price.toFixed(2)}</td>
-                            <td>${item.quantity}</td>
-                            <td>$${itemTotal.toFixed(2)}</td>
-                            <td><button class="btn" onclick="removeFromCart(${item.id})">Remove</button></td>
-                        </tr>
-                    `;
-                });
-                
-                cartHTML += `
-                        </tbody>
-                    </table>
-                    <div class="cart-total">
-                        <h3>Total: $${cartTotal.toFixed(2)}</h3>
                     </div>
                 `;
-                
-                cartContent.innerHTML = cartHTML;
-                checkoutForm.style.display = 'block';
+                grid.appendChild(card);
+            });
+        }
+        
+        function filterByCategory(category) {
+            currentFilter = category;
+            renderProducts();
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            const buttonToActivate = Array.from(document.querySelectorAll('.category-btn')).find(btn => btn.getAttribute('onclick').includes(`'${category}'`));
+            if(buttonToActivate) buttonToActivate.classList.add('active');
+        }
+
+        // --- CART FUNCTIONALITY ---
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({...product, quantity: 1});
             }
+            updateCartCount();
+            showToast(`${product.name} added to cart`);
+            saveCartToStorage();
+        }
+
+        const updateCartCount = () => {
+            document.getElementById('cartCount').textContent = cart.reduce((total, item) => total + item.quantity, 0);
+        };
+        
+        function showCart() {
+            const modal = document.getElementById('cartModal');
+            const cartItemsEl = document.getElementById('cartItems');
+            cartItemsEl.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsEl.innerHTML = '<p>Your cart is empty</p>';
+            } else {
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item'; // You would need to add CSS for this class
+                    cartItem.style.cssText = 'display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #eee; align-items: center;';
+                    cartItem.innerHTML = `
+                        <img src="${item.images[0]}" alt="${item.name}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">
+                        <div style="flex-grow:1;">
+                            <div style="font-weight:bold;">${item.name}</div>
+                            <div>$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div style="text-align:right;">
+                             <div style="font-weight:bold;">$${(item.price * item.quantity).toFixed(2)}</div>
+                             <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:red; cursor:pointer; font-size:0.8rem;">Remove</button>
+                        </div>
+                    `;
+                    cartItemsEl.appendChild(cartItem);
+                });
+            }
+            document.getElementById('cartTotal').textContent = `Total: $${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}`;
+            modal.style.display = 'flex';
         }
 
         function removeFromCart(productId) {
             cart = cart.filter(item => item.id !== productId);
-            updateCartDisplay();
             updateCartCount();
+            showCart(); // Refresh cart display
+            saveCartToStorage();
         }
 
-        // Order functions
-        function placeOrder() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const address = document.getElementById('address').value;
-            const phone = document.getElementById('phone').value;
-            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-            
-            if (!name || !email || !address) {
-                alert('Please fill in all required fields');
+        // --- CHECKOUT FUNCTIONALITY ---
+        function showCheckout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty.");
                 return;
             }
-            
-            // In a real app, you would send this data to your server
-            const orderTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            
-            // Show order confirmation
-            document.getElementById('modal-body').innerHTML = `
-                <p>Thank you for your order, ${name}!</p>
-                ${paymentMethod === 'bank-transfer' ? '<p>Please complete your bank transfer to the account details provided.</p>' : ''}
-                <p>Order Total: $${orderTotal.toFixed(2)}</p>
-                <p>A confirmation has been sent to ${email}.</p>
-            `;
-            
-            // Show modal
-            document.getElementById('order-modal').style.display = 'flex';
-            
-            // Clear cart
+            closeModal('cartModal');
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+        
+        function prepareOrderForSubmission() {
+            const orderSummary = cart.map(item => `${item.name} (Qty: ${item.quantity})`).join(', ');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+            document.getElementById('orderItems').value = orderSummary;
+            document.getElementById('orderTotal').value = `$${total}`;
             cart = [];
             updateCartCount();
-            updateCartDisplay();
-            
-            // Reset form
-            document.getElementById('order-form').reset();
+            saveCartToStorage();
         }
-
-        function closeModal() {
-            document.getElementById('order-modal').style.display = 'none';
-            showPage('home');
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            showPage('home');
-            updateCartCount();
-            
-            // Set up payment method toggle
-            document.querySelectorAll('input[name="payment"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    document.getElementById('bank-details').style.display = 
-                        this.value === 'bank-transfer' ? 'block' : 'none';
-                });
+        
+        // --- REVIEW SYSTEM LOGIC ---
+        function renderGeneralReviews() {
+            const container = document.getElementById('generalReviewsList');
+            container.innerHTML = '';
+            if (generalReviews.length === 0) {
+                container.innerHTML = '<p style="text-align: center;">No reviews yet. Be the first!</p>';
+                return;
+            }
+            generalReviews.forEach(review => {
+                const reviewEl = document.createElement('div');
+                reviewEl.className = 'review';
+                reviewEl.innerHTML = `<div class="review-author">${review.name}</div><div class="review-content">${review.content}</div>`;
+                container.appendChild(reviewEl);
             });
-        });
+        }
+
+        function saveGeneralReview() {
+            const name = document.getElementById('reviewerName').value;
+            const content = document.getElementById('reviewContent').value;
+            generalReviews.push({ name, content });
+            saveGeneralReviewsToStorage();
+            renderGeneralReviews();
+            document.getElementById('generalReviewForm').reset();
+            showToast('Thank you for your review!');
+        }
+
+        function showProductReviews(productId) {
+            const product = products.find(p => p.id === productId);
+            document.getElementById('reviewModalTitle').textContent = `Reviews for ${product.name}`;
+            const container = document.getElementById('productReviewsList');
+            container.innerHTML = '';
+            if (product.reviews.length === 0) {
+                container.innerHTML = '<p>No reviews for this product yet.</p>';
+            } else {
+                product.reviews.forEach(review => {
+                    const reviewEl = document.createElement('div');
+                    reviewEl.className = 'review';
+                    reviewEl.innerHTML = `<div class="review-author">${review.name}</div><div class="review-content">${review.content}</div>`;
+                    container.appendChild(reviewEl);
+                });
+            }
+            document.getElementById('reviewProductId').value = product.id;
+            document.getElementById('reviewProductName').value = product.name;
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+
+        function saveProductReview() {
+            const productId = document.getElementById('reviewProductId').value;
+            const name = document.getElementById('productReviewerName').value;
+            const content = document.getElementById('productReviewContent').value;
+            const product = products.find(p => p.id == productId);
+            if(product) {
+                product.reviews.push({ name, content });
+                saveProductsToStorage();
+                renderProducts(); // To update review count on card
+            }
+            document.getElementById('productReviewForm').reset();
+            closeModal('reviewModal');
+            showToast('Thank you for your review!');
+        }
+
+        // --- ADMIN FUNCTIONALITY ---
+        function handleCrownClick() {
+            clickCount++;
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(() => { clickCount = 0; }, 1000);
+            if (clickCount >= 7) {
+                clickCount = 0;
+                showAdminLogin();
+            }
+        }
+
+        function showAdminLogin() {
+            if (isAdminLoggedIn) {
+                showView('admin');
+                return;
+            }
+            const password = prompt("Enter admin password:");
+            if (password === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                showView('admin');
+            } else if (password) {
+                alert('Incorrect password!');
+            }
+        }
+
+        function renderAdminProducts() {
+            const container = document.getElementById('adminProductsList');
+            container.innerHTML = '';
+            if (products.length === 0) {
+                container.innerHTML = '<p>No products found. Add one above.</p>';
+                return;
+            }
+            products.slice().reverse().forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product-card';
+                productElement.innerHTML = `
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p style="font-weight:bold; color: #e74c3c;">$${product.price.toFixed(2)}</p>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button onclick="editProduct(${product.id})" class="btn btn-primary" style="flex:1;">Edit</button>
+                            <button onclick="deleteProduct(${product.id})" class="btn btn-primary" style="background: #e74c3c; flex:1;">Delete</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productElement);
+            });
+        }
+        
+        function saveProduct() {
+            const id = document.getElementById('productId').value;
+            const newProductData = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                description: document.getElementById('productDescription').value,
+                images: document.getElementById('productImageURLs').value.split('\n').map(url => url.trim()).filter(url => url),
+            };
+
+            if (id) { // Editing
+                const index = products.findIndex(p => p.id == id);
+                products[index] = { ...products[index], ...newProductData };
+            } else { // Adding
+                products.push({ id: Date.now(), ...newProductData, reviews: [] });
+            }
+            
+            saveProductsToStorage();
+            renderProducts();
+            renderAdminProducts();
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            showToast(id ? 'Product updated!' : 'Product added!');
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productImageURLs').value = product.images.join('\n');
+            document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+            products = products.filter(p => p.id !== id);
+            saveProductsToStorage();
+            renderProducts();
+            renderAdminProducts();
+            showToast('Product deleted.');
+        }
+
+        // --- UTILITY FUNCTIONS ---
+        const showToast = (message) => {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const logoUrl = e.target.result;
+                updateLogo(logoUrl);
+                localStorage.setItem('companyLogo', logoUrl);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateLogo(logoUrl) {
+            document.getElementById('logoPreview').src = logoUrl;
+            document.getElementById('logoPreview').style.display = 'block';
+            document.getElementById('storeLogo').src = logoUrl;
+            document.getElementById('storeLogo').style.display = 'block';
+            document.getElementById('logoText').style.display = 'none';
+        }
     </script>
 </body>
 </html>
