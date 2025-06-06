@@ -1,50 +1,9 @@
-
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lure Kings - Premium Fishing Lures</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
             margin: 0;
@@ -84,18 +43,6 @@
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
-        }
-        
-        .logo #storeLogo {
-            max-height: 50px;
-            width: auto;
-            display: none;
-        }
-
-        .logo .logo-text-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .logo i {
@@ -421,27 +368,6 @@
             visibility: visible;
         }
 
-        .logo-upload-container {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        
-        .file-upload-area {
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 1rem;
-        }
-
-        .logo-preview {
-            max-width: 200px;
-            max-height: 100px;
-            margin-top: 1rem;
-            display: none;
-        }
-        
         .explainer-box {
             background-color: #fffbe6;
             border: 1px solid #ffe58f;
@@ -501,11 +427,8 @@
     <header class="header">
         <nav class="nav">
             <div class="logo" id="logo">
-                <img id="storeLogo" src="" alt="Lure Kings Logo">
-                <div class="logo-text-container" id="logoText">
-                    <i class="fas fa-crown"></i>
-                    Lure Kings
-                </div>
+                <i class="fas fa-crown"></i>
+                Lure Kings
             </div>
             <div class="nav-buttons">
                 <button class="btn btn-secondary" onclick="showView('store')">Store</button>
@@ -536,7 +459,7 @@
         <div class="products-grid" id="productsGrid"></div>
         
         <div class="review-section">
-            <h2 style="text-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
+            <h2 style="textTrang chủtext-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
             <div id="generalReviewsList">
                 <p style="text-align: center;">No reviews yet. Be the first!</p>
             </div>
@@ -575,16 +498,6 @@
         <div class="hero">
             <h1>Admin Dashboard</h1>
             <p>Manage your Lure Kings inventory</p>
-        </div>
-
-        <div class="logo-upload-container">
-            <h3>Upload Company Logo</h3>
-            <div class="file-upload-area">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i>
-                <p>Click to upload logo or drag & drop</p>
-            </div>
-            <input type="file" id="logoUpload" accept="image/*" style="display: none;">
-            <img id="logoPreview" class="logo-preview">
         </div>
 
         <div class="admin-form">
@@ -736,29 +649,22 @@ https://example.com/image2.jpg" required></textarea>
         document.addEventListener('DOMContentLoaded', () => init());
 
         function init() {
-            // Load data from localStorage or use defaults
             products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
             cart = JSON.parse(localStorage.getItem('cart')) || [];
             generalReviews = JSON.parse(localStorage.getItem('generalReviews')) || [];
-
-            const savedLogo = localStorage.getItem('companyLogo');
-            if (savedLogo) {
-                updateLogo(savedLogo);
-            }
             
-            // Render initial views
             renderProducts();
             updateCartCount();
             renderAdminProducts();
             renderGeneralReviews();
             
-            // Setup listeners
             setupEventListeners();
         }
 
         // --- EVENT LISTENERS ---
         function setupEventListeners() {
-            document.getElementById('logo').addEventListener('click', handleCrownClick);
+            const logo = document.getElementById('logo');
+            logo.addEventListener('click', handleCrownClick);
             
             document.getElementById('productForm').addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -785,7 +691,6 @@ https://example.com/image2.jpg" required></textarea>
                 saveProductReview();
             });
 
-            // Payment method selection logic
             document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     document.getElementById('bankDetails').classList.toggle('hidden', e.target.id !== 'bankTransfer');
@@ -793,7 +698,6 @@ https://example.com/image2.jpg" required></textarea>
                 });
             });
 
-            // Star rating logic
             const starContainer = document.getElementById('starRating');
             if (starContainer) {
                 starContainer.querySelectorAll('.star-rating i').forEach(star => {
@@ -806,12 +710,6 @@ https://example.com/image2.jpg" required></textarea>
                     });
                 });
             }
-            
-            // Logo Upload Listeners
-            const fileInput = document.getElementById('logoUpload');
-            const uploadArea = document.querySelector('.file-upload-area');
-            uploadArea.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleLogoUpload);
         }
 
         // --- DATA PERSISTENCE ---
@@ -1007,8 +905,10 @@ https://example.com/image2.jpg" required></textarea>
         }
 
         // --- ADMIN FUNCTIONALITY ---
-        function handleCrownClick() {
+        function handleCrownClick(e) {
+            e.preventDefault();
             clickCount++;
+            console.log(`Crown click count: ${clickCount}`); // Debugging
             clearTimeout(clickTimeout);
             clickTimeout = setTimeout(() => { clickCount = 0; }, 1000);
             if (clickCount >= 3) {
@@ -1020,16 +920,26 @@ https://example.com/image2.jpg" required></textarea>
         function showAdminLogin() {
             if (isAdminLoggedIn) {
                 showView('admin');
+                showToast('Admin panel accessed!');
                 return;
             }
-            const password = prompt("Enter admin password:");
-            if (password === null) return;
-            if (password === ADMIN_PASSWORD) {
-                isAdminLoggedIn = true;
-                showView('admin');
-                showToast('Admin login successful!');
-            } else {
-                alert('Incorrect password!');
+            try {
+                const password = prompt("Enter admin password:");
+                if (password === null) {
+                    showToast('Admin login cancelled.');
+                    return;
+                }
+                if (password === ADMIN_PASSWORD) {
+                    isAdminLoggedIn = true;
+                    showView('admin');
+                    showToast('Admin login successful!');
+                } else {
+                    alert('Incorrect password!');
+                    showToast('Incorrect password.');
+                }
+            } catch (error) {
+                console.error('Admin login error:', error);
+                showToast('Error accessing admin login.');
             }
         }
 
@@ -1109,26 +1019,6 @@ https://example.com/image2.jpg" required></textarea>
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         };
-        
-        function handleLogoUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const logoUrl = e.target.result;
-                updateLogo(logoUrl);
-                localStorage.setItem('companyLogo', logoUrl);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function updateLogo(logoUrl) {
-            document.getElementById('logoPreview').src = logoUrl;
-            document.getElementById('logoPreview').style.display = 'block';
-            document.getElementById('storeLogo').src = logoUrl;
-            document.getElementById('storeLogo').style.display = 'block';
-            document.getElementById('logoText').style.display = 'none';
-        }
     </script>
 </body>
 </html>
