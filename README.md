@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lure Kings - Premium Fishing Gear</title>
+    <title>Lure Kings - Premium Fishing Lures</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -186,7 +185,8 @@
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
+        
+        /* --- MODIFICATION: Horizontal Scroll Image Gallery --- */
         .product-image-container {
             display: flex;
             overflow-x: auto;
@@ -208,6 +208,7 @@
             flex: 0 0 100%;
             scroll-snap-align: start;
         }
+        /* --- END MODIFICATION --- */
 
         .product-info {
             padding: 1rem;
@@ -234,13 +235,13 @@
             color: #666;
             margin-bottom: 1rem;
             font-size: 0.9rem;
-            flex-grow: 1;
+            flex-grow: 1; /* Pushes buttons down */
         }
         
         .product-buttons {
             display: flex;
             gap: 0.5rem;
-            margin-top: auto;
+            margin-top: auto; /* Pushes this container to the bottom */
         }
 
         .add-to-cart, .reviews-btn {
@@ -326,19 +327,6 @@
         }
         .review-content {
             margin-top: 0.5rem;
-        }
-        .star-rating {
-            margin-top: 0.5rem;
-            color: #f8d56b;
-        }
-        .star-rating i {
-            cursor: pointer;
-        }
-        .star-rating .fa-star.filled {
-            color: #f8d56b;
-        }
-        .star-rating .fa-star {
-            color: #ccc;
         }
 
         .hidden {
@@ -431,6 +419,7 @@
             margin-bottom: 0.5rem;
         }
         
+        /* --- MODIFICATION: Stripe Placeholder Styles --- */
         .payment-method {
             padding: 0.75rem;
             border: 1px solid #ddd;
@@ -481,8 +470,8 @@
     <div class="container">
         <div id="storeView">
             <div class="hero">
-                <h1>Premium Fishing Gear</h1>
-                <p>High-quality fishing lures for the best prices</p>
+                <h1>Premium Fishing Lures</h1>
+                <p>High-quality fishing lures for the serious angler</p>
             </div>
 
             <div class="categories">
@@ -493,7 +482,8 @@
                 <button class="category-btn" onclick="filterByCategory('spinnerbaits')">Spinnerbaits</button>
             </div>
 
-            <div class="products-grid" id="productsGrid"></div>
+            <div class="products-grid" id="productsGrid">
+                 </div>
             
             <div class="review-section">
                 <h2 style="text-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
@@ -508,17 +498,6 @@
                         <div class="form-group">
                             <label for="reviewerName">Your Name</label>
                             <input type="text" id="reviewerName" name="Reviewer_Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reviewRating">Rating</label>
-                            <div class="star-rating" id="generalReviewStars">
-                                <i class="fas fa-star" data-rating="1"></i>
-                                <i class="fas fa-star" data-rating="2"></i>
-                                <i class="fas fa-star" data-rating="3"></i>
-                                <i class="fas fa-star" data-rating="4"></i>
-                                <i class="fas fa-star" data-rating="5"></i>
-                            </div>
-                            <input type="hidden" id="reviewRating" name="Rating" required>
                         </div>
                         <div class="form-group">
                             <label for="reviewContent">Your Review</label>
@@ -574,8 +553,7 @@
                     </div>
                     <div class="form-group">
                         <label for="productImageURLs">Product Images (one URL per line)</label>
-                        <textarea id="productImageURLs" rows="4" placeholder="https://example.com/image1.jpg
-https://example.com/image2.jpg" required></textarea>
+                        <textarea id="productImageURLs" rows="4" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Save Product</button>
                 </form>
@@ -590,7 +568,7 @@ https://example.com/image2.jpg" required></textarea>
 
     <div id="cartModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('cartModal')">×</span>
+            <span class="close" onclick="closeModal('cartModal')">&times;</span>
             <h2 style="margin-bottom: 1rem; color: #1a365d;">Shopping Cart</h2>
             <div id="cartItems"></div>
             <div class="cart-total" id="cartTotal" style="text-align:right; font-size:1.3rem; margin-top:1rem;">Total: $0.00</div>
@@ -600,7 +578,7 @@ https://example.com/image2.jpg" required></textarea>
 
     <div id="checkoutModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('checkoutModal')">×</span>
+            <span class="close" onclick="closeModal('checkoutModal')">&times;</span>
             <h2 style="margin-bottom: 1rem; color: #1a365d;">Secure Checkout</h2>
             <form id="checkoutForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
                 <input type="hidden" name="_subject" value="New Order from Lure Kings!">
@@ -635,7 +613,8 @@ https://example.com/image2.jpg" required></textarea>
                     <label for="stripe">Credit/Debit Card (Stripe)</label>
                     <div id="stripe-card-container" class="hidden" style="margin-top: 10px;">
                         <label for="card-element">Card Details</label>
-                        <div id="card-element" class="stripe-card-element"></div>
+                        <div id="card-element" class="stripe-card-element">
+                          </div>
                         <div id="card-errors" role="alert" style="color: #e74c3c; margin-top: 5px;"></div>
                     </div>
                 </div>
@@ -655,7 +634,7 @@ https://example.com/image2.jpg" required></textarea>
 
     <div id="reviewModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('reviewModal')">×</span>
+            <span class="close" onclick="closeModal('reviewModal')">&times;</span>
             <h2 id="reviewModalTitle" style="margin-bottom: 1rem; color: #1a365d;">Product Reviews</h2>
             <div id="productReviewsList"></div>
             <div class="admin-form" style="margin-top: 2rem; border: none; padding: 0;">
@@ -668,17 +647,6 @@ https://example.com/image2.jpg" required></textarea>
                     <div class="form-group">
                         <label for="productReviewerName">Your Name</label>
                         <input type="text" id="productReviewerName" name="Reviewer_Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productReviewRating">Rating</label>
-                        <div class="star-rating" id="productReviewStars">
-                            <i class="fas fa-star" data-rating="1"></i>
-                            <i class="fas fa-star" data-rating="2"></i>
-                            <i class="fas fa-star" data-rating="3"></i>
-                            <i class="fas fa-star" data-rating="4"></i>
-                            <i class="fas fa-star" data-rating="5"></i>
-                        </div>
-                        <input type="hidden" id="productReviewRating" name="Rating" required>
                     </div>
                     <div class="form-group">
                         <label for="productReviewContent">Your Review</label>
@@ -701,12 +669,15 @@ https://example.com/image2.jpg" required></textarea>
         let generalReviews = [];
         let currentFilter = 'all';
         
+        // --- MODIFICATION: Default product list is now empty ---
+        // Add your products via the admin dashboard after logging in.
         const defaultProducts = [];
 
         // --- APP INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => init());
 
         function init() {
+            // Load data from localStorage or use defaults
             products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
             cart = JSON.parse(localStorage.getItem('cart')) || [];
             generalReviews = JSON.parse(localStorage.getItem('generalReviews')) || [];
@@ -716,11 +687,13 @@ https://example.com/image2.jpg" required></textarea>
                 updateLogo(savedLogo);
             }
             
+            // Render initial views
             renderProducts();
             updateCartCount();
             renderAdminProducts();
             renderGeneralReviews();
             
+            // Setup listeners
             setupEventListeners();
         }
 
@@ -739,16 +712,19 @@ https://example.com/image2.jpg" required></textarea>
             
             document.getElementById('generalReviewForm').addEventListener('submit', (e) => {
                 e.preventDefault();
+                // This submits to FormSubmit and saves locally
                 document.getElementById('generalReviewForm').submit();
                 saveGeneralReview(); 
             });
 
             document.getElementById('productReviewForm').addEventListener('submit', (e) => {
                 e.preventDefault();
+                // This submits to FormSubmit and saves locally
                 document.getElementById('productReviewForm').submit();
                 saveProductReview();
             });
 
+            // Payment method selection logic
             document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     document.getElementById('bankDetails').classList.toggle('hidden', e.target.id !== 'bankTransfer');
@@ -756,30 +732,11 @@ https://example.com/image2.jpg" required></textarea>
                 });
             });
             
+             // Logo Upload Listeners
             const fileInput = document.getElementById('logoUpload');
             const uploadArea = document.querySelector('.file-upload-area');
             uploadArea.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleLogoUpload);
-
-            // Star rating listeners
-            document.querySelectorAll('.star-rating').forEach(container => {
-                container.querySelectorAll('.fa-star').forEach(star => {
-                    star.addEventListener('click', () => {
-                        const rating = parseInt(star.getAttribute('data-rating'));
-                        setStarRating(container.id, rating);
-                    });
-                });
-            });
-        }
-
-        // --- STAR RATING FUNCTIONALITY ---
-        function setStarRating(containerId, rating) {
-            const stars = document.querySelectorAll(`#${containerId} .fa-star`);
-            stars.forEach(star => {
-                const starRating = parseInt(star.getAttribute('data-rating'));
-                star.classList.toggle('filled', starRating <= rating);
-            });
-            document.getElementById(containerId === 'generalReviewStars' ? 'reviewRating' : 'productReviewRating').value = rating;
         }
 
         // --- DATA PERSISTENCE ---
@@ -861,7 +818,7 @@ https://example.com/image2.jpg" required></textarea>
             } else {
                 cart.forEach(item => {
                     const cartItem = document.createElement('div');
-                    cartItem.className = 'cart-item';
+                    cartItem.className = 'cart-item'; // You would need to add CSS for this class
                     cartItem.style.cssText = 'display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #eee; align-items: center;';
                     cartItem.innerHTML = `
                         <img src="${item.images[0]}" alt="${item.name}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">
@@ -884,7 +841,7 @@ https://example.com/image2.jpg" required></textarea>
         function removeFromCart(productId) {
             cart = cart.filter(item => item.id !== productId);
             updateCartCount();
-            showCart();
+            showCart(); // Refresh cart display
             saveCartToStorage();
         }
 
@@ -919,24 +876,18 @@ https://example.com/image2.jpg" required></textarea>
             generalReviews.forEach(review => {
                 const reviewEl = document.createElement('div');
                 reviewEl.className = 'review';
-                reviewEl.innerHTML = `
-                    <div class="review-author">${review.name}</div>
-                    <div class="star-rating">${'<i class="fas fa-star filled"></i>'.repeat(review.rating)}${'<i class="fas fa-star"></i>'.repeat(5 - review.rating)}</div>
-                    <div class="review-content">${review.content}</div>
-                `;
+                reviewEl.innerHTML = `<div class="review-author">${review.name}</div><div class="review-content">${review.content}</div>`;
                 container.appendChild(reviewEl);
             });
         }
 
         function saveGeneralReview() {
             const name = document.getElementById('reviewerName').value;
-            const rating = document.getElementById('reviewRating').value;
             const content = document.getElementById('reviewContent').value;
-            generalReviews.push({ name, rating: parseInt(rating), content });
+            generalReviews.push({ name, content });
             saveGeneralReviewsToStorage();
             renderGeneralReviews();
             document.getElementById('generalReviewForm').reset();
-            document.querySelectorAll('#generalReviewStars .fa-star').forEach(star => star.classList.remove('filled'));
             showToast('Thank you for your review!');
         }
 
@@ -951,11 +902,7 @@ https://example.com/image2.jpg" required></textarea>
                 product.reviews.forEach(review => {
                     const reviewEl = document.createElement('div');
                     reviewEl.className = 'review';
-                    reviewEl.innerHTML = `
-                        <div class="review-author">${review.name}</div>
-                        <div class="star-rating">${'<i class="fas fa-star filled"></i>'.repeat(review.rating)}${'<i class="fas fa-star"></i>'.repeat(5 - review.rating)}</div>
-                        <div class="review-content">${review.content}</div>
-                    `;
+                    reviewEl.innerHTML = `<div class="review-author">${review.name}</div><div class="review-content">${review.content}</div>`;
                     container.appendChild(reviewEl);
                 });
             }
@@ -967,16 +914,14 @@ https://example.com/image2.jpg" required></textarea>
         function saveProductReview() {
             const productId = document.getElementById('reviewProductId').value;
             const name = document.getElementById('productReviewerName').value;
-            const rating = document.getElementById('productReviewRating').value;
             const content = document.getElementById('productReviewContent').value;
             const product = products.find(p => p.id == productId);
             if(product) {
-                product.reviews.push({ name, rating: parseInt(rating), content });
+                product.reviews.push({ name, content });
                 saveProductsToStorage();
-                renderProducts();
+                renderProducts(); // To update review count on card
             }
             document.getElementById('productReviewForm').reset();
-            document.querySelectorAll('#productReviewStars .fa-star').forEach(star => star.classList.remove('filled'));
             closeModal('reviewModal');
             showToast('Thank you for your review!');
         }
@@ -1036,4 +981,72 @@ https://example.com/image2.jpg" required></textarea>
                 name: document.getElementById('productName').value,
                 category: document.getElementById('productCategory').value,
                 price: parseFloat(document.getElementById('productPrice').value),
-                description:
+                description: document.getElementById('productDescription').value,
+                images: document.getElementById('productImageURLs').value.split('\n').map(url => url.trim()).filter(url => url),
+            };
+
+            if (id) { // Editing
+                const index = products.findIndex(p => p.id == id);
+                products[index] = { ...products[index], ...newProductData };
+            } else { // Adding
+                products.push({ id: Date.now(), ...newProductData, reviews: [] });
+            }
+            
+            saveProductsToStorage();
+            renderProducts();
+            renderAdminProducts();
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            showToast(id ? 'Product updated!' : 'Product added!');
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productImageURLs').value = product.images.join('\n');
+            document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+            products = products.filter(p => p.id !== id);
+            saveProductsToStorage();
+            renderProducts();
+            renderAdminProducts();
+            showToast('Product deleted.');
+        }
+
+        // --- UTILITY FUNCTIONS ---
+        const showToast = (message) => {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const logoUrl = e.target.result;
+                updateLogo(logoUrl);
+                localStorage.setItem('companyLogo', logoUrl);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateLogo(logoUrl) {
+            document.getElementById('logoPreview').src = logoUrl;
+            document.getElementById('logoPreview').style.display = 'block';
+            document.getElementById('storeLogo').src = logoUrl;
+            document.getElementById('storeLogo').style.display = 'block';
+            document.getElementById('logoText').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
