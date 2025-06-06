@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lure Kings - Premium Fishing Lures</title>
+    <title>Lure Kings - Premium Fishing Gear</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -495,6 +495,24 @@
             display: none;
         }
 
+        /* Star rating styles */
+        .stars {
+            font-size: 1.2rem;
+            color: #ccc; /* Default star color */
+            cursor: pointer;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars .fa-star {
+            transition: color 0.2s ease-in-out;
+        }
+
+        .stars .fa-star.active {
+            color: #f8d56b; /* Active star color */
+        }
+
+
         @media (max-width: 768px) {
             .nav {
                 flex-direction: column;
@@ -535,8 +553,8 @@
     <div class="container">
         <div id="storeView">
             <div class="hero">
-                <h1>Premium Fishing Lures</h1>
-                <p>High-quality fishing lures for the serious angler</p>
+                <h1>Premium Fishing Gear</h1>
+                <p>High-quality fishing lures for the best prices</p>
             </div>
 
             <div class="categories">
@@ -722,7 +740,7 @@
     <script>
         // --- GLOBAL STATE ---
         let isAdminLoggedIn = false;
-        const ADMIN_PASSWORD = "Maxchingershambo08"; // Changed password
+        const ADMIN_PASSWORD = "Maxchingershambo08"; 
         let clickCount = 0;
         let clickTimeout;
         let products = [];
@@ -847,11 +865,19 @@
                         <h3 class="product-title">${product.name}</h3>
                         <div class="product-price">$${product.price.toFixed(2)}</div>
                         <p class="product-description">${product.description}</p>
+                        <div class="stars" data-product-id="${product.id}">
+                            <i class="fas fa-star" data-value="1"></i>
+                            <i class="fas fa-star" data-value="2"></i>
+                            <i class="fas fa-star" data-value="3"></i>
+                            <i class="fas fa-star" data-value="4"></i>
+                            <i class="fas fa-star" data-value="5"></i>
+                        </div>
                         <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+            addStarRatingListeners(); // Attach event listeners after rendering
         }
 
         function filterByCategory(category) {
@@ -859,7 +885,7 @@
             renderProducts();
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.textContent.toLowerCase().includes(category)) {
+                if (btn.textContent.toLowerCase().includes(category.replace('-', ' '))) {
                     btn.classList.add('active');
                 }
             });
@@ -956,7 +982,7 @@
         function showCheckout() {
             if (cart.length === 0) { return; }
             // Set the dynamic redirect URL for FormSubmit
-            const redirectUrl = `${window.location.origin}${window.location.pathname}?order=success`;
+            const redirectUrl = `https://lure-kings.github.io/Fishing-Store/?order=success`;
             document.getElementById('formSubmitRedirect').value = redirectUrl;
 
             updateCheckoutSummary();
@@ -1028,6 +1054,7 @@
             if (password === ADMIN_PASSWORD) {
                 isAdminLoggedIn = true;
                 showView('admin');
+                showToast("Admin access granted!");
             } else if (password !== null) {
                 alert('Incorrect password!');
             }
@@ -1118,6 +1145,33 @@
             renderProducts();
             renderAdminProducts();
             showToast('Product deleted successfully.');
+        }
+
+        // --- STAR RATING FUNCTIONALITY ---
+        function addStarRatingListeners() {
+            document.querySelectorAll('.stars').forEach(starContainer => {
+                const stars = starContainer.querySelectorAll('.fa-star');
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = parseInt(this.dataset.value);
+                        highlightStars(starContainer, rating);
+                        // You could save this rating to localStorage or send it to a server
+                        // For this example, we'll just show a toast.
+                        showToast(`Rated ${rating} stars!`);
+                    });
+                });
+            });
+        }
+
+        function highlightStars(container, rating) {
+            const stars = container.querySelectorAll('.fa-star');
+            stars.forEach(star => {
+                if (parseInt(star.dataset.value) <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
         }
 
         // --- UTILITY FUNCTIONS ---
