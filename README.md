@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lure Kings - Premium Fishing Lures</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Lure Kings - Premium Fishing Gear</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -43,6 +44,18 @@
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+        }
+        
+        .logo #storeLogo {
+            max-height: 50px;
+            width: auto;
+            display: none; /* Hidden by default, shown via JS if logo is uploaded */
+        }
+
+        .logo .logo-text-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .logo i {
@@ -173,7 +186,7 @@
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .product-image-container {
             display: flex;
             overflow-x: auto;
@@ -292,6 +305,7 @@
             color: #333;
         }
         
+        /* --- Review System Styles --- */
         .review-section {
             margin-top: 2rem;
             background: white;
@@ -312,6 +326,19 @@
         }
         .review-content {
             margin-top: 0.5rem;
+        }
+        .star-rating {
+            margin-top: 0.5rem;
+            color: #f8d56b;
+        }
+        .star-rating i {
+            cursor: pointer;
+        }
+        .star-rating .fa-star.filled {
+            color: #f8d56b;
+        }
+        .star-rating .fa-star {
+            color: #ccc;
         }
 
         .hidden {
@@ -368,6 +395,27 @@
             visibility: visible;
         }
 
+        .logo-upload-container {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .logo-preview {
+            max-width: 200px;
+            max-height: 100px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
         .explainer-box {
             background-color: #fffbe6;
             border: 1px solid #ffe58f;
@@ -406,29 +454,17 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        .star-rating {
-            display: flex;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .star-rating i {
-            color: #ddd;
-            transition: color 0.2s;
-        }
-
-        .star-rating i.active {
-            color: #f8d56b;
-        }
     </style>
 </head>
 <body>
     <header class="header">
         <nav class="nav">
             <div class="logo" id="logo">
-                <i class="fas fa-crown"></i>
-                Lure Kings
+                <img id="storeLogo" src="" alt="Lure Kings Logo">
+                <div class="logo-text-container" id="logoText">
+                    <i class="fas fa-crown"></i>
+                    Lure Kings
+                </div>
             </div>
             <div class="nav-buttons">
                 <button class="btn btn-secondary" onclick="showView('store')">Store</button>
@@ -442,102 +478,113 @@
 
     <div class="toast" id="toast">Item added to cart!</div>
 
-    <div id="storeView" class="container">
-        <div class="hero">
-            <h1>Premium Fishing Gear</h1>
-            <p>High-quality fishing lures for the best prices</p>
-        </div>
-
-        <div class="categories">
-            <button class="category-btn active" onclick="filterByCategory('all')">All Lures</button>
-            <button class="category-btn" onclick="filterByCategory('jigs')">Jigs</button>
-            <button class="category-btn" onclick="filterByCategory('soft-plastics')">Soft Plastics</button>
-            <button class="category-btn" onclick="filterByCategory('topwaters')">Topwaters</button>
-            <button class="category-btn" onclick="filterByCategory('spinnerbaits')">Spinnerbaits</button>
-        </div>
-
-        <div class="products-grid" id="productsGrid"></div>
-        
-        <div class="review-section">
-            <h2 style="textTrang chủtext-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
-            <div id="generalReviewsList">
-                <p style="text-align: center;">No reviews yet. Be the first!</p>
+    <div class="container">
+        <div id="storeView">
+            <div class="hero">
+                <h1>Premium Fishing Gear</h1>
+                <p>High-quality fishing lures for the best prices</p>
             </div>
-            <div class="admin-form" style="margin-top: 2rem;">
-                <h3 style="margin-bottom: 1rem; color: #1a365d;">Leave a Website Review</h3>
-                <form id="generalReviewForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
-                    <input type="hidden" name="_subject" value="New Lure Kings Website Review!">
-                    <input type="hidden" name="_template" value="table">
-                    <div class="form-group">
-                        <label>Rating<span class="required-star">*</span></label>
-                        <div class="star-rating" id="starRating">
-                            <i class="fas fa-star" data-rating="1"></i>
-                            <i class="fas fa-star" data-rating="2"></i>
-                            <i class="fas fa-star" data-rating="3"></i>
-                            <i class="fas fa-star" data-rating="4"></i>
-                            <i class="fas fa-star" data-rating="5"></i>
+
+            <div class="categories">
+                <button class="category-btn active" onclick="filterByCategory('all')">All Lures</button>
+                <button class="category-btn" onclick="filterByCategory('jigs')">Jigs</button>
+                <button class="category-btn" onclick="filterByCategory('soft-plastics')">Soft Plastics</button>
+                <button class="category-btn" onclick="filterByCategory('topwaters')">Topwaters</button>
+                <button class="category-btn" onclick="filterByCategory('spinnerbaits')">Spinnerbaits</button>
+            </div>
+
+            <div class="products-grid" id="productsGrid"></div>
+            
+            <div class="review-section">
+                <h2 style="text-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
+                <div id="generalReviewsList">
+                    <p style="text-align: center;">No reviews yet. Be the first!</p>
+                </div>
+                <div class="admin-form" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; color: #1a365d;">Leave a Website Review</h3>
+                    <form id="generalReviewForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="New Lure Kings Website Review!">
+                        <input type="hidden" name="_template" value="table">
+                        <div class="form-group">
+                            <label for="reviewerName">Your Name</label>
+                            <input type="text" id="reviewerName" name="Reviewer_Name" required>
                         </div>
-                        <input type="hidden" id="ratingInput" name="rating" required>
+                        <div class="form-group">
+                            <label for="reviewRating">Rating</label>
+                            <div class="star-rating" id="generalReviewStars">
+                                <i class="fas fa-star" data-rating="1"></i>
+                                <i class="fas fa-star" data-rating="2"></i>
+                                <i class="fas fa-star" data-rating="3"></i>
+                                <i class="fas fa-star" data-rating="4"></i>
+                                <i class="fas fa-star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="reviewRating" name="Rating" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewContent">Your Review</label>
+                            <textarea id="reviewContent" name="Review_Content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="adminView" class="hidden">
+            <div class="hero">
+                <h1>Admin Dashboard</h1>
+                <p>Manage your Lure Kings inventory</p>
+            </div>
+
+            <div class="logo-upload-container">
+                <h3>Upload Company Logo</h3>
+                <div class="file-upload-area">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i>
+                    <p>Click to upload logo or drag & drop</p>
+                </div>
+                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                <img id="logoPreview" class="logo-preview">
+            </div>
+
+            <div class="admin-form">
+                <h2 style="margin-bottom: 1rem; color: #1a365d;">Add/Edit Product</h2>
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" required>
                     </div>
                     <div class="form-group">
-                        <label for="reviewerName">Your Name<span class="required-star">*</span></label>
-                        <input type="text" id="reviewerName" name="Reviewer_Name" required>
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="jigs">Jigs</option>
+                            <option value="soft-plastics">Soft Plastics</option>
+                            <option value="topwaters">Topwaters</option>
+                            <option value="spinnerbaits">Spinnerbaits</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="reviewContent">Your Review<span class="required-star">*</span></label>
-                        <textarea id="reviewContent" name="Review_Content" rows="3" required></textarea>
+                        <label for="productPrice">Price ($)</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" required>
                     </div>
-                    <input type="hidden" name="_next" value="https://lure-kings.github.io/Fishing-Store/">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImageURLs">Product Images (one URL per line)</label>
+                        <textarea id="productImageURLs" rows="4" placeholder="https://example.com/image1.jpg
+https://example.com/image2.jpg" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Product</button>
                 </form>
             </div>
-        </div>
-    </div>
 
-    <div id="adminView" class="container hidden">
-        <div class="hero">
-            <h1>Admin Dashboard</h1>
-            <p>Manage your Lure Kings inventory</p>
-        </div>
-
-        <div class="admin-form">
-            <h2 style="margin-bottom: 1rem; color: #1a365d;">Add/Edit Product</h2>
-            <form id="productForm">
-                <input type="hidden" id="productId">
-                <div class="form-group">
-                    <label for="productName">Product Name<span class="required-star">*</span></label>
-                    <input type="text" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label for="productCategory">Category<span class="required-star">*</span></label>
-                    <select id="productCategory" required>
-                        <option value="">Select Category</option>
-                        <option value="jigs">Jigs</option>
-                        <option value="soft-plastics">Soft Plastics</option>
-                        <option value="topwaters">Topwaters</option>
-                        <option value="spinnerbaits">Spinnerbaits</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productPrice">Price ($)<span class="required-star">*</span></label>
-                    <input type="number" id="productPrice" step="0.01" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Description<span class="required-star">*</span></label>
-                    <textarea id="productDescription" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="productImageURLs">Product Images (one URL per line)<span class="required-star">*</span></label>
-                    <textarea id="productImageURLs" rows="4" placeholder="https://example.com/image1.jpg
-https://example.com/image2.jpg" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Product</button>
-            </form>
-        </div>
-
-        <div class="admin-form">
-            <h2 style="margin-bottom: 1rem; color: #1a365d;">Manage Existing Products</h2>
-            <div id="adminProductsList"></div>
+            <div class="admin-form">
+                <h2 style="margin-bottom: 1rem; color: #1a365d;">Manage Existing Products</h2>
+                <div id="adminProductsList"></div>
+            </div>
         </div>
     </div>
 
@@ -619,11 +666,22 @@ https://example.com/image2.jpg" required></textarea>
                     <input type="hidden" name="_subject" value="New Product Review!">
                     <input type="hidden" name="_template" value="table">
                     <div class="form-group">
-                        <label for="productReviewerName">Your Name<span class="required-star">*</span></label>
+                        <label for="productReviewerName">Your Name</label>
                         <input type="text" id="productReviewerName" name="Reviewer_Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="productReviewContent">Your Review<span class="required-star">*</span></label>
+                        <label for="productReviewRating">Rating</label>
+                        <div class="star-rating" id="productReviewStars">
+                            <i class="fas fa-star" data-rating="1"></i>
+                            <i class="fas fa-star" data-rating="2"></i>
+                            <i class="fas fa-star" data-rating="3"></i>
+                            <i class="fas fa-star" data-rating="4"></i>
+                            <i class="fas fa-star" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="productReviewRating" name="Rating" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productReviewContent">Your Review</label>
                         <textarea id="productReviewContent" name="Review_Content" rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
@@ -635,7 +693,7 @@ https://example.com/image2.jpg" required></textarea>
     <script>
         // --- GLOBAL STATE ---
         let isAdminLoggedIn = false;
-        const ADMIN_PASSWORD = "Maxchingershambo08";
+        const ADMIN_PASSWORD = "Maxchingershambo08"; // Change this password
         let clickCount = 0;
         let clickTimeout;
         let products = [];
@@ -652,6 +710,11 @@ https://example.com/image2.jpg" required></textarea>
             products = JSON.parse(localStorage.getItem('products')) || defaultProducts;
             cart = JSON.parse(localStorage.getItem('cart')) || [];
             generalReviews = JSON.parse(localStorage.getItem('generalReviews')) || [];
+
+            const savedLogo = localStorage.getItem('companyLogo');
+            if (savedLogo) {
+                updateLogo(savedLogo);
+            }
             
             renderProducts();
             updateCartCount();
@@ -663,8 +726,7 @@ https://example.com/image2.jpg" required></textarea>
 
         // --- EVENT LISTENERS ---
         function setupEventListeners() {
-            const logo = document.getElementById('logo');
-            logo.addEventListener('click', handleCrownClick);
+            document.getElementById('logo').addEventListener('click', handleCrownClick);
             
             document.getElementById('productForm').addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -677,12 +739,8 @@ https://example.com/image2.jpg" required></textarea>
             
             document.getElementById('generalReviewForm').addEventListener('submit', (e) => {
                 e.preventDefault();
-                if (!document.getElementById('ratingInput').value) {
-                    alert('Please select a star rating.');
-                    return;
-                }
                 document.getElementById('generalReviewForm').submit();
-                saveGeneralReview();
+                saveGeneralReview(); 
             });
 
             document.getElementById('productReviewForm').addEventListener('submit', (e) => {
@@ -697,19 +755,31 @@ https://example.com/image2.jpg" required></textarea>
                     document.getElementById('stripe-card-container').classList.toggle('hidden', e.target.id !== 'stripe');
                 });
             });
+            
+            const fileInput = document.getElementById('logoUpload');
+            const uploadArea = document.querySelector('.file-upload-area');
+            uploadArea.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleLogoUpload);
 
-            const starContainer = document.getElementById('starRating');
-            if (starContainer) {
-                starContainer.querySelectorAll('.star-rating i').forEach(star => {
-                    star.addEventListener('click', (e) => {
-                        const rating = parseInt(e.target.dataset.rating);
-                        document.getElementById('ratingInput').value = rating;
-                        starContainer.querySelectorAll('.star-rating i').forEach(s => {
-                            s.classList.toggle('active', parseInt(s.dataset.rating) <= rating);
-                        });
+            // Star rating listeners
+            document.querySelectorAll('.star-rating').forEach(container => {
+                container.querySelectorAll('.fa-star').forEach(star => {
+                    star.addEventListener('click', () => {
+                        const rating = parseInt(star.getAttribute('data-rating'));
+                        setStarRating(container.id, rating);
                     });
                 });
-            }
+            });
+        }
+
+        // --- STAR RATING FUNCTIONALITY ---
+        function setStarRating(containerId, rating) {
+            const stars = document.querySelectorAll(`#${containerId} .fa-star`);
+            stars.forEach(star => {
+                const starRating = parseInt(star.getAttribute('data-rating'));
+                star.classList.toggle('filled', starRating <= rating);
+            });
+            document.getElementById(containerId === 'generalReviewStars' ? 'reviewRating' : 'productReviewRating').value = rating;
         }
 
         // --- DATA PERSISTENCE ---
@@ -729,7 +799,7 @@ https://example.com/image2.jpg" required></textarea>
             grid.innerHTML = '';
             const filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
             
-            if (filteredProducts.length === 0 && currentFilter === 'all') {
+            if(filteredProducts.length === 0 && currentFilter === 'all') {
                 grid.innerHTML = `<p>No products yet. Log in to the admin panel to add some!</p>`;
                 return;
             }
@@ -760,7 +830,7 @@ https://example.com/image2.jpg" required></textarea>
             renderProducts();
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             const buttonToActivate = Array.from(document.querySelectorAll('.category-btn')).find(btn => btn.getAttribute('onclick').includes(`'${category}'`));
-            if (buttonToActivate) buttonToActivate.classList.add('active');
+            if(buttonToActivate) buttonToActivate.classList.add('active');
         }
 
         // --- CART FUNCTIONALITY ---
@@ -770,7 +840,7 @@ https://example.com/image2.jpg" required></textarea>
             if (existingItem) {
                 existingItem.quantity++;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                cart.push({...product, quantity: 1});
             }
             updateCartCount();
             showToast(`${product.name} added to cart`);
@@ -800,8 +870,8 @@ https://example.com/image2.jpg" required></textarea>
                             <div>$${item.price.toFixed(2)}</div>
                         </div>
                         <div style="text-align:right;">
-                            <div style="font-weight:bold;">$${(item.price * item.quantity).toFixed(2)}</div>
-                            <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:red; cursor:pointer; font-size:0.8rem;">Remove</button>
+                             <div style="font-weight:bold;">$${(item.price * item.quantity).toFixed(2)}</div>
+                             <button onclick="removeFromCart(${item.id})" style="background:none; border:none; color:red; cursor:pointer; font-size:0.8rem;">Remove</button>
                         </div>
                     `;
                     cartItemsEl.appendChild(cartItem);
@@ -851,7 +921,8 @@ https://example.com/image2.jpg" required></textarea>
                 reviewEl.className = 'review';
                 reviewEl.innerHTML = `
                     <div class="review-author">${review.name}</div>
-                    <div class="review-content">${review.rating} stars: ${review.content}</div>
+                    <div class="star-rating">${'<i class="fas fa-star filled"></i>'.repeat(review.rating)}${'<i class="fas fa-star"></i>'.repeat(5 - review.rating)}</div>
+                    <div class="review-content">${review.content}</div>
                 `;
                 container.appendChild(reviewEl);
             });
@@ -859,13 +930,13 @@ https://example.com/image2.jpg" required></textarea>
 
         function saveGeneralReview() {
             const name = document.getElementById('reviewerName').value;
+            const rating = document.getElementById('reviewRating').value;
             const content = document.getElementById('reviewContent').value;
-            const rating = document.getElementById('ratingInput').value;
-            generalReviews.push({ name, content, rating });
+            generalReviews.push({ name, rating: parseInt(rating), content });
             saveGeneralReviewsToStorage();
             renderGeneralReviews();
             document.getElementById('generalReviewForm').reset();
-            document.getElementById('starRating').querySelectorAll('.star-rating i').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('#generalReviewStars .fa-star').forEach(star => star.classList.remove('filled'));
             showToast('Thank you for your review!');
         }
 
@@ -880,7 +951,11 @@ https://example.com/image2.jpg" required></textarea>
                 product.reviews.forEach(review => {
                     const reviewEl = document.createElement('div');
                     reviewEl.className = 'review';
-                    reviewEl.innerHTML = `<div class="review-author">${review.name}</div><div class="review-content">${review.content}</div>`;
+                    reviewEl.innerHTML = `
+                        <div class="review-author">${review.name}</div>
+                        <div class="star-rating">${'<i class="fas fa-star filled"></i>'.repeat(review.rating)}${'<i class="fas fa-star"></i>'.repeat(5 - review.rating)}</div>
+                        <div class="review-content">${review.content}</div>
+                    `;
                     container.appendChild(reviewEl);
                 });
             }
@@ -892,26 +967,26 @@ https://example.com/image2.jpg" required></textarea>
         function saveProductReview() {
             const productId = document.getElementById('reviewProductId').value;
             const name = document.getElementById('productReviewerName').value;
+            const rating = document.getElementById('productReviewRating').value;
             const content = document.getElementById('productReviewContent').value;
             const product = products.find(p => p.id == productId);
-            if (product) {
-                product.reviews.push({ name, content });
+            if(product) {
+                product.reviews.push({ name, rating: parseInt(rating), content });
                 saveProductsToStorage();
                 renderProducts();
             }
             document.getElementById('productReviewForm').reset();
+            document.querySelectorAll('#productReviewStars .fa-star').forEach(star => star.classList.remove('filled'));
             closeModal('reviewModal');
             showToast('Thank you for your review!');
         }
 
         // --- ADMIN FUNCTIONALITY ---
-        function handleCrownClick(e) {
-            e.preventDefault();
+        function handleCrownClick() {
             clickCount++;
-            console.log(`Crown click count: ${clickCount}`); // Debugging
             clearTimeout(clickTimeout);
             clickTimeout = setTimeout(() => { clickCount = 0; }, 1000);
-            if (clickCount >= 3) {
+            if (clickCount >= 7) {
                 clickCount = 0;
                 showAdminLogin();
             }
@@ -920,26 +995,14 @@ https://example.com/image2.jpg" required></textarea>
         function showAdminLogin() {
             if (isAdminLoggedIn) {
                 showView('admin');
-                showToast('Admin panel accessed!');
                 return;
             }
-            try {
-                const password = prompt("Enter admin password:");
-                if (password === null) {
-                    showToast('Admin login cancelled.');
-                    return;
-                }
-                if (password === ADMIN_PASSWORD) {
-                    isAdminLoggedIn = true;
-                    showView('admin');
-                    showToast('Admin login successful!');
-                } else {
-                    alert('Incorrect password!');
-                    showToast('Incorrect password.');
-                }
-            } catch (error) {
-                console.error('Admin login error:', error);
-                showToast('Error accessing admin login.');
+            const password = prompt("Enter admin password:");
+            if (password === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                showView('admin');
+            } else if (password) {
+                alert('Incorrect password!');
             }
         }
 
@@ -973,52 +1036,4 @@ https://example.com/image2.jpg" required></textarea>
                 name: document.getElementById('productName').value,
                 category: document.getElementById('productCategory').value,
                 price: parseFloat(document.getElementById('productPrice').value),
-                description: document.getElementById('productDescription').value,
-                images: document.getElementById('productImageURLs').value.split('\n').map(url => url.trim()).filter(url => url),
-            };
-
-            if (id) {
-                const index = products.findIndex(p => p.id == id);
-                products[index] = { ...products[index], ...newProductData };
-            } else {
-                products.push({ id: Date.now(), ...newProductData, reviews: [] });
-            }
-            
-            saveProductsToStorage();
-            renderProducts();
-            renderAdminProducts();
-            document.getElementById('productForm').reset();
-            document.getElementById('productId').value = '';
-            showToast(id ? 'Product updated!' : 'Product added!');
-        }
-
-        function editProduct(id) {
-            const product = products.find(p => p.id === id);
-            document.getElementById('productId').value = product.id;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productCategory').value = product.category;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productDescription').value = product.description;
-            document.getElementById('productImageURLs').value = product.images.join('\n');
-            document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function deleteProduct(id) {
-            if (!confirm('Are you sure you want to delete this product?')) return;
-            products = products.filter(p => p.id !== id);
-            saveProductsToStorage();
-            renderProducts();
-            renderAdminProducts();
-            showToast('Product deleted.');
-        }
-
-        // --- UTILITY FUNCTIONS ---
-        const showToast = (message) => {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        };
-    </script>
-</body>
-</html>
+                description:
