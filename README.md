@@ -64,9 +64,6 @@
         .file-upload-area { border: 2px dashed #ddd; border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; margin-bottom: 1rem; }
         .file-upload-area:hover { border-color: #1a365d; }
         .image-preview { max-width: 200px; max-height: 200px; border-radius: 8px; margin-top: 1rem; border: 1px solid #ddd; }
-        .payment-info { background: #f9f9f9; border: 1px solid #ddd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-        .payment-info h4 { color: #1a365d; margin-bottom: 0.5rem; }
-        .payment-method { padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem; }
         .toast { position: fixed; bottom: 20px; right: 20px; background: #1a365d; color: white; padding: 1rem; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
         .toast.show { opacity: 1; visibility: visible; }
         .admin-logo { text-align: center; margin-bottom: 1.5rem; }
@@ -74,7 +71,6 @@
         .logo-upload-container { margin-bottom: 1.5rem; text-align: center; }
         .logo-preview { max-width: 200px; max-height: 100px; margin-top: 1rem; display: none; }
         .summary-line { display: flex; justify-content: space-between; font-size: 1rem; padding: 0.25rem 0; }
-        .summary-line.total { font-weight: bold; font-size: 1.2rem; margin-top: 0.5rem; border-top: 1px solid #ccc; padding-top: 0.5rem; }
         @media (max-width: 768px) {
             .nav { flex-direction: column; gap: 1rem; }
             .hero h1 { font-size: 2rem; }
@@ -111,7 +107,7 @@
                 <h1>Lure Kings</h1>
                 <p>Serious value for serious anglers</p>
             </div>
-            <div class="categories">
+             <div class="categories">
                 <button class="category-btn active" onclick="filterByCategory('all')">All Lures</button>
                 <button class="category-btn" onclick="filterByCategory('jigs')">Jigs</button>
                 <button class="category-btn" onclick="filterByCategory('soft-plastics')">Soft Plastics</button>
@@ -169,35 +165,13 @@
                 <p style="text-align:center; padding: 0.5rem; background: #f9f9f9; border-radius: 4px; margin-bottom: 1rem; font-style: italic;">
                     DM for Shipping prices.
                 </p>
+                <p style="text-align:center; padding: 0.5rem; background: #f9f9f9; border-radius: 4px; margin-bottom: 1rem; font-style: italic;">
+                    DM for Direct Transfer.
+                </p>
                 
                 <div class="form-group">
                     <label for="orderNotes">Order Notes (Optional)</label>
                     <textarea id="orderNotes" name="notes" rows="2" placeholder="Any special instructions..."></textarea>
-                </div>
-
-                <div class="form-group payment-info">
-                    <h4>Payment Method<span class="required-star">*</span></h4>
-                    <div class="payment-method">
-                        <input type="radio" id="bankTransfer" name="payment_method" value="Direct Transfer" required>
-                        <label for="bankTransfer">Direct Transfer</label>
-                        <div id="bankDetails" class="hidden" style="padding-left: 20px; font-size: 0.9em; opacity: 0.8;">
-                            <p>DM for direct transfer.</p>
-                        </div>
-                    </div>
-                    <div class="payment-method">
-                        <input type="radio" id="stripe" name="payment_method" value="Stripe">
-                        <label for="stripe">Stripe (Credit/Debit Card)</label>
-                        <div id="stripe-element" class="hidden" style="padding: 10px;">
-                             <p style="font-style:italic;">Stripe integration placeholder.</p>
-                        </div>
-                    </div>
-                     <div class="payment-method">
-                        <input type="radio" id="paypal" name="payment_method" value="PayPal">
-                        <label for="paypal">PayPal</label>
-                        <div id="paypal-button-container" class="hidden" style="padding: 10px;">
-                            <p style="font-style:italic;">PayPal integration placeholder.</p>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="form-group">
@@ -227,7 +201,12 @@
     let currentFilter = 'all';
 
     // --- FALLBACK DATA ---
-    const defaultProducts = [ /* ... same as before ... */ ];
+    const defaultProducts = [
+        { id: 1, name: "Bass Pro Jig Head", category: "jigs", price: 12.99, description: "Premium jig head perfect for bass fishing with realistic action.", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop" },
+        { id: 2, name: "Soft Plastic Worm", category: "soft-plastics", price: 8.49, description: "Lifelike soft plastic worm that attracts fish with its natural movement.", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop" },
+        { id: 3, name: "Popper Topwater Lure", category: "topwaters", price: 15.99, description: "Creates explosive surface action that drives fish wild.", image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop" },
+        { id: 4, name: "Colorado Spinnerbait", category: "spinnerbaits", price: 11.79, description: "Classic spinnerbait with Colorado blade for maximum flash and vibration.", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop" }
+    ];
 
     // --- APP INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', init);
@@ -246,7 +225,6 @@
             document.getElementById('logoText').style.display = 'flex';
         }
         
-        // Regenerate Admin HTML in case it's needed
         createAdminView();
         
         renderProducts();
@@ -296,13 +274,10 @@
         `;
     }
 
-    // --- EVENT LISTENERS ---
     function setupEventListeners() {
         document.getElementById('logo').addEventListener('click', handleCrownClick);
         
-        // Re-bind listener after creating admin view
-        const adminView = document.getElementById('adminView');
-        adminView.querySelector('#productForm').addEventListener('submit', function(e) {
+        document.getElementById('adminView').querySelector('#productForm').addEventListener('submit', function(e) {
             e.preventDefault();
             saveProduct();
         });
@@ -310,25 +285,11 @@
         const checkoutForm = document.getElementById('checkoutForm');
         checkoutForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const selectedPayment = checkoutForm.querySelector('input[name="payment_method"]:checked');
-            if (!selectedPayment) {
-                alert("Please select a payment method.");
-                return;
-            }
             prepareOrderForSubmission();
             checkoutForm.submit();
         });
-        
-        document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                document.getElementById('bankDetails').classList.toggle('hidden', e.target.id !== 'bankTransfer');
-                document.getElementById('stripe-element').classList.toggle('hidden', e.target.id !== 'stripe');
-                document.getElementById('paypal-button-container').classList.toggle('hidden', e.target.id !== 'paypal');
-            });
-        });
     }
 
-    // --- CART & TOTALS ---
     function showCart() {
         updateCartDisplay();
         document.getElementById('cartModal').style.display = 'block';
@@ -385,8 +346,8 @@
         }
         saveCartToStorage();
         updateCartCount();
-        updateCartDisplay(); // Update display if cart modal is open
-        updateCheckoutDisplay(); // Also update checkout if it's open
+        updateCartDisplay();
+        updateCheckoutDisplay();
     }
 
     function removeFromCart(productId) {
@@ -412,7 +373,6 @@
         updateCartCount();
     }
 
-    // --- LOGO HANDLING ---
     function applyLogo(logoUrl) {
         const mainLogoImg = document.getElementById('mainHeaderLogo');
         const adminLogoImg = document.getElementById('companyLogo');
@@ -429,8 +389,7 @@
         logoText.style.display = 'none';
     }
     
-    // All other functions (saveProductsToStorage, renderProducts, addToCart, etc.) can remain as they were in the previous version.
-    // They are included here for completeness.
+    // All other functions remain the same
     function saveProductsToStorage() { localStorage.setItem('products', JSON.stringify(products)); }
     function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
     function showView(view) { if (view === 'admin' && !isAdminLoggedIn) { showAdminLogin(); return; } document.getElementById('storeView').classList.toggle('hidden', view !== 'store'); document.getElementById('adminView').classList.toggle('hidden', view !== 'admin'); }
