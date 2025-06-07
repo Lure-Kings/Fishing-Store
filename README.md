@@ -3,758 +3,1503 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lure Kings - Premium Fishing Lures</title>
-    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.6/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #1a365d;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        /* --- MODIFICATION START: Logo Styles --- */
+        .logo #storeLogo {
+            max-height: 50px; /* Adjust as needed */
+            width: auto;
+            display: none; /* Hidden by default */
+        }
+
+        .logo .logo-text-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        /* --- MODIFICATION END: Logo Styles --- */
+
+        .logo i {
+            font-size: 1.8rem;
+            color: #f8d56b;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #1a365d;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a365d;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: #1a365d;
+            border-color: #1a365d;
+            color: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* --- MODIFICATION START: Multiple Product Image Carousel --- */
+        .product-image-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(26, 54, 93, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 10;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            line-height: 20px;
+        }
+        
+        .carousel-btn:hover {
+            background-color: #1a365d;
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+        /* --- MODIFICATION END: Multiple Product Image Carousel --- */
+
+        .product-info {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Allows footer buttons to stick to the bottom */
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #1a365d;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            flex-grow: 1; /* Pushes buttons down */
+        }
+        
+        /* --- MODIFICATION START: Product buttons flex container --- */
+        .product-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto; /* Pushes this container to the bottom */
+        }
+        /* --- MODIFICATION END: Product buttons flex container --- */
+
+        .add-to-cart, .reviews-btn {
+            width: 100%;
+            background-color: #1a365d;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .add-to-cart:hover, .reviews-btn:hover {
+            background-color: #142a4a;
+        }
+        
+        .reviews-btn {
+            background-color: #555;
+        }
+        .reviews-btn:hover {
+            background-color: #333;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative; /* Changed from absolute */
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 90%;
+            width: 600px;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: #333;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+            gap: 1rem;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: #1a365d;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .quantity-btn {
+            background: #1a365d;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn:hover {
+            background: #142a4a;
+        }
+
+        .remove-item {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .remove-item:hover {
+            background: #c0392b;
+        }
+
+        .cart-total {
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a365d;
+            border-top: 1px solid #ddd;
+            margin-top: 1rem;
+        }
+
+        .admin-form {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1a365d;
+        }
+        .form-group label .required-star {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #1a365d;
+        }
+        
+        /* --- MODIFICATION START: Review System Styles --- */
+        .review-section {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .review {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+        }
+        
+        .review:last-child {
+            border-bottom: none;
+        }
+
+        .review-author {
+            font-weight: bold;
+            color: #1a365d;
+        }
+        
+        .review-rating {
+            color: #f8d56b;
+        }
+        
+        .review-content {
+            margin-top: 0.5rem;
+        }
+        /* --- MODIFICATION END: Review System Styles --- */
+
+
+        .hidden {
+            display: none !important;
+        }
+
+        .checkout-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-area:hover {
+            border-color: #1a365d;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        .payment-info {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .payment-info h4 {
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+        }
+        
+        .payment-method {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a365d;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .admin-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-logo img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logo-upload-container {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .logo-preview {
+            max-width: 200px;
+            max-height: 100px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        /* --- MODIFICATION START: Shipping/Payment Explainer Box --- */
+        .explainer-box {
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #614d13;
+        }
+        .explainer-box h5 {
+            color: #d46b08;
+            margin-top: 0;
+        }
+        .explainer-box code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        /* --- MODIFICATION END: Shipping/Payment Explainer Box --- */
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                width: 95%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-
-        // Sample products
-        const initialProducts = [
-            {
-                id: 1,
-                name: "Bass Pro Jig Head",
-                category: "jigs",
-                price: 12.99,
-                description: "Premium jig head for bass fishing with realistic action.",
-                images: [
-                    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop"
-                ],
-                reviews: [{ rating: 4, comment: "Great lure!" }],
-            },
-            {
-                id: 2,
-                name: "Soft Plastic Worm",
-                category: "soft-plastics",
-                price: 8.49,
-                description: "Lifelike worm with natural movement.",
-                images: [
-                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop"
-                ],
-                reviews: [{ rating: 5, comment: "Caught a big one!" }],
-            },
-        ];
-
-        // Website reviews
-        let websiteReviews = JSON.parse(localStorage.getItem('websiteReviews')) || [
-            { rating: 4, comment: "Great selection of lures!" },
-            { rating: 5, comment: "Fast shipping and quality products." }
-        ];
-
-        // Helper to calculate average rating
-        const calculateAverageRating = (reviews) => {
-            if (!reviews || reviews.length === 0) return 0;
-            const total = reviews.reduce((sum, review) => sum + review.rating, 0);
-            return (total / reviews.length).toFixed(1);
-        };
-
-        // Main App Component
-        function App() {
-            const [products, setProducts] = useState(JSON.parse(localStorage.getItem('products')) || initialProducts);
-            const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
-            const [view, setView] = useState('store');
-            const [isAdmin, setIsAdmin] = useState(false);
-            const [cartModal, setCartModal] = useState(false);
-            const [checkoutModal, setCheckoutModal] = useState(false);
-            const [toast, setToast] = useState(null);
-            const [currentCategory, setCurrentCategory] = useState('all');
-            const [shippingZone, setShippingZone] = useState('inner-city');
-            const shippingRates = {
-                'inner-city': 5,
-                'metro': 10,
-                'regional': 15,
-                'interstate': 20,
-            };
-
-            useEffect(() => {
-                localStorage.setItem('products', JSON.stringify(products));
-                localStorage.setItem('cart', JSON.stringify(cart));
-                localStorage.setItem('websiteReviews', JSON.stringify(websiteReviews));
-            }, [products, cart]);
-
-            const showToast = (message) => {
-                setToast(message);
-                setTimeout(() => setToast(null), 3000);
-            };
-
-            const addToCart = (product) => {
-                setCart(prev => {
-                    const existing = prev.find(item => item.id === product.id);
-                    if (existing) {
-                        return prev.map(item =>
-                            item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-                        );
-                    }
-                    return [...prev, { ...product, quantity: 1 }];
-                });
-                showToast(`${product.name} added to cart!`);
-            };
-
-            const updateCartItem = (id, delta) => {
-                setCart(prev => {
-                    const item = prev.find(i => i.id === id);
-                    if (!item) return prev;
-                    const newQuantity = item.quantity + delta;
-                    if (newQuantity <= 0) return prev.filter(i => i.id !== id);
-                    return prev.map(i => i.id === id ? { ...i, quantity: newQuantity } : i);
-                });
-            };
-
-            const removeFromCart = (id) => {
-                setCart(prev => prev.filter(item => item.id !== id));
-                showToast('Item removed from cart');
-            };
-
-            const addProduct = (product) => {
-                setProducts(prev => [
-                    ...prev,
-                    { ...product, id: prev.length ? Math.max(...prev.map(p => p.id)) + 1 : 1, reviews: [] }
-                ]);
-                showToast('Product added successfully!');
-            };
-
-            const updateProduct = (id, updatedProduct) => {
-                setProducts(prev => prev.map(p => p.id === id ? { ...updatedProduct, id, reviews: p.reviews } : p));
-                showToast('Product updated successfully!');
-            };
-
-            const deleteProduct = (id) => {
-                if (window.confirm('Are you sure you want to delete this product?')) {
-                    setProducts(prev => prev.filter(p => p.id !== id));
-                    showToast('Product deleted');
-                }
-            };
-
-            const addProductReview = (productId, review) => {
-                setProducts(prev => prev.map(p =>
-                    p.id === productId ? { ...p, reviews: [...(p.reviews || []), review] } : p
-                ));
-                showToast('Review submitted!');
-            };
-
-            const addWebsiteReview = (review) => {
-                websiteReviews = [...websiteReviews, review];
-                localStorage.setItem('websiteReviews', JSON.stringify(websiteReviews));
-                showToast('Website review submitted!');
-            };
-
-            const handleCheckoutSubmit = (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const orderDetails = {
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone'),
-                    address: formData.get('address'),
-                    notes: formData.get('notes'),
-                    items: cart.map(item => `${item.name} (${item.quantity} x $${item.price.toFixed(2)})`).join('\n'),
-                    total: (cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + shippingRates[shippingZone]).toFixed(2),
-                    shipping: shippingRates[shippingZone],
-                };
-                setCart([]);
-                setCheckoutModal(false);
-                showToast('Order placed successfully!');
-            };
-
-            return (
-                <div className="min-h-screen bg-gray-100 font-sans">
-                    {/* Header */}
-                    <header className="bg-blue-900 text-white sticky top-0 z-50 shadow-md">
-                        <nav className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('store')}>
-                                <i className="fas fa-crown text-yellow-400 text-2xl"></i>
-                                <span className="text-2xl font-bold">Lure Kings</span>
-                            </div>
-                            <div className="flex gap-4">
-                                <button
-                                    className="px-4 py-2 bg-blue-900 border border-white rounded hover:bg-blue-800"
-                                    onClick={() => setView('store')}
-                                >
-                                    Store
-                                </button>
-                                <button
-                                    className="px-4 py-2 bg-blue-900 border border-white rounded hover:bg-blue-800"
-                                    onClick={() => setView('reviews')}
-                                >
-                                    Reviews
-                                </button>
-                                <button
-                                    className="px-4 py-2 bg-blue-900 border border-white rounded hover:bg-blue-800"
-                                    onClick={() => {
-                                        const password = prompt('Enter admin password:');
-                                        if (password === 'lureking') {
-                                            setIsAdmin(true);
-                                            setView('admin');
-                                        } else if (password) {
-                                            showToast('Incorrect password');
-                                        }
-                                    }}
-                                >
-                                    Admin
-                                </button>
-                                <button
-                                    className="relative px-4 py-2 bg-blue-900 border border-white rounded hover:bg-blue-800"
-                                    onClick={() => setCartModal(true)}
-                                >
-                                    <i className="fas fa-shopping-cart"></i>
-                                    <span className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                                        {cart.reduce((sum, item) => sum + item.quantity, 0)}
-                                    </span>
-                                </button>
-                            </div>
-                        </nav>
-                    </header>
-
-                    {/* Toast Notification */}
-                    {toast && (
-                        <div className="fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-2 rounded shadow-lg z-50">
-                            {toast}
-                        </div>
-                    )}
-
-                    {/* Main Content */}
-                    <main className="max-w-7xl mx-auto px-4 py-8">
-                        {view === 'store' && (
-                            <StoreView
-                                products={products}
-                                currentCategory={currentCategory}
-                                setCurrentCategory={setCurrentCategory}
-                                addToCart={addToCart}
-                                addProductReview={addProductReview}
-                            />
-                        )}
-                        {view === 'reviews' && (
-                            <ReviewsView
-                                websiteReviews={websiteReviews}
-                                addWebsiteReview={addWebsiteReview}
-                            />
-                        )}
-                        {view === 'admin' && isAdmin && (
-                            <AdminView
-                                products={products}
-                                addProduct={addProduct}
-                                updateProduct={updateProduct}
-                                deleteProduct={deleteProduct}
-                            />
-                        )}
-                    </main>
-
-                    {/* Cart Modal */}
-                    {cartModal && (
-                        <Modal title="Shopping Cart" onClose={() => setCartModal(false)}>
-                            <CartView
-                                cart={cart}
-                                updateCartItem={updateCartItem}
-                                removeFromCart={removeFromCart}
-                                shippingCost={shippingRates[shippingZone]}
-                                setCheckoutModal={setCheckoutModal}
-                            />
-                        </Modal>
-                    )}
-
-                    {/* Checkout Modal */}
-                    {checkoutModal && (
-                        <Modal title="Secure Checkout" onClose={() => setCheckoutModal(false)}>
-                            <CheckoutView
-                                cart={cart}
-                                shippingZone={shippingZone}
-                                setShippingZone={setShippingZone}
-                                shippingRates={shippingRates}
-                                handleCheckoutSubmit={handleCheckoutSubmit}
-                            />
-                        </Modal>
-                    )}
+    <header class="header">
+        <nav class="nav">
+            <div class="logo" id="logo">
+                <img id="storeLogo" src="" alt="Lure Kings Logo">
+                <div class="logo-text-container" id="logoText">
+                    <i class="fas fa-crown"></i>
+                    Lure Kings
                 </div>
-            );
-        }
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="showView('store')">Store</button>
+                <button class="btn btn-primary cart-icon" onclick="showCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </nav>
+    </header>
 
-        // Store View Component
-        function StoreView({ products, currentCategory, setCurrentCategory, addToCart, addProductReview }) {
-            const categories = ['all', 'jigs', 'soft-plastics', 'topwaters', 'spinnerbaits'];
+    <div class="toast" id="toast">Item added to cart!</div>
 
-            return (
-                <>
-                    <div className="text-center mb-8 bg-white p-6 rounded-lg shadow">
-                        <h1 className="text-3xl font-bold text-blue-900 mb-2">Premium Fishing Lures</h1>
-                        <p className="text-gray-600">High-quality lures for serious anglers</p>
-                    </div>
+    <div class="container">
+        <div id="storeView">
+            <div class="hero">
+                <h1>Premium Fishing Lures</h1>
+                <p>High-quality fishing lures for the serious angler</p>
+            </div>
 
-                    <div className="flex flex-wrap gap-2 justify-center mb-8">
-                        {categories.map(cat => (
-                            <button
-                                key={cat}
-                                className={`px-4 py-2 rounded border ${currentCategory === cat ? 'bg-blue-900 text-white border-blue-900' : 'bg-white border-gray-300'}`}
-                                onClick={() => setCurrentCategory(cat)}
-                            >
-                                {cat === 'all' ? 'All Lures' : cat.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase())}
-                            </button>
-                        ))}
-                    </div>
+            <div class="categories">
+                <button class="category-btn active" onclick="filterByCategory('all')">All Lures</button>
+                <button class="category-btn" onclick="filterByCategory('jigs')">Jigs</button>
+                <button class="category-btn" onclick="filterByCategory('soft-plastics')">Soft Plastics</button>
+                <button class="category-btn" onclick="filterByCategory('topwaters')">Topwaters</button>
+                <button class="category-btn" onclick="filterByCategory('spinnerbaits')">Spinnerbaits</button>
+            </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {products
-                            .filter(p => currentCategory === 'all' || p.category === currentCategory)
-                            .map(product => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    addToCart={addToCart}
-                                    addProductReview={addProductReview}
-                                />
-                            ))}
-                    </div>
-                </>
-            );
-        }
-
-        // Product Card Component with Image Carousel
-        function ProductCard({ product, addToCart, addProductReview }) {
-            const [currentImage, setCurrentImage] = useState(0);
-
-            const nextImage = () => setCurrentImage((currentImage + 1) % product.images.length);
-            const prevImage = () => setCurrentImage((currentImage - 1 + product.images.length) % product.images.length);
-
-            const handleReviewSubmit = (e) => {
-                e.preventDefault();
-                const rating = parseInt(e.target.rating.value);
-                const comment = e.target.comment.value;
-                if (rating && comment) {
-                    addProductReview(product.id, { rating, comment });
-                    e.target.reset();
-                }
-            };
-
-            return (
-                <div className="bg-white border rounded-lg shadow hover:shadow-lg transition transform hover:-translate-y-1">
-                    <div className="relative">
-                        <img
-                            src={product.images[currentImage]}
-                            alt={product.name}
-                            className="w-full h-48 object-cover rounded-t-lg"
-                        />
-                        {product.images.length > 1 && (
-                            <>
-                                <button
-                                    className="absolute left-2 top-1/ Foulkesbury Road, Chatswood NSW 2067, Australia top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded"
-                                    onClick={prevImage}
-                                >
-                                    <i className="fas fa-chevron-left"></i>
-                                </button>
-                                <button
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded"
-                                    onClick={nextImage}
-                                >
-                                    <i className="fas fa-chevron-right"></i>
-                                </button>
-                            </>
-                        )}
-                    </div>
-                    <div className="p-4">
-                        <h3 className="font-bold text-blue-900">{product.name}</h3>
-                        <p className="text-red-600 font-bold">${product.price.toFixed(2)}</p>
-                        <p className="text-gray-600 text-sm">{product.description}</p>
-                        <div className="flex items-center gap-1">
-                            <span>{calculateAverageRating(product.reviews)}★</span>
-                            <span>({product.reviews.length} reviews)</span>
-                        </div>
-                        <button
-                            className="w-full mt-2 bg-blue-900 text-white py-2 rounded hover:bg-blue-800"
-                            onClick={() => addToCart(product)}
-                        >
-                            Add to Cart
-                        </button>
-                        <div className="mt-4">
-                            <h4 className="font-bold">Reviews</h4>
-                            {product.reviews.map((review, index) => (
-                                <div key={index} className="mt-2 text-sm">
-                                    <span>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
-                                    <p>{review.comment}</p>
-                                </div>
-                            ))}
-                            <form onSubmit={handleReviewSubmit} className="mt-2">
-                                <div className="flex gap-2">
-                                    <select name="rating" className="border rounded p-1" required>
-                                        <option value="">Rate</option>
-                                        {[1, 2, 3, 4, 5].map(n => (
-                                            <option key={n} value={n}>{n} Stars</option>
-                                        ))}
-                                    </select>
-                                    <input
-                                        type="text"
-                                        name="comment"
-                                        placeholder="Your review"
-                                        className="border rounded p-1 flex-grow"
-                                        required
-                                    />
-                                    <button type="submit" className="bg-blue-900 text-white px-2 py-1 rounded">
-                                        Submit
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            <div class="products-grid" id="productsGrid"></div>
+            
+            <div class="review-section">
+                <h2 style="text-align: center; color: #1a365d; margin-bottom: 1rem;">Customer Reviews</h2>
+                <div id="generalReviewsList">
+                    <p style="text-align: center;">No reviews yet. Be the first!</p>
                 </div>
-            );
-        }
-
-        // Reviews View Component
-        function ReviewsView({ websiteReviews, addWebsiteReview }) {
-            const handleReviewSubmit = (e) => {
-                e.preventDefault();
-                const rating = parseInt(e.target.rating.value);
-                const comment = e.target.comment.value;
-                if (rating && comment) {
-                    addWebsiteReview({ rating, comment });
-                    e.target.reset();
-                }
-            };
-
-            return (
-                <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-2xl font-bold text-blue-900 mb-4">
-                        Website Reviews ({calculateAverageRating(websiteReviews)}★)
-                    </h2>
-                    <form onSubmit={handleReviewSubmit} className="mb-4">
-                        <div className="flex gap-2">
-                            <select name="rating" className="border rounded p-2" required>
-                                <option value="">Rate</option>
-                                {[1, 2, 3, 4, 5].map(n => (
-                                    <option key={n} value={n}>{n} Stars</option>
-                                ))}
-                            </select>
-                            <input
-                                type="text"
-                                name="comment"
-                                placeholder="Your review"
-                                className="border rounded p-2 flex-grow"
-                                required
-                            />
-                            <button type="submit" className="bg-blue-900 text-white px-4 py-2 rounded">
-                                Submit
-                            </button>
-                        </div>
-                    </form>
-                    <div>
-                        {websiteReviews.map((review, index) => (
-                            <div key={index} className="mb-2 p-2 bg-gray-50 rounded">
-                                <span>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
-                                <p>{review.comment}</p>
-                            </div>
-                        ))}
-                    </div>
+                <div class="admin-form" style="margin-top: 2rem;">
+                     <h3 style="margin-bottom: 1rem; color: #1a365d;">Leave a Website Review</h3>
+                     <form id="generalReviewForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                         <input type="hidden" name="_subject" value="New Lure Kings Website Review!">
+                         <input type="hidden" name="_template" value="table">
+                         <div class="form-group">
+                             <label for="reviewerName">Your Name</label>
+                             <input type="text" id="reviewerName" name="Reviewer_Name" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="reviewContent">Your Review</label>
+                             <textarea id="reviewContent" name="Review_Content" rows="3" required></textarea>
+                         </div>
+                         <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                     </form>
                 </div>
-            );
-        }
+            </div>
+            </div>
 
-        // Admin View Component
-        function AdminView({ products, addProduct, updateProduct, deleteProduct }) {
-            const [editProduct, setEditProduct] = useState(null);
-            const [formData, setFormData] = useState({
-                name: '',
-                category: '',
-                price: '',
-                description: '',
-                images: [''],
-            });
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                const product = {
-                    name: formData.name,
-                    category: formData.category,
-                    price: parseFloat(formData.price),
-                    description: formData.description,
-                    images: formData.images.filter(url => url),
-                };
-                if (editProduct) {
-                    updateProduct(editProduct.id, product);
-                    setEditProduct(null);
-                } else {
-                    addProduct(product);
-                }
-                setFormData({ name: '', category: '', price: '', description: '', images: [''] });
-            };
-
-            const handleImageChange = (index, value) => {
-                const newImages = [...formData.images];
-                newImages[index] = value;
-                setFormData({ ...formData, images: newImages });
-            };
-
-            const addImageField = () => {
-                setFormData({ ...formData, images: [...formData.images, ''] });
-            };
-
-            const editProductHandler = (product) => {
-                setEditProduct(product);
-                setFormData({
-                    name: product.name,
-                    category: product.category,
-                    price: product.price,
-                    description: product.description,
-                    images: product.images,
-                });
-            };
-
-            return (
-                <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-2xl font-bold text-blue-900 mb-4">Admin Dashboard</h2>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label className="block font-bold text-blue-900">Product Name</label>
-                            <input
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full border rounded p-2"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block font-bold text-blue-900">Category</label>
-                            <select
-                                value={formData.category}
-                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                className="w-full border rounded p-2"
-                                required
-                            >
-                                <option value="">Select Category</option>
-                                <option value="jigs">Jigs</option>
-                                <option value="soft-plastics">Soft Plastics</option>
-                                <option value="topwaters">Topwaters</option>
-                                <option value="spinnerbaits">Spinnerbaits</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block font-bold text-blue-900">Price ($)</label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                value={formData.price}
-                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                className="w-full border rounded p-2"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block font-bold text-blue-900">Description</label>
-                            <textarea
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="w-full border rounded p-2"
-                                rows="3"
-                                required
-                            ></textarea>
-                        </div>
-                        <div>
-                            <label className="block font-bold text-blue-900">Images (URLs)</label>
-                            {formData.images.map((image, index) => (
-                                <input
-                                    key={index}
-                                    type="url"
-                                    value={image}
-                                    onChange={(e) => handleImageChange(index, e.target.value)}
-                                    className="w-full border rounded p-2 mb-2"
-                                    placeholder="Enter image URL"
-                                />
-                            ))}
-                            <button
-                                type="button"
-                                className="bg-blue-900 text-white px-4 py-2 rounded"
-                                onClick={addImageField}
-                            >
-                                Add Another Image
-                            </button>
-                        </div>
-                        <button type="submit" className="w-full bg-blue-900 text-white py-2 rounded">
-                            {editProduct ? 'Update Product' : 'Add Product'}
-                        </button>
-                    </form>
-
-                    <div className="mt-8">
-                        <h3 className="text-xl font-bold text-blue-900 mb-4">Manage Products</h3>
-                        {products.map(product => (
-                            <div key={product.id} className="p-4 bg-gray-50 rounded mb-2 flex justify-between">
-                                <div>
-                                    <h4 className="font-bold">{product.name}</h4>
-                                    <p>Category: {product.category}</p>
-                                    <p>Price: ${product.price.toFixed(2)}</p>
-                                    <p>{product.description}</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <button
-                                        className="bg-blue-900 text-white px-4 py-2 rounded"
-                                        onClick={() => editProductHandler(product)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="bg-red-600 text-white px-4 py-2 rounded"
-                                        onClick={() => deleteProduct(product.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+        <div id="adminView" class="hidden">
+            <div class="hero">
+                <div class="admin-logo">
+                    <img id="companyLogo" src="" alt="Lure Kings Logo">
                 </div>
-            );
-        }
+                <h1>Admin Dashboard</h1>
+                <p>Manage your Lure Kings inventory</p>
+            </div>
 
-        // Cart View Component
-        function CartView({ cart, updateCartItem, removeFromCart, shippingCost, setCheckoutModal }) {
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-            return (
-                <div>
-                    {cart.length === 0 ? (
-                        <p>Your cart is empty</p>
-                    ) : (
-                        <>
-                            {cart.map(item => (
-                                <div key={item.id} className="flex items-center p-4 border-b gap-4">
-                                    <img src={item.images[0]} alt={item.name} className="w-16 h-16 object-cover rounded" />
-                                    <div className="flex-grow">
-                                        <h4 className="font-bold text-blue-900">{item.name}</h4>
-                                        <p>${item.price.toFixed(2)} each</p>
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                className="bg-blue-900 text-white w-6 h-6 rounded flex items-center justify-center"
-                                                onClick={() => updateCartItem(item.id, -1)}
-                                            >
-                                                -
-                                            </button>
-                                            <span>{item.quantity}</span>
-                                            <button
-                                                className="bg-blue-900 text-white w-6 h-6 rounded flex items-center justify-center"
-                                                onClick={() => updateCartItem(item.id, 1)}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <button
-                                        className="bg-red-600 text-white px-2 py-1 rounded"
-                                        onClick={() => removeFromCart(item.id)}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            ))}
-                            <div className="p-4 text-center font-bold text-blue-900 border-t">
-                                Subtotal: ${total.toFixed(2)}<br />
-                                Shipping: ${shippingCost.toFixed(2)}<br />
-                                Total: ${(total + shippingCost).toFixed(2)}
-                            </div>
-                            <button
-                                className="w-full bg-blue-900 text-white py-2 rounded"
-                                onClick={() => setCheckoutModal(true)}
-                            >
-                                Proceed to Checkout
-                            </button>
-                        </>
-                    )}
+            <div class="logo-upload-container">
+                <h3>Upload Company Logo</h3>
+                <div class="file-upload-area" onclick="document.getElementById('logoUpload').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i>
+                    <p>Click to upload logo or drag & drop</p>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Supports JPG, PNG</p>
                 </div>
-            );
-        }
+                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                <img id="logoPreview" class="logo-preview">
+            </div>
 
-        // Checkout View Component
-        function CheckoutView({ cart, shippingZone, setShippingZone, shippingRates, handleCheckoutSubmit }) {
-            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            const orderItems = cart.map(item => `${item.name} (${item.quantity} x $${item.price.toFixed(2)})`).join('\n');
-
-            return (
-                <div>
-                    <div className="p-4 bg-gray-50 rounded mb-4">
-                        <h4 className="font-bold text-blue-900">Payment Information</h4>
-                        <p><strong>Bank Details:</strong> ANZ Bank</p>
-                        <p><strong>Account Name:</strong> Lure Kings Pty Ltd</p>
-                        <p><strong>BSB:</strong> 012-345</p>
-                        <p><strong>Account Number:</strong> 123456789</p>
-                        <p className="text-sm text-gray-600">Use your order number as the payment reference</p>
+            <div class="admin-form">
+                <h2 style="margin-bottom: 1rem; color: #1a365d;">Add/Edit Product</h2>
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" required>
                     </div>
-                    <div className="mb-4">
-                        <label className="block font-bold text-blue-900">Shipping Zone</label>
-                        <select
-                            value={shippingZone}
-                            onChange={(e) => setShippingZone(e.target.value)}
-                            className="w-full border rounded p-2"
-                        >
-                            <option value="inner-city">Inner City ($5.00)</option>
-                            <option value="metro">Metro ($10.00)</option>
-                            <option value="regional">Regional ($15.00)</option>
-                            <option value="interstate">Interstate ($20.00)</option>
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="jigs">Jigs</option>
+                            <option value="soft-plastics">Soft Plastics</option>
+                            <option value="topwaters">Topwaters</option>
+                            <option value="spinnerbaits">Spinnerbaits</option>
                         </select>
                     </div>
-                    <form
-                        action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com"
-                        method="POST"
-                        onSubmit={handleCheckoutSubmit}
-                    >
-                        <input type="hidden" name="_subject" value="New Order from Lure Kings" />
-                        <input type="hidden" name="_template" value="table" />
-                        <input type="hidden" name="_cc" value="lure.kings.fishing.aus@gmail.com" />
-                        <input type="hidden" name="_autoresponse" value="Thank you for your order! We'll process it shortly." />
-                        <input type="hidden" name="order_items" value={orderItems} />
-                        <input type="hidden" name="order_total" value={(total + shippingRates[shippingZone]).toFixed(2)} />
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block font-bold text-blue-900">Full Name</label>
-                                <input type="text" name="name" className="w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label className="block font-bold text-blue-900">Email Address</label>
-                                <input type="email" name="email" className="w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label className="block font-bold text-blue-900">Phone Number</label>
-                                <input type="tel" name="phone" className="w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label className="block font-bold text-blue-900">Delivery Address</label>
-                                <textarea name="address" className="w-full border rounded p-2" rows="3" required></textarea>
-                            </div>
-                            <div>
-                                <label className="block font-bold text-blue-900">Order Notes (Optional)</label>
-                                <textarea name="notes" className="w-full border rounded p-2" rows="2"></textarea>
-                            </div>
-                            <button type="submit" className="w-full bg-blue-900 text-white py-2 rounded">
-                                Place Order
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            );
-        }
-
-        // Modal Component
-        function Modal({ title, onClose, children }) {
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-                    <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[90%] overflow-y-auto relative">
-                        <button
-                            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-                            onClick={onClose}
-                        >
-                            <i className="fas fa-times text-xl"></i>
-                        </button>
-                        <h2 className="text-2xl font-bold text-blue-900 mb-4">{title}</h2>
-                        {children}
+                    <div class="form-group">
+                        <label for="productPrice">Price ($)</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" required>
                     </div>
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productImageURLs">Product Images (one URL per line)</label>
+                        <textarea id="productImageURLs" rows="4" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Save Product
+                    </button>
+                </form>
+            </div>
+
+            <div class="admin-form">
+                <h2 style="margin-bottom: 1rem; color: #1a365d;">Manage Existing Products</h2>
+                <div id="adminProductsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cartModal')">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #1a365d;">
+                Shopping Cart
+            </h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: $0.00</div>
+            <button class="btn btn-primary" onclick="showCheckout()" style="width: 100%; margin-top: 1rem;">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('checkoutModal')">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #1a365d;">
+                Secure Checkout
+            </h2>
+            
+            <form id="checkoutForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                <input type="hidden" name="_next" value="https://your-domain.com/?order=success"> <input type="hidden" name="_subject" value="New Order from Lure Kings">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_cc" value="lure.kings.fishing.aus@gmail.com">
+                <input type="hidden" name="_autoresponse" value="Thank you for your order! We'll process it shortly.">
+                
+                <div class="form-group">
+                    <label for="customerName">Full Name<span class="required-star">*</span></label>
+                    <input type="text" id="customerName" name="name" required>
                 </div>
-            );
+                <div class="form-group">
+                    <label for="customerEmail">Email Address<span class="required-star">*</span></label>
+                    <input type="email" id="customerEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number<span class="required-star">*</span></label>
+                    <input type="tel" id="customerPhone" name="phone" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Delivery Address<span class="required-star">*</span></label>
+                    <textarea id="customerAddress" name="address" rows="3" required></textarea>
+                </div>
+                
+                <div class="explainer-box">
+                    <h5>Address Validation & Shipping Estimates</h5>
+                    <p>
+                        To enable automatic address validation and shipping cost estimates from <strong>Chatswood</strong>, you need to integrate a service like the <strong>Google Maps API</strong>.
+                    </p>
+                    <ol style="padding-left: 20px;">
+                        <li>Create a Google Cloud account and get an API key for the "Places API" and "Distance Matrix API".</li>
+                        <li>Implement JavaScript to use the Places API for address autocomplete.</li>
+                        <li>Once an address is selected, send a request to your secure backend. The backend will use the Distance Matrix API (with your secret key) to calculate the distance from Chatswood and determine the shipping cost.</li>
+                        <li>The shipping cost would then be added to the total.</li>
+                    </ol>
+                </div>
+                <div class="form-group">
+                    <label for="orderNotes">Order Notes (Optional)</label>
+                    <textarea id="orderNotes" name="notes" rows="2" placeholder="Any special instructions..."></textarea>
+                </div>
+
+                <div class="form-group payment-info">
+                    <h4>Payment Method<span class="required-star">*</span></h4>
+                    <div class="payment-method">
+                        <input type="radio" id="bankTransfer" name="payment_method" value="Bank Transfer" required>
+                        <label for="bankTransfer">Direct Bank Transfer</label>
+                        <div id="bankDetails" class="hidden" style="padding-left: 20px; font-size: 0.9em; opacity: 0.8;">
+                            <p><strong>Bank:</strong> ANZ Bank | <strong>Account:</strong> Lure Kings Pty Ltd<br>
+                                <strong>BSB:</strong> 012-345 | <strong>Acc No:</strong> 123456789<br>
+                                Use your Order ID as reference.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="explainer-box">
+                        <h5>Live Payment Integration (Stripe/PayPal)</h5>
+                        <p>To accept live payments, you must use a backend server.</p>
+                        <p>
+                            For <strong>Stripe</strong>, your frontend JavaScript would collect card details using secure "Stripe Elements". It would then request a "payment intent" from your backend. Your backend, using your <strong>secret Stripe key</strong>, would talk to Stripe to process the payment. This protects you and your customers. The same server-based approach is used for PayPal.
+                        </p>
+                    </div>
+                     <div class="payment-method">
+                        <input type="radio" id="stripe" name="payment_method" value="Stripe" disabled>
+                        <label for="stripe">Stripe (Credit/Debit Card) - <em style="color:#999;">Integration required</em></label>
+                    </div>
+                     <div class="payment-method">
+                        <input type="radio" id="paypal" name="payment_method" value="PayPal" disabled>
+                        <label for="paypal">PayPal - <em style="color:#999;">Integration required</em></label>
+                    </div>
+                    </div>
+
+                <div class="form-group">
+                    <label>Order Summary</label>
+                    <div id="orderItemsDisplay"></div>
+                </div>
+                <div class="cart-total" id="checkoutTotal">Total: $0.00</div>
+                <input type="hidden" id="orderItems" name="order_items">
+                <input type="hidden" id="orderTotal" name="order_total">
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reviewModal')">&times;</span>
+            <h2 id="reviewModalTitle" style="margin-bottom: 1rem; color: #1a365d;">Product Reviews</h2>
+            <div id="productReviewsList"></div>
+            <div class="admin-form" style="margin-top: 2rem; border: none; padding: 0;">
+                <h3 style="margin-bottom: 1rem; color: #1a365d;">Leave a Review</h3>
+                <form id="productReviewForm" action="https://formsubmit.co/lure.kings.fishing.aus@gmail.com" method="POST">
+                    <input type="hidden" id="reviewProductId" name="product_id">
+                    <input type="hidden" id="reviewProductName" name="Product_Name">
+                    <input type="hidden" name="_subject" value="New Product Review!">
+                    <input type="hidden" name="_template" value="table">
+
+                    <div class="form-group">
+                        <label for="productReviewerName">Your Name</label>
+                        <input type="text" id="productReviewerName" name="Reviewer_Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productReviewContent">Your Review</label>
+                        <textarea id="productReviewContent" name="Review_Content" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // --- GLOBAL STATE ---
+        let isAdminLoggedIn = false;
+        const ADMIN_PASSWORD = "Maxchingershambo08";
+        let clickCount = 0;
+        let clickTimeout;
+        let products = [];
+        let cart = [];
+        // MODIFICATION START: Added general reviews state
+        let generalReviews = []; 
+        // MODIFICATION END: Added general reviews state
+        let currentFilter = 'all';
+        
+        // --- INITIAL DATA (FALLBACK) ---
+        // MODIFICATION START: Updated product data to include multiple images and reviews
+        const defaultProducts = [
+             { 
+                id: 1, 
+                name: "Bass Pro Jig Head", 
+                category: "jigs", 
+                price: 12.99, 
+                description: "Premium jig head perfect for bass fishing with realistic action.", 
+                images: ["https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop"],
+                reviews: []
+            },
+            { 
+                id: 2, 
+                name: "Soft Plastic Worm", 
+                category: "soft-plastics", 
+                price: 8.49, 
+                description: "Lifelike soft plastic worm that attracts fish with its natural movement.", 
+                images: ["https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop"],
+                reviews: []
+            },
+            { 
+                id: 3, 
+                name: "Popper Topwater Lure", 
+                category: "topwaters", 
+                price: 15.99, 
+                description: "Creates explosive surface action that drives fish wild.", 
+                images: ["https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop"],
+                reviews: []
+            },
+            { 
+                id: 4, 
+                name: "Colorado Spinnerbait", 
+                category: "spinnerbaits", 
+                price: 11.79, 
+                description: "Classic spinnerbait with Colorado blade for maximum flash and vibration.", 
+                images: [
+                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1519712461314-14c3e80a0e78?w=400&h=300&fit=crop"
+                ],
+                reviews: [
+                    { name: 'John D.', content: 'Caught a huge bass with this! Works like a charm.' },
+                    { name: 'AnglerJane', content: 'Great quality, but the color was slightly different than the photo.' }
+                ]
+            }
+        ];
+        // MODIFICATION END: Updated product data
+
+        // --- APP INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
+
+        function init() {
+            // Load data from localStorage
+            const storedProducts = localStorage.getItem('products');
+            products = storedProducts ? JSON.parse(storedProducts) : defaultProducts;
+
+            const storedCart = localStorage.getItem('cart');
+            cart = storedCart ? JSON.parse(storedCart) : [];
+            
+            // MODIFICATION START: Load reviews from local storage
+            const storedReviews = localStorage.getItem('generalReviews');
+            generalReviews = storedReviews ? JSON.parse(storedReviews) : [];
+            // MODIFICATION END: Load reviews from local storage
+
+            const savedLogo = localStorage.getItem('companyLogo');
+            if (savedLogo) {
+                // MODIFICATION START: Update both admin and store logos
+                document.getElementById('companyLogo').src = savedLogo;
+                document.getElementById('storeLogo').src = savedLogo;
+                document.getElementById('storeLogo').style.display = 'block';
+                document.getElementById('logoText').style.display = 'none';
+                document.getElementById('logoPreview').src = savedLogo;
+                document.getElementById('logoPreview').style.display = 'block';
+                // MODIFICATION END: Update both admin and store logos
+            }
+            
+            // Render initial views
+            renderProducts();
+            updateCartCount();
+            renderAdminProducts();
+            // MODIFICATION START: Render reviews
+            renderGeneralReviews();
+            // MODIFICATION END: Render reviews
+            
+            // Setup listeners
+            setupEventListeners();
+            setupImageUpload('logoUpload', 'logoPreview', null, '.logo-upload-container .file-upload-area', handleLogoUpload);
+
+            // Handle order success message
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('order') && urlParams.get('order') === 'success') {
+                showToast("Thank you! Your order has been placed successfully.");
+                // Clean up the URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         }
 
-        // Render the app
-        ReactDOM.render(<App />, document.getElementById('root'));
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            document.getElementById('logo').addEventListener('click', handleCrownClick);
+            
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProduct();
+            });
+
+            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+                const selectedPayment = document.querySelector('input[name="payment_method"]:checked');
+                // Allow submission without payment if only bank transfer is selected
+                if (!selectedPayment) {
+                    alert("Please select a payment method.");
+                    e.preventDefault();
+                    return;
+                }
+                prepareOrderForSubmission();
+            });
+            
+            // MODIFICATION START: Review form listeners
+            document.getElementById('generalReviewForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveGeneralReview();
+            });
+
+            document.getElementById('productReviewForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProductReview();
+            });
+            // MODIFICATION END: Review form listeners
+
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    document.getElementById('bankDetails').classList.toggle('hidden', e.target.id !== 'bankTransfer');
+                });
+            });
+        }
+
+        // --- DATA PERSISTENCE ---
+        function saveProductsToStorage() {
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        function saveCartToStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        
+        // MODIFICATION START: Save reviews to storage
+        function saveGeneralReviewsToStorage() {
+            localStorage.setItem('generalReviews', JSON.stringify(generalReviews));
+        }
+        // MODIFICATION END: Save reviews to storage
+
+        // --- VIEW MANAGEMENT ---
+        function showView(view) {
+            document.getElementById('storeView').classList.toggle('hidden', view !== 'store');
+            document.getElementById('adminView').classList.toggle('hidden', view !== 'admin');
+        }
+        
+        // MODIFICATION START: Generic Modal Closer
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        // MODIFICATION END: Generic Modal Closer
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            const filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
+            
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                // MODIFICATION START: Product card with image carousel
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'product-image-container';
+                
+                let imageHTML = '';
+                product.images.forEach((imgSrc, index) => {
+                    imageHTML += `<img src="${imgSrc}" alt="${product.name}" class="product-image" style="opacity: ${index === 0 ? 1 : 0};">`;
+                });
+                
+                if (product.images.length > 1) {
+                    imageHTML += `
+                        <button class="carousel-btn prev" onclick="navigateCarousel(event, ${product.id}, -1)">&lt;</button>
+                        <button class="carousel-btn next" onclick="navigateCarousel(event, ${product.id}, 1)">&gt;</button>
+                    `;
+                }
+                imageContainer.innerHTML = imageHTML;
+                imageContainer.dataset.productId = product.id;
+                imageContainer.dataset.currentImage = 0;
+                // MODIFICATION END: Product card with image carousel
+                
+                const infoContainer = document.createElement('div');
+                infoContainer.className = 'product-info';
+                infoContainer.innerHTML = `
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-buttons">
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="reviews-btn" onclick="showProductReviews(${product.id})">Reviews (${product.reviews.length})</button>
+                    </div>
+                `;
+                
+                card.appendChild(imageContainer);
+                card.appendChild(infoContainer);
+                grid.appendChild(card);
+            });
+        }
+        
+        // MODIFICATION START: Image carousel navigation
+        function navigateCarousel(event, productId, direction) {
+            event.stopPropagation(); // Prevents card hover effects from interfering
+            const container = document.querySelector(`.product-image-container[data-product-id='${productId}']`);
+            if (!container) return;
+
+            const images = container.querySelectorAll('.product-image');
+            let currentIndex = parseInt(container.dataset.currentImage);
+
+            images[currentIndex].style.opacity = 0; // Fade out current
+            
+            currentIndex += direction;
+
+            if (currentIndex >= images.length) {
+                currentIndex = 0;
+            } else if (currentIndex < 0) {
+                currentIndex = images.length - 1;
+            }
+
+            images[currentIndex].style.opacity = 1; // Fade in next
+            container.dataset.currentImage = currentIndex;
+        }
+        // MODIFICATION END: Image carousel navigation
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            renderProducts();
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Find the button to activate. A bit more robust.
+            const buttonToActivate = Array.from(document.querySelectorAll('.category-btn')).find(btn => btn.getAttribute('onclick').includes(`'${category}'`));
+            if(buttonToActivate) buttonToActivate.classList.add('active');
+        }
+
+        // --- CART FUNCTIONALITY ---
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            
+            updateCartCount();
+            showToast(`${product.name} added to cart`);
+            saveCartToStorage();
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+        
+        function showCart() {
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotalEl = document.getElementById('cartTotal');
+            
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+                cartTotalEl.textContent = 'Total: $0.00';
+            } else {
+                let total = 0;
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <img src="${item.images[0]}" alt="${item.name}"> <div class="cart-item-info">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div>$${item.price.toFixed(2)} each</div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateCartItem(${item.id}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateCartItem(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold; text-align: right;">$${itemTotal.toFixed(2)}</div>
+                            <button class="remove-item" style="margin-top: 5px;" onclick="removeFromCart(${item.id})">Remove</button>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+                cartTotalEl.textContent = `Total: $${total.toFixed(2)}`;
+            }
+            modal.style.display = 'flex'; // Use flex for centering
+        }
+
+        function updateCartItem(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (!item) return;
+            
+            item.quantity += change;
+            
+            if (item.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCartCount();
+                showCart(); // Refresh cart display
+                saveCartToStorage();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            showCart(); // Refresh cart display
+            saveCartToStorage();
+        }
+
+        // --- CHECKOUT FUNCTIONALITY ---
+        function showCheckout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty. Please add items before checking out.");
+                return;
+            }
+            const orderItemsDisplay = document.getElementById('orderItemsDisplay');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            let orderItemsHTML = '<ul style="list-style-type: none; padding: 0;">';
+             cart.forEach(item => {
+                orderItemsHTML += `<li style="margin-bottom: 0.5rem; padding: 0.5rem; background: #f5f5f5; border-radius: 4px;">
+                    ${item.name} - ${item.quantity} x $${item.price.toFixed(2)}
+                </li>`;
+            });
+            orderItemsHTML += '</ul>';
+            orderItemsDisplay.innerHTML = orderItemsHTML;
+
+            document.getElementById('checkoutTotal').textContent = `Total: $${total.toFixed(2)}`;
+            
+            closeModal('cartModal');
+            document.getElementById('checkoutModal').style.display = 'flex'; // Use flex for centering
+        }
+        
+        function prepareOrderForSubmission() {
+            const orderSummary = cart.map(item => 
+                `${item.name} (Qty: ${item.quantity} x $${item.price.toFixed(2)}) = $${(item.quantity * item.price).toFixed(2)}`
+            ).join('\n');
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+
+            document.getElementById('orderItems').value = orderSummary;
+            document.getElementById('orderTotal').value = `$${total}`;
+
+            // Clear cart after preparing for submission
+            cart = [];
+            updateCartCount();
+            saveCartToStorage();
+        }
+        
+        // --- MODIFICATION START: Review System Logic ---
+        function renderGeneralReviews() {
+            const container = document.getElementById('generalReviewsList');
+            container.innerHTML = '';
+            if (generalReviews.length === 0) {
+                container.innerHTML = '<p style="text-align: center;">No reviews yet. Be the first!</p>';
+                return;
+            }
+            generalReviews.forEach(review => {
+                const reviewEl = document.createElement('div');
+                reviewEl.className = 'review';
+                reviewEl.innerHTML = `
+                    <div class="review-author">${review.name}</div>
+                    <div class="review-content">${review.content}</div>
+                `;
+                container.appendChild(reviewEl);
+            });
+        }
+
+        function saveGeneralReview() {
+            const name = document.getElementById('reviewerName').value;
+            const content = document.getElementById('reviewContent').value;
+            
+            generalReviews.push({ name, content });
+            saveGeneralReviewsToStorage();
+            renderGeneralReviews();
+            
+            // Submit the form programmatically after saving locally
+            document.getElementById('generalReviewForm').submit();
+            document.getElementById('generalReviewForm').reset();
+            showToast('Thank you for your review!');
+        }
+
+        function showProductReviews(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            document.getElementById('reviewModalTitle').textContent = `Reviews for ${product.name}`;
+            const container = document.getElementById('productReviewsList');
+            container.innerHTML = '';
+            if (product.reviews.length === 0) {
+                container.innerHTML = '<p>No reviews for this product yet.</p>';
+            } else {
+                product.reviews.forEach(review => {
+                    const reviewEl = document.createElement('div');
+                    reviewEl.className = 'review';
+                    reviewEl.innerHTML = `
+                        <div class="review-author">${review.name}</div>
+                        <div class="review-content">${review.content}</div>
+                    `;
+                    container.appendChild(reviewEl);
+                });
+            }
+
+            document.getElementById('reviewProductId').value = product.id;
+            document.getElementById('reviewProductName').value = product.name;
+            document.getElementById('reviewModal').style.display = 'flex';
+        }
+
+        function saveProductReview() {
+            const productId = document.getElementById('reviewProductId').value;
+            const name = document.getElementById('productReviewerName').value;
+            const content = document.getElementById('productReviewContent').value;
+
+            const product = products.find(p => p.id == productId);
+            if(product) {
+                product.reviews.push({ name, content });
+                saveProductsToStorage();
+                renderProducts(); // To update review count on card
+            }
+            
+            document.getElementById('productReviewForm').submit();
+            document.getElementById('productReviewForm').reset();
+            closeModal('reviewModal');
+            showToast('Thank you for your review!');
+        }
+        // --- MODIFICATION END: Review System Logic ---
+
+
+        // --- ADMIN FUNCTIONALITY ---
+        function handleCrownClick() {
+            clickCount++;
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(() => { clickCount = 0; }, 1000); // Reset clicks after 1 second of inactivity
+            if (clickCount >= 7) { // Set back to 7 clicks
+                clickCount = 0;
+                showAdminLogin();
+            }
+        }
+
+        function showAdminLogin() {
+            if (isAdminLoggedIn) {
+                showView('admin');
+                return;
+            }
+            const password = prompt("Enter admin password:");
+            if (password === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                showView('admin');
+            } else if (password !== null && password !== "") {
+                alert('Incorrect password!');
+            }
+        }
+
+        function renderAdminProducts() {
+            const container = document.getElementById('adminProductsList');
+            container.innerHTML = '';
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p>No products found</p>';
+                return;
+            }
+            
+            // Display newest products first
+            products.slice().reverse().forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product-card';
+                productElement.innerHTML = `
+                    <img src="${product.images[0]}" alt="${product.name}" class="product-image"> <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p style="font-size:0.9em; color:#666; text-transform: capitalize;">${product.category}</p>
+                        <p style="font-weight:bold; color: #e74c3c;">$${product.price.toFixed(2)}</p>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button onclick="editProduct(${product.id})" class="btn btn-primary" style="flex:1;">Edit</button>
+                            <button onclick="deleteProduct(${product.id})" class="btn btn-primary" style="background: #e74c3c; flex:1;">Delete</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productElement);
+            });
+        }
+        
+        function saveProduct() {
+            const id = document.getElementById('productId').value;
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const description = document.getElementById('productDescription').value;
+            // MODIFICATION START: Get multiple images
+            const images = document.getElementById('productImageURLs').value.split('\n').map(url => url.trim()).filter(url => url);
+            // MODIFICATION END: Get multiple images
+            
+            if (!name || !category || isNaN(price) || !description || images.length === 0) {
+                alert('Please fill all fields and provide at least one image URL.');
+                return;
+            }
+
+            if (id) { // Editing existing product
+                const index = products.findIndex(p => p.id == id);
+                if (index > -1) {
+                    // Preserve reviews when editing
+                    products[index] = { ...products[index], name, category, price, description, images };
+                }
+            } else { // Adding new product
+                 const newProduct = {
+                    id: Date.now(), // Use timestamp for a unique ID
+                    name, category, price, description, images,
+                    reviews: [] // New products start with no reviews
+                };
+                products.push(newProduct);
+            }
+            
+            saveProductsToStorage();
+            renderProducts();
+            renderAdminProducts();
+            
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            showToast(id ? 'Product updated successfully!' : 'Product added successfully!');
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDescription').value = product.description;
+            // MODIFICATION START: Populate multiple image URLs
+            document.getElementById('productImageURLs').value = product.images.join('\n');
+            // MODIFICATION END: Populate multiple image URLs
+            
+            document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+            
+            products = products.filter(p => p.id !== id);
+            saveProductsToStorage();
+            renderProducts();
+            renderAdminProducts();
+            showToast('Product deleted successfully.');
+        }
+
+        // --- UTILITY FUNCTIONS ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Simplified, as image uploads are no longer needed on the product form.
+        // This function is now only used for the logo upload.
+        function setupImageUpload(inputId, previewId, urlInputId, areaSelector, customHandler) {
+            const fileInput = document.getElementById(inputId);
+            const uploadArea = document.querySelector(areaSelector);
+
+            fileInput.addEventListener('change', customHandler);
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            ['dragover', 'drop', 'dragleave'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (eventName === 'dragover') uploadArea.style.borderColor = '#1a365d';
+                    else uploadArea.style.borderColor = '#ddd';
+                    if (eventName === 'drop' && e.dataTransfer.files.length) {
+                        fileInput.files = e.dataTransfer.files;
+                        customHandler({ target: fileInput });
+                    }
+                });
+            });
+        }
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const logoUrl = e.target.result;
+                // MODIFICATION START: Update all logo instances
+                document.getElementById('logoPreview').src = logoUrl;
+                document.getElementById('logoPreview').style.display = 'block';
+                document.getElementById('companyLogo').src = logoUrl;
+                document.getElementById('storeLogo').src = logoUrl;
+                document.getElementById('storeLogo').style.display = 'block';
+                document.getElementById('logoText').style.display = 'none';
+                localStorage.setItem('companyLogo', logoUrl); // Persist logo
+                // MODIFICATION END: Update all logo instances
+            };
+            reader.readAsDataURL(file);
+        }
+
     </script>
 </body>
 </html>
