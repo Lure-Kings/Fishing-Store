@@ -9,8 +9,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; color: #333; line-height: 1.6; }
         .header { background-color: #1a365d; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
-        .logo { font-size: 2rem; font-weight: bold; color: white; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
         #mainHeaderLogo { max-height: 50px; display: none; }
         #logoText { display: flex; align-items: center; gap: 0.5rem; }
         .logo i { font-size: 1.8rem; color: #f8d56b; }
@@ -145,15 +143,7 @@
                 <input type="hidden" name="_autoresponse" value="Thank you for your order! We'll process it shortly.">
                 
                 <div class="form-group">
-                    <label for="customerName">Full Name<span class="required-star">*</span></label>
-                    <input type="text" id="customerName" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="customerEmail">Email Address<span class="required-star">*</span></label>
-                    <input type="email" id="customerEmail" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="customerPhone">Phone Number<span class="required-star">*</span></label>
+                    <tomerPhone">Phone Number<span class="required-star">*</span></label>
                     <input type="tel" id="customerPhone" name="phone" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                 </div>
                 <div class="form-group">
@@ -207,8 +197,8 @@
         { id: 4, name: "Colorado Spinnerbait", category: "spinnerbaits", price: 11.79, description: "Classic spinnerbait with Colorado blade for maximum flash and vibration.", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop" }
     ];
 
-    // --- APP INITIALIZATION ---
-    document.addEventListener('DOMContentLoaded', init);
+    -- APP INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', init
 
     function init() {
         const storedProducts = localStorage.getItem('products');
@@ -266,17 +256,7 @@
                     <div class="form-group"><label for="productPrice">Price ($)</label><input type="number" id="productPrice" step="0.01" min="0" required></div>
                     <div class="form-group"><label for="productDescription">Description</label><textarea id="productDescription" rows="3" required></textarea></div>
                     <div class="form-group"><label for="productImage">Product Image</label><div class="file-upload-area"><i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a365d; margin-bottom: 0.5rem;"></i><p>Click to upload image or drag & drop</p></div><input type="file" id="imageUpload" accept="image/*" style="display: none;"><input type="text" id="productImageURL" placeholder="Or enter image URL"><img id="imagePreview" class="image-preview" style="display: none;"></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Product</button>
-                </form>
-            </div>
-            <div class="admin-form"><h2 style="margin-bottom: 1rem; color: #1a365d;">Manage Existing Products</h2><div id="adminProductsList"></div></div>
-        `;
-    }
-
-    function setupEventListeners() {
-        document.getElementById('logo').addEventListener('click', handleCrownClick);
-        
-        document.getElementById('adminView').querySelector('#productForm').addEventListener('submit', function(e) {
+                    <button t]inView').querySelector('#productForm').addEventListener('submit', function(e) {
             e.preventDefault();
             saveProduct();
         });
@@ -388,9 +368,7 @@
         logoText.style.display = 'none';
     }
     
-    // All other functions remain the same
-    function saveProductsToStorage() { localStorage.setItem('products', JSON.stringify(products)); }
-    function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
+    // All other functions rema]age() { localStorage.setItem('cart', JSON.stringify(cart)); }
     function showView(view) { if (view === 'admin' && !isAdminLoggedIn) { showAdminLogin(); return; } document.getElementById('storeView').classList.toggle('hidden', view !== 'store'); document.getElementById('adminView').classList.toggle('hidden', view !== 'admin'); }
     function renderProducts() { const grid = document.getElementById('productsGrid'); grid.innerHTML = ''; const filtered = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter); filtered.forEach(p => { const card = document.createElement('div'); card.className = 'product-card'; card.innerHTML = `<img src="${p.image}" alt="${p.name}" class="product-image"><div class="product-info"><h3 class="product-title">${p.name}</h3><div class="product-price">$${p.price.toFixed(2)}</div><p class="product-description">${p.description}</p><button class="add-to-cart" onclick="addToCart(${p.id})">Add to Cart</button></div>`; grid.appendChild(card); }); }
     function filterByCategory(category) { currentFilter = category; renderProducts(); document.querySelectorAll('.category-btn').forEach(btn => { btn.classList.remove('active'); if (btn.textContent.toLowerCase().includes(category)) btn.classList.add('active'); }); }
@@ -401,12 +379,9 @@
     function handleCrownClick() { clickCount++; clearTimeout(clickTimeout); clickTimeout = setTimeout(() => { clickCount = 0; }, 1000); if (clickCount >= 3) { clickCount = 0; showAdminLogin(); } }
     function showAdminLogin() { const pw = prompt("Enter admin password:"); if (pw === ADMIN_PASSWORD) { isAdminLoggedIn = true; showView('admin'); } else if (pw !== null) { alert('Incorrect password!'); } }
     function renderAdminProducts() { const cont = document.getElementById('adminProductsList'); if (!cont) return; cont.innerHTML = ''; if (!products.length) { cont.innerHTML = '<p>No products found</p>'; return; } products.slice().reverse().forEach(p => { const el = document.createElement('div'); el.className = 'product-card'; el.innerHTML = `<img src="${p.image}" alt="${p.name}" class="product-image"><div class="product-info"><h3 class="product-title">${p.name}</h3><p style="font-size:0.9em;color:#666">${p.category}</p><p style="font-weight:bold;color:#e74c3c">$${p.price.toFixed(2)}</p><div style="margin-top:1rem;"><button onclick="editProduct(${p.id})" class="btn btn-secondary">Edit</button><button onclick="deleteProduct(${p.id})" class="btn btn-secondary" style="background:#e74c3c;">Delete</button></div></div>`; cont.appendChild(el); }); }
-    function saveProduct() { const id = document.getElementById('productId').value; const name = document.getElementById('productName').value; const cat = document.getElementById('productCategory').value; const price = parseFloat(document.getElementById('productPrice').value); const desc = document.getElementById('productDescription').value; const img = document.getElementById('productImageURL').value; if (!name || !cat || isNaN(price) || !desc || !img) { alert('Please fill all fields and provide an image.'); return; } if (id) { const i = products.findIndex(p => p.id == id); if (i > -1) products[i] = { ...products[i], name, category: cat, price, description: desc, image: img }; } else { products.push({ id: Date.now(), name, category: cat, price, description: desc, image: img }); } saveProductsToStorage(); renderProducts(); renderAdminProducts(); document.getElementById('productForm').reset(); document.getElementById('productId').value = ''; document.getElementById('imagePreview').style.display = 'none'; showToast(id ? 'Product updated!' : 'Product added!'); }
-    function editProduct(id) { const p = products.find(prod => prod.id === id); if (!p) return; document.getElementById('productId').value = p.id; document.getElementById('productName').value = p.name; document.getElementById('productCategory').value = p.category; document.getElementById('productPrice').value = p.price; document.getElementById('productDescription').value = p.description; document.getElementById('productImageURL').value = p.image; const prev = document.getElementById('imagePreview'); prev.src = p.image; prev.style.display = 'block'; document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' }); }
-    function deleteProduct(id) { if (!confirm('Are you sure you want to delete this product?')) return; products = products.filter(p => p.id !== id); saveProductsToStorage(); renderProducts(); renderAdminProducts(); showToast('Product deleted.'); }
-    function showToast(message) { const t = document.getElementById('toast'); t.textContent = message; t.classList.add('show'); setTimeout(() => { t.classList.remove('show'); }, 3000); }
-    function setupImageUpload(inputId, previewId, urlInputId, areaSelector, customHandler) { const fileInput = document.getElementById(inputId); const uploadArea = document.querySelector(areaSelector); if (!uploadArea) return; const handler = customHandler || function(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { document.getElementById(previewId).src = e.target.result; document.getElementById(previewId).style.display = 'block'; if (urlInputId) document.getElementById(urlInputId).value = e.target.result; }; reader.readAsDataURL(file); }; fileInput.addEventListener('change', handler); uploadArea.addEventListener('click', () => fileInput.click()); ['dragover', 'drop', 'dragleave'].forEach(evt => { uploadArea.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); if (evt === 'dragover') uploadArea.style.borderColor = '#1a365d'; else uploadArea.style.borderColor = '#ddd'; if (evt === 'drop' && e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; handler({ target: fileInput }); } }); }); }
+    function saveProduct() { const id = document.getElementById('productId').value; const name = document.getElementById('productName').value; const cat = document.getElementById('productCategory').value; const price = parseFloat(document.getElementById('productPrice').value); const desc = document.getElementById('productDescription').value; const img = document.getElementById('productImageURL').value; if (!name || !cat || isNaN(price) || !desc || !img) { alert('Please fill all fields and provide an image.'); return; } if (id) { const i = products.findIndex(p => p.id == id); if (i > -1) products[i] = { ...products[i], name, category: cat, price, description: desc, image: img }; } else { products.push({ id: Date.now(), name, category: cat, price, description: desc, image: img }); } saveProductsToStorage(); renderProducts(); renderAdminProducts(); document.getElementById('productForm').reset(); document.getElementById('productId').value = '';ment.getElementById('toast'); t.textContent = message; t.classList.add('show'); setTimeout(() => { t.classList.remove('show'); }, 3000); }
+    function setupImageUpload(inputId, previewId, urlInputId, areaSelector, customHandler) { const fileInput = document.getElementById(inputId); const uploadArea = document.querySelector(areaSelector); if (!uploadArea) return; const handler = customHandler || function(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { document.getElementById(previewId).src = e.target.result; document.getElementById(previewId).style.display = 'block'; if (urlInputId) document.getElementById(urlInputId).value = e.target.result; }; reader.readAsDataURL(file); }; fileInput.addEventListener('change', handler); uploadArea.addEventListener('click', () => fileInput.click()); ['dragover', 'drop', 'dragleave'].forEach(evt => { uploadArea.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); if (evt === 'dragover') uploadArea.style.borderCor = '#1a365d'; else uploadArea.style.borderColor = '#ddd'; if (evt === 'drop' && e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; handler({ target: fileInput 
     function handleLogoUpload(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { const logoUrl = e.target.result; applyLogo(logoUrl); localStorage.setItem('companyLogo', logoUrl); }; reader.readAsDataURL(file); }
-    </script>
+    </scrip
 </body>
 </html>
